@@ -556,6 +556,39 @@
                         </div>
                     </div>
 
+                    <!-- NUEVAS FUNCIONES AÑADIDAS: Mes a cancelar y Día del pago -->
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-calendar-days" style="color: var(--accent);"></i> Mes a Cancelar *</label>
+                            <select id="pagoMesCancelar" required>
+                                <option value="">Seleccione mes...</option>
+                                <option value="Enero">Enero</option>
+                                <option value="Febrero">Febrero</option>
+                                <option value="Marzo">Marzo</option>
+                                <option value="Abril">Abril</option>
+                                <option value="Mayo">Mayo</option>
+                                <option value="Junio">Junio</option>
+                                <option value="Julio">Julio</option>
+                                <option value="Agosto">Agosto</option>
+                                <option value="Septiembre">Septiembre</option>
+                                <option value="Octubre">Octubre</option>
+                                <option value="Noviembre">Noviembre</option>
+                                <option value="Diciembre">Diciembre</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-calendar-day" style="color: var(--accent);"></i> Día del Pago *</label>
+                            <select id="pagoDiaPago" required>
+                                <option value="">Seleccione día...</option>
+                                <script>
+                                    for(let d = 1; d <= 31; d++) {
+                                        document.write(`<option value="${d}">${d}</option>`);
+                                    }
+                                </script>
+                            </select>
+                        </div>
+                    </div>
+
                     <div class="form-grid">
                         <div class="form-group">
                             <label>Monto en USD ($)</label>
@@ -738,7 +771,6 @@
             </div>
         </div>
 
-        <!-- SECCIÓN 9: PANEL DE ADMINISTRACIÓN INTEGRAL -->
         <div id="admin" class="section-container">
             <div class="card" style="border-top-color: var(--accent);">
                 <h2><i class="fa-solid fa-lock"></i> Panel Administrativo Integral y Autogestionable</h2>
@@ -1213,7 +1245,10 @@
             document.getElementById('loadingPago').style.display = 'block';
             document.getElementById('btnPago').style.display = 'none';
 
-            notificarCorreoOficial("Reporte de Pago / Abono", "Atleta: " + document.getElementById('pagoAtleta').value + " - Monto: $" + document.getElementById('pagoMontoUSD').value);
+            const mesCancelar = document.getElementById('pagoMesCancelar').value;
+            const diaPago = document.getElementById('pagoDiaPago').value;
+
+            notificarCorreoOficial("Reporte de Pago / Abono", "Atleta: " + document.getElementById('pagoAtleta').value + " - Mes: " + mesCancelar + " - Día: " + diaPago + " - Monto: $" + document.getElementById('pagoMontoUSD').value);
 
             setTimeout(() => {
                 document.getElementById('loadingPago').style.display = 'none';
@@ -1557,5 +1592,3 @@
     </script>
 </body>
 </html>
-
- 
