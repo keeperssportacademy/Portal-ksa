@@ -1535,10 +1535,6 @@
 
         function renderizarSedesPublicas() {
             const contenedor = document.getElementById('listaSedesExtra');
-            if(sedesAlternativasKSA.length === 0) {
-                contenedor.innerHTML = '';
-                return;
-            }
             let html = '';
             sedesAlternativasKSA.forEach(sede => {
                 html += `<p style="margin-bottom: 6px;"><b>Sede Adicional:</b> ${sede}</p>`;
