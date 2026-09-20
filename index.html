@@ -98,6 +98,7 @@
 
         .infografia-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
         .atleta-card { background: #111; border: 2px solid #333; border-radius: 12px; padding: 1.5rem; text-align: center; border-top: 4px solid var(--accent); position: relative; }
+        .atleta-avatar { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent); margin: 0 auto 1rem; background: #000; }
         .atleta-info { text-align: left; font-size: 0.85rem; color: #94a3b8; margin-top: 1rem; line-height: 1.6; background: #181818; padding: 12px; border-radius: 6px; }
         .atleta-info b { color: var(--light); }
 
@@ -186,7 +187,7 @@
 
         <header>
             <h1>KEEPERS SPORT ACADEMY GK</h1>
-            <p>TU ARCO, TU REINO — ¡MENTALIDAD DE CAMPEONES!</p>
+            <p>¡Mentalidad de campeones!</p>
         </header>
 
         <div class="nav-tabs">
@@ -202,22 +203,22 @@
             <div class="nav-tab" onclick="switchTab('cumpleanos', this)"><i class="fa-solid fa-cake-candles"></i> Cumpleaños</div>
             <div class="nav-tab" onclick="switchTab('galeria', this)"><i class="fa-solid fa-images"></i> Galería</div>
             <div class="nav-tab" onclick="switchTab('redes', this)"><i class="fa-solid fa-share-nodes"></i> Redes</div>
-            <div class="nav-tab" id="tabAdmin" onclick="switchTab('admin', this)" style="display: none;"><i class="fa-solid fa-lock"></i> Admin CRUD</div>
+            <div class="nav-tab" id="tabAdmin" onclick="switchTab('admin', this)" style="display: none;"><i class="fa-solid fa-lock"></i> Admin</div>
         </div>
 
         <div id="inicio" class="section-container active">
             <div class="card" style="text-align: center; border-top-color: var(--danger);">
-                <h2 style="justify-content: center; border: none;">Portal Oficial Keepers Sport Academy GK</h2>
+                <h2 style="justify-content: center; border: none;">¡Bienvenidos a Keepers Sport Academy GK!</h2>
                 <p style="color: var(--text-color); font-weight: 600; margin-bottom: 1.5rem; font-size: 1.05rem; line-height: 1.8; background: #1a1a1a; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--accent);">
-                    Academia especializada en la formación de porteros de alto rendimiento bajo la dirección del Head Coach Eduardo Martínez.<br><br>
-                    <b>Sede Oficial: Vereda del Lago</b><br>
-                    Entrenamientos en cancha de arena de playa y césped sintético.<br>
-                    • Lunes y Miércoles: 5:40 PM<br>
-                    • Martes y Jueves: 5:40 PM y 6:40 PM
+                    ¡Hola! Bienvenido a Keepers Sport Academy.<br><br>
+                    Somos una academia sumamente exigente. No entrenamos por pasar el rato. Buscamos atletas que amen su posición, rechacen el conformismo y estén 100% comprometidos con su evolución física, técnica y mental.<br><br>
+                    Si estás listo para dejarlo todo en la cancha.<br>
+                    Estamos listos para ver de qué estás hecho. ¡A trabajar! 🚀
                 </p>
                 <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                    <button class="btn" style="width: auto;" onclick="switchTab('inscripcion', document.querySelectorAll('.nav-tab')[1])">Ir a Ficha de Inscripción</button>
+                    <button class="btn" style="width: auto;" onclick="switchTab('inscripcion', document.querySelectorAll('.nav-tab')[1])">Ir a Inscripción</button>
                     <button class="btn btn-accent" style="width: auto;" onclick="switchTab('reservas', document.querySelectorAll('.nav-tab')[2])">Reservar Sesión</button>
+                    <button class="btn btn-accent" style="width: auto; background: var(--light); color: var(--primary);" onclick="switchTab('fansstore', document.querySelectorAll('.nav-tab')[4])"><i class="fa-solid fa-bag-shopping"></i> Visitar Fans Store</button>
                 </div>
             </div>
             
@@ -392,7 +393,7 @@
                             <input type="date" id="resFecha" required onchange="validarAnticipacionReserva()">
                         </div>
                         <div class="form-group">
-                            <label>Sede y Turno *</label>
+                            <label>Sede / Turno *</label>
                             <select id="resTurno" required>
                                 <option value="">Seleccione turno...</option>
                                 <option value="Vereda del Lago - 5:40 PM">Vereda del Lago - 5:40 PM</option>
@@ -419,30 +420,23 @@
                     </div>
 
                     <div id="loadingReserva" class="loading"><i class="fa-solid fa-spinner fa-spin"></i> Procesando reserva y notificando a keeperssportacademy@gmail.com...</div>
-                    <button type="submit" class="btn btn-accent" id="btnReserva">Confirmar Reserva de Sesión</button>
+                    <button type="submit" class="btn btn-accent" id="btnReserva">Confirmar Reserva de Entrenamiento</button>
                 </form>
             </div>
         </div>
 
         <div id="kits" class="section-container">
             <div class="card">
-                <h2><i class="fa-solid fa-shirt"></i> Reserva de Kits Oficiales KSA</h2>
-                <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.5rem;">Paleta oficial: Rojo, Negro, Amarillo y Blanco</p>
+                <h2><i class="fa-solid fa-shirt"></i> Reserva de Kit de Entrenamiento Oficial</h2>
+                <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.5rem;">Valor total del kit: $35. Puede cancelar el monto total o abonar el 50% ($17.50).</p>
                 <div id="alertaKit" class="alert alert-success"></div>
 
                 <form id="formKit" onsubmit="enviarReservaKit(event)">
                     <div class="form-grid">
                         <div class="form-group"><label>Nombre del Atleta *</label><input type="text" id="kitAtleta" required placeholder="Mateo Pérez"></div>
+                        <div class="form-group"><label>Cédula del Representante *</label><input type="text" id="kitCedula" required placeholder="V-12345678"></div>
                         <div class="form-group">
-                            <label>Kit o Indumentaria *</label>
-                            <select id="kitModalidad" required onchange="actualizarMontoKit(this.value)">
-                                <option value="">Seleccione...</option>
-                                <option value="Completo">Kit Oficial Completo ($35.00)</option>
-                                <option value="Abono 50%">Abono del 50% ($17.50)</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Talla *</label>
+                            <label>Talla de Uniforme (T2 al 2XL) *</label>
                             <select id="kitTalla" required onchange="actualizarMontoKit(document.getElementById('kitModalidad').value)">
                                 <option value="">Seleccione talla...</option>
                                 <option value="Talla 2">Talla 2</option><option value="Talla 4">Talla 4</option>
@@ -454,10 +448,18 @@
                                 <option value="2XL">Talla 2XL</option>
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label>Modalidad de Pago *</label>
+                            <select id="kitModalidad" required onchange="actualizarMontoKit(this.value)">
+                                <option value="">Seleccione...</option>
+                                <option value="Completo">Pago Completo ($35.00)</option>
+                                <option value="Abono 50%">Abono del 50% ($17.50)</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div id="cajaBancoKit" class="payment-box" style="display: none; margin-bottom: 1.5rem;">
-                        <h4 style="color: var(--accent); margin-bottom: 12px;"><i class="fa-solid fa-wallet"></i> Datos Bancarios para Kit Oficial:</h4>
+                        <h4 style="color: var(--accent); margin-bottom: 12px;"><i class="fa-solid fa-wallet"></i> Datos Bancarios para Kit Oficial (Pago Inmediato):</h4>
                         <div id="infoBancoKit"></div>
                     </div>
 
@@ -474,16 +476,48 @@
 
         <div id="fansstore" class="section-container">
             <div class="card">
-                <h2><i class="fa-solid fa-bag-shopping"></i> Fans Store KSA</h2>
-                <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.5rem;">"Tu arco, tu reino" — Mentalidad de campeones</p>
+                <h2><i class="fa-solid fa-bag-shopping"></i> Fans Store KSA - Playeras Oficiales</h2>
+                <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.5rem;">Costo fijo por playera: <b>$20.00 USD</b>.</p>
                 <div id="alertaStore" class="alert alert-success"></div>
 
-                <div style="background: #111; border: 1px solid #333; border-radius: 12px; padding: 1.5rem; border-top: 4px solid var(--accent);">
-                    <h3 style="color: var(--light); margin-bottom: 8px; font-size: 1.1rem;"><i class="fa-solid fa-hat-cowboy" style="color: var(--accent);"></i> Gorra Oficial KSA</h3>
-                    <p style="font-size: 0.9rem; color: #94a3b8; margin-bottom: 12px;">Diseño exclusivo con paleta institucional.</p>
-                    <p style="font-size: 1.05rem; color: var(--accent); font-weight: 700; margin-bottom: 15px;">Precio: $15</p>
-                    <button type="button" class="btn btn-accent" onclick="switchTab('pagos', document.querySelectorAll('.nav-tab')[5])">Solicitar</button>
-                </div>
+                <form id="formStore" onsubmit="enviarPedidoStore(event)">
+                    <div class="form-grid">
+                        <div class="form-group"><label>Nombre y Apellido del Comprador *</label><input type="text" id="storeComprador" required placeholder="Ej. Ana Martínez"></div>
+                        <div class="form-group"><label>Teléfono / WhatsApp *</label><input type="tel" id="storeTelefono" required placeholder="0414-0000000"></div>
+                        <div class="form-group">
+                            <label>Talla Solicitada (T2 al 2XL) *</label>
+                            <select id="storeTalla" required onchange="actualizarBancoStore()">
+                                <option value="">Seleccione talla...</option>
+                                <option value="Talla 2">Talla 2</option><option value="Talla 4">Talla 4</option>
+                                <option value="Talla 6">Talla 6</option><option value="Talla 8">Talla 8</option>
+                                <option value="Talla 10">Talla 10</option><option value="Talla 12">Talla 12</option>
+                                <option value="Talla 14">Talla 14</option><option value="Talla 16">Talla 16</option>
+                                <option value="S">Talla S</option><option value="M">Talla M</option>
+                                <option value="L">Talla L</option><option value="XL">Talla XL</option>
+                                <option value="2XL">Talla 2XL</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label>Cantidad de Playeras *</label><input type="number" id="storeCantidad" min="1" value="1" required oninput="actualizarBancoStore()"></div>
+                    </div>
+
+                    <div style="background: #111; padding: 1rem; border-radius: 8px; border: 1px solid var(--accent); margin-bottom: 1.2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                        <span style="color: var(--light); font-weight: 600;">Total a Cancelar: <b id="storeTotalUSD" style="color: var(--accent); font-size: 1.2rem;">$20.00 USD</b></span>
+                        <span style="color: #94a3b8; font-size: 0.9rem;" id="storeTotalBS">Equivalente en Bs: Calculando...</span>
+                    </div>
+
+                    <div class="payment-box" style="margin-bottom: 1.5rem;">
+                        <h4 style="color: var(--accent); margin-bottom: 12px;"><i class="fa-solid fa-wallet"></i> Datos Bancarios para Fans Store (Pago Inmediato):</h4>
+                        <div id="infoBancoStore"></div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group"><label>Número de Referencia *</label><input type="text" id="storeReferencia" required placeholder="Ej. 554433"></div>
+                        <div class="form-group"><label>Adjuntar Capture del Pago *</label><input type="file" id="storeCapture" accept="image/*" required style="padding: 0.5rem; background: #000;"></div>
+                    </div>
+
+                    <div id="loadingStore" class="loading"><i class="fa-solid fa-spinner fa-spin"></i> Procesando pedido en Fans Store...</div>
+                    <button type="submit" class="btn btn-accent" id="btnStore">Solicitar Playera Oficial</button>
+                </form>
             </div>
         </div>
 
@@ -505,7 +539,7 @@
                                 <option value="">Seleccione concepto...</option>
                                 <option value="Inscripción General" data-monto="20">Inscripción General - $20.00</option>
                                 <option value="Kits de Uniforme Oficial" data-monto="35">Kits de Uniforme Oficial - $35.00</option>
-                                <option value="Gorra Oficial KSA" data-monto="15">Gorra Oficial KSA - $15.00</option>
+                                <option value="Playera Fans Store" data-monto="20">Playera Fans Store - $20.00</option>
                                 <option value="Sesión extra (1) atleta regular con inscripción activa" data-monto="7.5">Sesión extra (1) atleta regular con inscripción activa - $7,50</option>
                                 <option value="Sesión extra (1) atleta regular con inscripción inactiva" data-monto="15">Sesión extra (1) atleta regular con inscripción inactiva - $15,00</option>
                                 <option value="Plan Base (8 sesiones)" data-monto="60">Plan Base (8 sesiones) - $60.00</option>
@@ -520,41 +554,6 @@
                                 <option value="Abono">Abono a Mensualidad / Cuota Parcial</option>
                             </select>
                         </div>
-                    </div>
-
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Seleccionar Año *</label>
-                            <select id="pagoAnio" required>
-                                <option value="">Seleccione año...</option>
-                                <option value="2026">2026</option>
-                                <option value="2027">2027</option>
-                                <option value="2025">2025</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Mes Correspondiente al Pago *</label>
-                            <select id="pagoMes" required>
-                                <option value="">Seleccione mes...</option>
-                                <option value="Enero">Enero</option>
-                                <option value="Febrero">Febrero</option>
-                                <option value="Marzo">Marzo</option>
-                                <option value="Abril">Abril</option>
-                                <option value="Mayo">Mayo</option>
-                                <option value="Junio">Junio</option>
-                                <option value="Julio">Julio</option>
-                                <option value="Agosto">Agosto</option>
-                                <option value="Septiembre">Septiembre</option>
-                                <option value="Octubre">Octubre</option>
-                                <option value="Noviembre">Noviembre</option>
-                                <option value="Diciembre">Diciembre</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Fecha en que se realizó el Pago (Día, Mes, Año) *</label>
-                        <input type="date" id="pagoFechaRealizacion" required>
                     </div>
 
                     <div class="form-grid">
@@ -601,43 +600,22 @@
 
         <div id="infografia" class="section-container">
             <div class="card">
-                <h2><i class="fa-solid fa-id-card"></i> Atletas Oficiales KSA</h2>
-                <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.5rem;">Base de datos de porteros activos.</p>
+                <h2><i class="fa-solid fa-id-card"></i> Infografía y Fichas de Atletas KSA</h2>
                 <div id="gridInfografiaAtletas" class="infografia-grid">
                     <div class="atleta-card">
-                        <h3 style="color: var(--light); font-size: 1.1rem; margin-bottom: 5px;">Joaquin Bravo</h3>
-                        <p style="font-size: 0.8rem; color: var(--accent); font-weight: 700; margin-bottom: 10px;">Portero Oficial KSA</p>
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" class="atleta-avatar" alt="Atleta">
+                        <h3 style="color: var(--light); font-size: 1.1rem; margin-bottom: 5px;">Mateo Pérez</h3>
+                        <p style="font-size: 0.8rem; color: var(--accent); font-weight: 700; margin-bottom: 10px;">Atleta Oficial KSA</p>
                         <div class="atleta-info">
-                            Cédula: <b>V-14496578</b><br>
-                            Representante: <b>Representante</b><br>
-                            Plan: <b>Plan Base</b>
-                        </div>
-                    </div>
-                    <div class="atleta-card">
-                        <h3 style="color: var(--light); font-size: 1.1rem; margin-bottom: 5px;">Gil Alvarez</h3>
-                        <p style="font-size: 0.8rem; color: var(--accent); font-weight: 700; margin-bottom: 10px;">Portero Oficial KSA</p>
-                        <div class="atleta-info">
-                            Cédula: <b>V-00000001</b><br>
-                            Representante: <b>Representante</b><br>
-                            Plan: <b>Plan Pro</b>
-                        </div>
-                    </div>
-                    <div class="atleta-card">
-                        <h3 style="color: var(--light); font-size: 1.1rem; margin-bottom: 5px;">Leonardo Nucette</h3>
-                        <p style="font-size: 0.8rem; color: var(--accent); font-weight: 700; margin-bottom: 10px;">Portero Oficial KSA</p>
-                        <div class="atleta-info">
-                            Cédula: <b>V-00000002</b><br>
-                            Representante: <b>Representante</b><br>
-                            Plan: <b>Plan Élite GK</b>
-                        </div>
-                    </div>
-                    <div class="atleta-card">
-                        <h3 style="color: var(--light); font-size: 1.1rem; margin-bottom: 5px;">Manuel Pineda</h3>
-                        <p style="font-size: 0.8rem; color: var(--accent); font-weight: 700; margin-bottom: 10px;">Portero Oficial KSA</p>
-                        <div class="atleta-info">
-                            Cédula: <b>V-00000003</b><br>
-                            Representante: <b>Representante</b><br>
-                            Plan: <b>Plan Base</b>
+                            Fecha de nac: <b>12/05/2014 (12 años)</b><br>
+                            Cédula: <b>V-34567890</b><br>
+                            Perfil: <b>Derecho</b><br>
+                            Equipo actual: <b>Academia F.C.</b><br>
+                            Hobby: <b>Dibujar y futsal</b><br>
+                            Fans de: <b>Real Madrid</b><br>
+                            Metas: <b>Ser arquero profesional de la Vinotinto</b><br>
+                            Que le gusta de ksa: <b>Los entrenamientos de potencia en arena y la exigencia técnica.</b><br>
+                            Redes sociales: <b>@mateoperez_gk</b>
                         </div>
                     </div>
                 </div>
@@ -710,15 +688,45 @@
 
         <div id="redes" class="section-container">
             <div class="card">
-                <h2><i class="fa-solid fa-share-nodes"></i> Redes Sociales y Canales Oficiales</h2>
-                <p style="color: #94a3b8; margin-bottom: 1.5rem;">Contacto institucional KSA.</p>
+                <h2><i class="fa-solid fa-share-nodes"></i> Redes Sociales Oficiales</h2>
+                <p style="color: #94a3b8; margin-bottom: 1.5rem;">Síguenos y forma parte de nuestra comunidad digital de alto rendimiento.</p>
                 
                 <div id="contenedorRedesSociales" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem;">
                     <div class="social-card">
                         <i class="fa-brands fa-whatsapp" style="color: #25D366;"></i>
-                        <h3 style="color: var(--light); margin-bottom: 5px;">WhatsApp Oficial</h3>
+                        <h3 style="color: var(--light); margin-bottom: 5px;">WhatsApp Oficial KSA</h3>
                         <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 15px;">0424-6891083</p>
-                        <a href="https://wa.me/584246891083" target="_blank" class="btn btn-accent" style="padding: 0.5rem; font-size: 0.85rem; background: #25D366; color: #fff;">Escribir</a>
+                        <a href="https://wa.me/584246891083" target="_blank" class="btn btn-accent" style="padding: 0.5rem; font-size: 0.85rem; background: #25D366; color: #fff;">Escribir al WhatsApp</a>
+                    </div>
+                    <div class="social-card">
+                        <i class="fa-brands fa-instagram"></i>
+                        <h3 style="color: var(--light); margin-bottom: 5px;">Keepers Sport Academy GK</h3>
+                        <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 15px;">@keeperssportacademy</p>
+                        <a href="https://instagram.com" target="_blank" class="btn btn-accent" style="padding: 0.5rem; font-size: 0.85rem;">Visitar Instagram</a>
+                    </div>
+                    <div class="social-card">
+                        <i class="fa-brands fa-instagram"></i>
+                        <h3 style="color: var(--light); margin-bottom: 5px;">Prof. Eduardo Martínez</h3>
+                        <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 15px;">Head Coach</p>
+                        <a href="https://instagram.com" target="_blank" class="btn btn-accent" style="padding: 0.5rem; font-size: 0.85rem;">Visitar Perfil</a>
+                    </div>
+                    <div class="social-card">
+                        <i class="fa-brands fa-tiktok"></i>
+                        <h3 style="color: var(--light); margin-bottom: 5px;">TikTok Oficial</h3>
+                        <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 15px;">@keeperssportacademy</p>
+                        <a href="https://tiktok.com" target="_blank" class="btn btn-accent" style="padding: 0.5rem; font-size: 0.85rem;">Visitar TikTok</a>
+                    </div>
+                    <div class="social-card">
+                        <i class="fa-brands fa-youtube"></i>
+                        <h3 style="color: var(--light); margin-bottom: 5px;">YouTube Academy</h3>
+                        <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 15px;">Canal Oficial</p>
+                        <a href="https://youtube.com" target="_blank" class="btn btn-accent" style="padding: 0.5rem; font-size: 0.85rem;">Ver Canal</a>
+                    </div>
+                    <div class="social-card">
+                        <i class="fa-brands fa-facebook"></i>
+                        <h3 style="color: var(--light); margin-bottom: 5px;">Facebook Oficial</h3>
+                        <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 15px;">Keepers Sport Academy GK</p>
+                        <a href="https://facebook.com" target="_blank" class="btn btn-accent" style="padding: 0.5rem; font-size: 0.85rem;">Visitar Facebook</a>
                     </div>
                     <div class="social-card">
                         <i class="fa-solid fa-envelope"></i>
@@ -732,11 +740,11 @@
 
         <div id="admin" class="section-container">
             <div class="card" style="border-top-color: var(--accent);">
-                <h2><i class="fa-solid fa-lock"></i> Panel Admin CRUD (Base de Datos Original)</h2>
-                <p style="color: #94a3b8; margin-bottom: 1.5rem;">Gestión de la base de datos original de atletas KSA.</p>
+                <h2><i class="fa-solid fa-lock"></i> Panel Administrativo Integral y Autogestionable</h2>
+                <p style="color: #94a3b8; margin-bottom: 1.5rem;">Panel exclusivo para el Head Coach Eduardo Martínez (Control Total de Secciones y Base de Datos).</p>
                 
                 <form id="formAdmin" onsubmit="guardarContenidoAdmin(event)">
-                    <div class="section-title">Configuración Global y Tasa</div>
+                    <div class="section-title">1. Configurar Tasa del Día y Puntos Internos</div>
                     <div class="form-grid">
                         <div class="form-group">
                             <label>Tasa del Día Base (Bs)</label>
@@ -748,15 +756,70 @@
                         </div>
                     </div>
 
-                    <div class="section-title">Base de Datos de Atletas Original (CRUD)</div>
+                    <div class="section-title">2. Autogestionar Costos (Sesión Regular, Eventual y Servicios)</div>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Sesión Extra Atleta Regular ($)</label><input type="number" step="0.5" id="admCostReg" value="7.5"></div>
+                        <div class="form-group"><label>Sesión Atleta Eventual ($)</label><input type="number" step="0.5" id="admCostEventual" value="15.0"></div>
+                        <div class="form-group"><label>Costo Plan Base ($)</label><input type="number" id="admCostBase" value="60"></div>
+                        <div class="form-group"><label>Costo Plan Pro ($)</label><input type="number" id="admCostPro" value="90"></div>
+                        <div class="form-group"><label>Costo Plan Élite ($)</label><input type="number" id="admCostElite" value="120"></div>
+                        <div class="form-group"><label>Costo Kit Uniforme ($)</label><input type="number" id="admCostKit" value="35"></div>
+                        <div class="form-group"><label>Costo Playera Fans Store ($)</label><input type="number" id="admCostStore" value="20"></div>
+                    </div>
+
+                    <div class="section-title">3. Gestión de Galería (Subir y Eliminar)</div>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Título Multimedia</label><input type="text" id="adminMediaTitulo" placeholder="Ej. Bloqueo Raso"></div>
+                        <div class="form-group"><label>Archivo Foto/Video</label><input type="file" id="adminMediaFile" accept="image/*,video/*"></div>
+                    </div>
+                    <div class="form-group"><label>Descripción</label><textarea id="adminMediaDesc" rows="2" placeholder="Detalles..."></textarea></div>
+                    <div id="panelGestionGaleria" style="margin-top: 1rem; background: #111; padding: 1rem; border-radius: 8px; border: 1px solid #333;">
+                        <h4 style="color: var(--accent); margin-bottom: 8px; font-size: 0.9rem;">Elementos Actuales en Galería:</h4>
+                        <div id="listaAdminGaleria">Cargando elementos...</div>
+                    </div>
+
+                    <div class="section-title" style="margin-top: 2rem;">4. Base de Datos de Inscripciones y Registro Directo</div>
+                    <div style="background: #111; padding: 1.2rem; border-radius: 8px; border: 1px solid #333; margin-bottom: 1.5rem;">
+                        <h4 style="color: var(--accent); margin-bottom: 12px; font-size: 0.95rem;"><i class="fa-solid fa-user-plus"></i> Inscribir Atleta Directamente (Ficha Completa)</h4>
+                        
+                        <div class="form-grid">
+                            <div class="form-group"><label>Nombres y Apellidos del Atleta</label><input type="text" id="admRegNombre" placeholder="Mateo Pérez"></div>
+                            <div class="form-group"><label>Cédula / Partida Nacimiento</label><input type="text" id="admRegCedula" placeholder="V-34567890"></div>
+                            <div class="form-group"><label>Fecha de Nacimiento</label><input type="date" id="admRegNac"></div>
+                            <div class="form-group"><label>Teléfono del Atleta</label><input type="tel" id="admRegTel" placeholder="0414-0000000"></div>
+                            <div class="form-group"><label>Dirección</label><input type="text" id="admRegDir" placeholder="Sector, Calle, Casa"></div>
+                            <div class="form-group"><label>Redes Sociales Atleta</label><input type="text" id="admRegRedes" placeholder="@usuario"></div>
+                            
+                            <div class="form-group"><label>Nombres y Apellidos del Representante</label><input type="text" id="admRegRep" placeholder="Carlos Pérez"></div>
+                            <div class="form-group"><label>Cédula del Representante</label><input type="text" id="admRegCedRep" placeholder="V-12345678"></div>
+                            <div class="form-group"><label>Parentesco</label><select id="admRegParentesco"><option value="Madre">Madre</option><option value="Padre">Padre</option><option value="Representante Legal">Representante Legal</option><option value="Otro">Otro</option></select></div>
+                            <div class="form-group"><label>Teléfono / WhatsApp Principal</label><input type="tel" id="admRegTelRep" placeholder="0412-0000000"></div>
+                            <div class="form-group"><label>Correo Electrónico</label><input type="email" id="admRegCorreoRep" placeholder="correo@ejemplo.com"></div>
+                            
+                            <div class="form-group"><label>Equipo u Organización</label><input type="text" id="admRegEquipo" placeholder="Academia F.C."></div>
+                            <div class="form-group"><label>Categoría / Año</label><input type="text" id="admRegCategoria" placeholder="Sub-12 / 2014"></div>
+                            <div class="form-group"><label>Perfil / Pie Dominante</label><select id="admRegPie"><option value="Derecho">Derecho</option><option value="Izquierdo">Izquierdo</option><option value="Ambidextro">Ambidextro</option></select></div>
+                            <div class="form-group"><label>Estatura (cm) / Peso (kg)</label><input type="text" id="admRegAntro" placeholder="145 cm / 38 kg"></div>
+                            <div class="form-group"><label>Talla de Uniforme</label><input type="text" id="admRegTalla" placeholder="Talla 10 / M"></div>
+                            
+                            <div class="form-group"><label>Plan de Entrenamiento Mensual</label><select id="admRegPlanSelect"><option value="Plan Base">Plan Base (8 sesiones) - $60</option><option value="Plan Pro">Plan Pro (12 sesiones) - $90</option><option value="Plan Élite GK">Plan Élite GK (16 sesiones) - $120</option></select></div>
+                            <div class="form-group"><label>Horario Preferido</label><select id="admRegHorario"><option value="Lunes y Miércoles - 5:40 PM">Lunes y Miércoles - 5:40 PM</option><option value="Martes y Jueves - 5:40 PM y 6:40 PM">Martes y Jueves - 5:40 PM y 6:40 PM</option></select></div>
+                            <div class="form-group"><label>Tipo de Sangre</label><select id="admRegSangre"><option value="O+">O+</option><option value="O-">O-</option><option value="A+">A+</option><option value="A-">A-</option><option value="B+">B+</option><option value="B-">B-</option><option value="AB+">AB+</option><option value="AB-">AB-</option></select></div>
+                            <div class="form-group"><label>Enfermedades / Alergias / Lesiones</label><input type="text" id="admRegSalud" placeholder="Ninguna / No"></div>
+                            <div class="form-group"><label>Contacto de Emergencia</label><input type="text" id="admRegEmergencia" placeholder="Nombre y Teléfono"></div>
+                        </div>
+                        <button type="button" class="btn btn-accent" onclick="registrarAtletaCompletoAdmin()">Guardar Ficha Completa en Base de Datos</button>
+                    </div>
+
                     <div class="table-container">
                         <table>
                             <thead>
                                 <tr>
                                     <th>Atleta</th>
                                     <th>Cédula</th>
-                                    <th>Representante</th>
-                                    <th>Plan</th>
+                                    <th>Representante / Telf</th>
+                                    <th>Plan / Equipo</th>
+                                    <th>Estatus</th>
                                     <th>Acción</th>
                                 </tr>
                             </thead>
@@ -764,8 +827,20 @@
                         </table>
                     </div>
 
+                    <div class="section-title" style="margin-top: 2rem;">5. Gestión de Sedes Alternativas y Clínicas Especiales</div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Agregar Sede Adicional</label>
+                            <input type="text" id="admNuevaSede" placeholder="Ej. Cancha Sintética Norte (Entrenamientos tácticos y salidas de balón)">
+                        </div>
+                    </div>
+                    <div id="panelGestionSedes" style="margin-top: 1rem; background: #111; padding: 1rem; border-radius: 8px; border: 1px solid #333;">
+                        <h4 style="color: var(--accent); margin-bottom: 8px; font-size: 0.9rem;">Sedes Alternativas Registradas:</h4>
+                        <div id="listaAdminSedes">Cargando sedes...</div>
+                    </div>
+
                     <div id="loadingAdmin" class="loading"><i class="fa-solid fa-spinner fa-spin"></i> Guardando cambios en el sistema...</div>
-                    <button type="submit" class="btn btn-accent" style="margin-top: 1rem;">Guardar Cambios</button>
+                    <button type="submit" class="btn btn-accent" style="margin-top: 1rem;">Guardar Cambios del Sistema</button>
                 </form>
             </div>
         </div>
@@ -775,13 +850,13 @@
     <script>
         let modoAccesoActual = 'login';
         let baseDatosAtletasKSA = [
-            { nombre: "Joaquin Bravo", cedula: "V-14496578", representante: "Representante", plan: "Plan Base" },
-            { nombre: "Gil Alvarez", cedula: "V-00000001", representante: "Representante", plan: "Plan Pro" },
-            { nombre: "Leonardo Nucette", cedula: "V-00000002", representante: "Representante", plan: "Plan Élite GK" },
-            { nombre: "Manuel Pineda", cedula: "V-00000003", representante: "Representante", plan: "Plan Base" }
+            { nombre: "Mateo Pérez", nac: "2014-05-12", equipo: "Academia F.C.", perfil: "Derecho", cedula: "V-34567890", representante: "Carlos Pérez", telRep: "0412-0000000", plan: "Plan Base", sesionesRestantes: 2, estatus: "Activo" }
         ];
 
-        let galeriaKSA = [];
+        let galeriaKSA = [
+            { id: 1, titulo: "Entrenamiento de Potencia en Arena", tipo: "imagen", url: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80", descripcion: "Sede Vereda del Lago - Alto Rendimiento GK." }
+        ];
+
         let sedesAlternativasKSA = [];
 
         function obtenerTasaDelDia() {
@@ -794,6 +869,7 @@
             const tasaFinal = obtenerTasaDelDia();
             document.getElementById('lblTasaGlobalHeader').innerText = tasaFinal.toFixed(2);
             actualizarMontoKit(document.getElementById('kitModalidad').value);
+            actualizarBancoStore();
             if(document.getElementById('pagoMontoUSD').value) { calcularBolivaresMontoLibre(); }
         }
 
@@ -922,6 +998,7 @@
             const ultimo = localStorage.getItem('ksa_ultimo_acceso');
             if(ultimo) { document.getElementById('lblUltimoAcceso').innerText = ultimo; }
             actualizarBarraTasaGlobal();
+            actualizarBancoStore();
             renderizarSedesPublicas();
         };
 
@@ -932,6 +1009,7 @@
             if(element) element.classList.add('active');
             if(tabId === 'galeria') { cargarGaleria(); }
             if(tabId === 'cumpleanos') { generarMensajesCumpleanosLimpios(); }
+            if(tabId === 'fansstore') { actualizarBancoStore(); }
             if(tabId === 'admin') { cargarPanelAdministrativo(); }
         }
 
@@ -954,9 +1032,9 @@
             let costoUSD = 0;
 
             if(tipo === 'SesionExtraActiva') {
-                costoUSD = 7.5;
+                costoUSD = parseFloat(localStorage.getItem('ksa_costo_reg')) || 7.5;
             } else if(tipo === 'Eventual') {
-                costoUSD = 15.0;
+                costoUSD = parseFloat(localStorage.getItem('ksa_costo_eventual')) || 15.0;
             }
 
             if(tipo === 'SesionExtraActiva' || tipo === 'Eventual') {
@@ -992,8 +1070,10 @@
 
         function verificarSesionesAtleta(nombreAtleta) {
             if(!nombreAtleta) return;
+            const atletaEncontrado = baseDatosAtletasKSA.find(a => a.nombre.toLowerCase() === nombreAtleta.toLowerCase());
+            let sesiones = atletaEncontrado ? atletaEncontrado.sesionesRestantes : 2;
             document.getElementById('avisoSesionesRegulares').style.display = 'block';
-            document.getElementById('txtEstadoSesiones').innerHTML = `Atleta localizado. (Recuperación obligatoria en la misma semana).`;
+            document.getElementById('txtEstadoSesiones').innerHTML = `Atleta localizado. Sesiones restantes: <b style="color: #34d399;">${sesiones}</b>. (Recuperación obligatoria en la misma semana).`;
         }
 
         function validarAnticipacionReserva() {
@@ -1073,6 +1153,57 @@
                 document.getElementById('formKit').reset();
                 document.getElementById('cajaBancoKit').style.display = 'none';
                 setTimeout(() => { alerta.style.display = 'none'; }, 7000);
+            }, 1000);
+        }
+
+        function actualizarBancoStore() {
+            const cantidad = parseInt(document.getElementById('storeCantidad').value) || 1;
+            const tallaStore = document.getElementById('storeTalla').value;
+            const totalUSD = cantidad * 20;
+            const tasaActual = obtenerTasaDelDia();
+            const totalBs = (totalUSD * tasaActual).toFixed(2);
+
+            document.getElementById('storeTotalUSD').innerText = `$${totalUSD.toFixed(2)} USD`;
+            document.getElementById('storeTotalBS').innerText = `Equivalente en Bs: ${totalBs} Bs`;
+
+            if(!tallaStore) {
+                document.getElementById('infoBancoStore').innerHTML = `<p style="color: #94a3b8; font-size: 0.9rem;">Seleccione una talla para ver los datos bancarios y el monto inmediato.</p>`;
+                return;
+            }
+
+            const textoCopiar = `Banco: BNC | Titular: EDUARDO MARTINEZ | C.I: V-19936880 | Cuenta: 01910572501100079991 | Monto: ${totalBs} Bs`;
+            document.getElementById('infoBancoStore').innerHTML = `
+                <div class="bank-info">
+                    <button type="button" class="copy-btn" onclick="copiarTextoCompleto('${textoCopiar}')">Copiar Todo</button>
+                    <div class="bank-info-content">
+                        <b>Banco:</b> Banco Nacional de Crédito (BNC) - Transferencia<br>
+                        <b>Titular:</b> EDUARDO MARTINEZ<br>
+                        <b>C.I:</b> V-19936880<br>
+                        <b>Cuenta:</b> 0191-0572-50-1100079991<br>
+                        <b>Playera/s (${cantidad}):</b> Talla ${tallaStore} | <b>Total:</b> $${totalUSD.toFixed(2)} (${totalBs} Bs)
+                    </div>
+                    <div class="tasa-externa-separada"><i class="fa-solid fa-coins"></i> Tasa del Día: ${tasaActual.toFixed(2)} Bs</div>
+                </div>
+            `;
+        }
+
+        function enviarPedidoStore(e) {
+            e.preventDefault();
+            document.getElementById('loadingStore').style.display = 'block';
+            document.getElementById('btnStore').style.display = 'none';
+
+            notificarCorreoOficial("Nuevo Pedido Fans Store", "Comprador: " + document.getElementById('storeComprador').value + " - Talla: " + document.getElementById('storeTalla').value);
+
+            setTimeout(() => {
+                document.getElementById('loadingStore').style.display = 'none';
+                document.getElementById('btnStore').style.display = 'block';
+                let alerta = document.getElementById('alertaStore');
+                alerta.innerText = "¡Pedido de Fans Store registrado con éxito! Notificación enviada a keeperssportacademy@gmail.com";
+                alerta.style.display = 'block';
+                document.getElementById('formStore').reset();
+                document.getElementById('storeCantidad').value = 1;
+                actualizarBancoStore();
+                setTimeout(() => { alerta.style.display = 'none'; }, 6000);
             }, 1000);
         }
 
@@ -1165,7 +1296,7 @@
 
         function copiarTextoCompleto(texto) {
             navigator.clipboard.writeText(texto);
-            alert("¡Datos bancarios y monto copiados con éxito! Procede a pegar en tu banca.");
+            alert("¡Datos bancarios y monto copiados con éxito (sin la tasa)! Procede a pegar en tu banca.");
         }
 
         function enviarInscripcion(e) {
@@ -1173,8 +1304,34 @@
             document.getElementById('loadingInscripcion').style.display = 'block';
             document.getElementById('btnInscripcion').style.display = 'none';
 
-            var nombre = document.getElementById('nombreAtleta').value;
-            notificarCorreoOficial("Nueva Inscripción de Atleta", "Atleta: " + nombre);
+            var datos = {
+                nombreAtleta: document.getElementById('nombreAtleta').value,
+                cedulaAtleta: document.getElementById('cedulaAtleta').value,
+                fechaNac: document.getElementById('fechaNac').value,
+                nombreRep: document.getElementById('nombreRep').value,
+                cedulaRep: document.getElementById('cedulaRep').value,
+                telRep: document.getElementById('telRep').value,
+                correoRep: document.getElementById('correoRep').value,
+                equipo: document.getElementById('equipo').value,
+                pie: document.getElementById('pie').value,
+                talla: document.getElementById('talla').value,
+                plan: document.getElementById('plan').value
+            };
+
+            baseDatosAtletasKSA.push({
+                nombre: datos.nombreAtleta,
+                nac: datos.fechaNac,
+                equipo: datos.equipo || 'Independiente',
+                perfil: datos.pie,
+                cedula: datos.cedulaAtleta,
+                representante: datos.nombreRep,
+                telRep: datos.telRep,
+                plan: datos.plan,
+                sesionesRestantes: 8,
+                estatus: 'Activo'
+            });
+
+            notificarCorreoOficial("Nueva Inscripción de Atleta", "Atleta: " + datos.nombreAtleta + " - Plan: " + datos.plan);
 
             setTimeout(() => {
                 document.getElementById('loadingInscripcion').style.display = 'none';
@@ -1187,46 +1344,165 @@
             }, 1000);
         }
 
+        function registrarAtletaCompletoAdmin() {
+            const nombre = document.getElementById('admRegNombre').value.trim();
+            const cedula = document.getElementById('admRegCedula').value.trim();
+            const nac = document.getElementById('admRegNac').value;
+            const rep = document.getElementById('admRegRep').value.trim();
+            const telRep = document.getElementById('admRegTelRep').value.trim();
+
+            if(!nombre) {
+                alert("Por favor ingrese al menos el nombre del atleta.");
+                return;
+            }
+
+            baseDatosAtletasKSA.push({
+                nombre: nombre,
+                nac: nac || '2014-01-01',
+                equipo: document.getElementById('admRegEquipo').value.trim() || 'Academia',
+                perfil: document.getElementById('admRegPie').value,
+                cedula: cedula || 'V-00000000',
+                representante: rep || 'Representante',
+                telRep: telRep || '0412-0000000',
+                plan: document.getElementById('admRegPlanSelect').value,
+                sesionesRestantes: 8,
+                estatus: 'Activo'
+            });
+
+            alert(`¡Atleta ${nombre} inscrito exitosamente desde el panel admin!`);
+            document.getElementById('admRegNombre').value = '';
+            document.getElementById('admRegCedula').value = '';
+            document.getElementById('admRegNac').value = '';
+            document.getElementById('admRegTel').value = '';
+            document.getElementById('admRegDir').value = '';
+            document.getElementById('admRegRedes').value = '';
+            document.getElementById('admRegRep').value = '';
+            document.getElementById('admRegCedRep').value = '';
+            document.getElementById('admRegTelRep').value = '';
+            document.getElementById('admRegCorreoRep').value = '';
+            document.getElementById('admRegEquipo').value = '';
+            document.getElementById('admRegCategoria').value = '';
+            document.getElementById('admRegAntro').value = '';
+            document.getElementById('admRegTalla').value = '';
+            document.getElementById('admRegSalud').value = '';
+            document.getElementById('admRegEmergencia').value = '';
+            cargarPanelAdministrativo();
+        }
+
         function generarMensajesCumpleanosLimpios() {
             const contenedor = document.getElementById('contenedorMensajesCumpleanos');
-            contenedor.innerHTML = `
+            const hoy = new Date();
+            const mesActual = hoy.getMonth() + 1;
+            let html = '';
+
+            html += `
                 <div style="background: #111; border: 1px solid var(--accent); padding: 1.5rem; border-radius: 8px; border-left: 5px solid var(--accent);">
                     <h4 style="color: var(--accent); margin-bottom: 0;"><i class="fa-solid fa-cake-candles"></i> Aniversario Oficial de Keepers Sport Academy GK (16 de Enero)</h4>
                 </div>
+            `;
+            html += `
                 <div style="background: #111; border: 1px solid var(--danger); padding: 1.5rem; border-radius: 8px; border-left: 5px solid var(--danger);">
                     <h4 style="color: var(--danger); margin-bottom: 0;"><i class="fa-solid fa-user-tie"></i> Cumpleaños del Head Coach Eduardo Martínez (4 de Febrero)</h4>
                 </div>
             `;
+
+            let atletasDelMes = baseDatosAtletasKSA.filter(atleta => {
+                if(!atleta.nac) return false;
+                const partes = atleta.nac.split('-');
+                if(partes.length === 3) { return parseInt(partes[1], 10) === mesActual; }
+                return false;
+            });
+
+            if(atletasDelMes.length > 0) {
+                atletasDelMes.forEach(atleta => {
+                    html += `
+                        <div style="background: #111; border: 1px solid #064e3b; padding: 1.5rem; border-radius: 8px; border-left: 5px solid #34d399;">
+                            <h4 style="color: #34d399; margin-bottom: 5px;"><i class="fa-solid fa-gift"></i> Cumpleaños del Mes - Atleta: ${atleta.nombre}</h4>
+                            <p style="font-size: 0.9rem; color: var(--light); font-style: italic;">"¡Feliz cumpleaños en este mes, ${atleta.nombre}! <b>Mentalidad de campeones</b>."</p>
+                        </div>
+                    `;
+                });
+            } else {
+                html += `
+                    <div style="background: #111; border: 1px solid #333; padding: 1.2rem; border-radius: 8px; text-align: center; color: #94a3b8; font-size: 0.9rem;">
+                        <i class="fa-solid fa-calendar"></i> No hay atletas cumpliendo años en este mes en curso. ¡Pronto más celebraciones KSA!
+                    </div>
+                `;
+            }
+            contenedor.innerHTML = html;
         }
 
         function cargarPanelAdministrativo() {
             document.getElementById('admTasaBase').value = localStorage.getItem('ksa_tasa_base') || 1000.00;
             document.getElementById('admPuntosExtra').value = localStorage.getItem('ksa_puntos_extra') || 4.41;
+            document.getElementById('admCostReg').value = localStorage.getItem('ksa_costo_reg') || 7.5;
+            document.getElementById('admCostEventual').value = localStorage.getItem('ksa_costo_eventual') || 15.0;
+
+            let htmlGaleria = '';
+            galeriaKSA.forEach(item => {
+                htmlGaleria += `<div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #222; font-size: 0.85rem;">
+                    <span><b>${item.titulo}</b></span>
+                    <button type="button" class="logout-btn" onclick="eliminarElementoGaleria(${item.id})">Eliminar</button>
+                </div>`;
+            });
+            document.getElementById('listaAdminGaleria').innerHTML = htmlGaleria || 'No hay elementos.';
+
+            let htmlSedesAdmin = '';
+            sedesAlternativasKSA.forEach((sede, index) => {
+                htmlSedesAdmin += `<div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #222; font-size: 0.85rem;">
+                    <span><b>${sede}</b></span>
+                    <button type="button" class="logout-btn" onclick="eliminarSede(${index})">Eliminar</button>
+                </div>`;
+            });
+            document.getElementById('listaAdminSedes').innerHTML = htmlSedesAdmin || 'No hay sedes alternativas registradas.';
 
             let htmlAtletas = '';
             baseDatosAtletasKSA.forEach((atleta, index) => {
                 htmlAtletas += `<tr>
                     <td><b>${atleta.nombre}</b></td>
                     <td>${atleta.cedula}</td>
-                    <td>${atleta.representante}</td>
-                    <td>${atleta.plan}</td>
+                    <td>${atleta.representante} (${atleta.telRep})</td>
+                    <td>${atleta.plan} <br><span style="color:#94a3b8; font-size:0.8rem;">${atleta.equipo}</span></td>
+                    <td><span style="color: ${atleta.estatus === 'Activo' ? '#34d399' : '#f87171'}; font-weight: bold; background: #111; padding: 4px 8px; border-radius: 4px; border: 1px solid #333;">● ${atleta.estatus || 'Activo'}</span></td>
                     <td>
-                        <button type="button" class="logout-btn" onclick="eliminarAtletaAdmin(${index})">Eliminar</button>
+                        <button type="button" class="copy-btn" onclick="alternarEstatusAtleta(${index})">Cambiar Estatus</button>
                     </td>
                 </tr>`;
             });
             document.getElementById('tablaAdminAtletas').innerHTML = htmlAtletas;
         }
 
-        function eliminarAtletaAdmin(index) {
-            baseDatosAtletasKSA.splice(index, 1);
+        function alternarEstatusAtleta(index) {
+            baseDatosAtletasKSA[index].estatus = baseDatosAtletasKSA[index].estatus === 'Activo' ? 'Inactivo' : 'Activo';
             cargarPanelAdministrativo();
-            alert("Atleta eliminado de la base de datos.");
+            alert("Estatus del atleta actualizado correctamente.");
+        }
+
+        function eliminarElementoGaleria(id) {
+            galeriaKSA = galeriaKSA.filter(item => item.id !== id);
+            cargarPanelAdministrativo();
+            cargarGaleria();
+            alert("Elemento eliminado de la galería.");
+        }
+
+        function eliminarSede(index) {
+            sedesAlternativasKSA.splice(index, 1);
+            cargarPanelAdministrativo();
+            renderizarSedesPublicas();
+            alert("Sede alternativa eliminada.");
         }
 
         function renderizarSedesPublicas() {
             const contenedor = document.getElementById('listaSedesExtra');
-            contenedor.innerHTML = `<p style="color: #94a3b8; font-style: italic;">No hay sedes alternativas registradas actualmente.</p>`;
+            if(sedesAlternativasKSA.length === 0) {
+                contenedor.innerHTML = `<p style="color: #94a3b8; font-style: italic;">No hay sedes alternativas registradas actualmente. Agrega una desde el panel de administración.</p>`;
+                return;
+            }
+            let html = '';
+            sedesAlternativasKSA.forEach(sede => {
+                html += `<p style="margin-bottom: 6px;"><b>Sede Adicional:</b> ${sede}</p>`;
+            });
+            contenedor.innerHTML = html;
         }
 
         function guardarContenidoAdmin(e) {
@@ -1235,16 +1511,27 @@
 
             const baseVal = document.getElementById('admTasaBase').value;
             const puntosVal = document.getElementById('admPuntosExtra').value;
+            const costoRegVal = document.getElementById('admCostReg').value;
+            const costoEventualVal = document.getElementById('admCostEventual').value;
 
             if(baseVal && puntosVal) {
                 localStorage.setItem('ksa_tasa_base', baseVal);
                 localStorage.setItem('ksa_puntos_extra', puntosVal);
+                localStorage.setItem('ksa_costo_reg', costoRegVal);
+                localStorage.setItem('ksa_costo_eventual', costoEventualVal);
                 actualizarBarraTasaGlobal();
+            }
+
+            const nuevaSede = document.getElementById('admNuevaSede').value.trim();
+            if(nuevaSede) {
+                sedesAlternativasKSA.push(nuevaSede);
+                document.getElementById('admNuevaSede').value = '';
+                renderizarSedesPublicas();
             }
 
             setTimeout(() => {
                 document.getElementById('loadingAdmin').style.display = 'none';
-                alert("¡Configuración guardada con éxito!");
+                alert("¡Configuración y datos administrativos guardados con éxito!");
                 cargarPanelAdministrativo();
             }, 1000);
         }
@@ -1252,7 +1539,19 @@
         function cargarGaleria() {
             document.getElementById('loadingGaleria').style.display = 'none';
             let grid = document.getElementById('galleryGrid');
-            grid.innerHTML = `<p style="color: #94a3b8; font-style: italic;">Galería sin elementos multimedia adicionales.</p>`;
+            let html = '';
+            galeriaKSA.forEach(item => {
+                html += `
+                    <div class="gallery-card">
+                        <img src="${item.url}" class="gallery-media">
+                        <div class="gallery-body">
+                            <h4 style="color:var(--light);">${item.titulo}</h4>
+                            <p style="font-size:0.9rem; color:#94a3b8;">${item.descripcion}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            grid.innerHTML = html;
         }
     </script>
 </body>
