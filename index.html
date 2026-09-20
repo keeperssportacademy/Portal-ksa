@@ -102,8 +102,10 @@
         .atleta-info { text-align: left; font-size: 0.85rem; color: #94a3b8; margin-top: 1rem; line-height: 1.6; background: #181818; padding: 12px; border-radius: 6px; }
         .atleta-info b { color: var(--light); }
 
-        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
-        .gallery-media { width: 100%; height: 200px; object-fit: cover; background: #000; }
+        /* GALERÍA MULTIMEDIA CORREGIDA Y OPERATIVA */
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        .gallery-card { background: #111; border: 1px solid #333; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; border-top: 4px solid var(--accent); }
+        .gallery-media { width: 100%; height: 220px; object-fit: cover; background: #000; display: block; }
         .gallery-body { padding: 1.2rem; }
 
         .social-card { background: #111; border: 1px solid #333; padding: 1.5rem; border-radius: 12px; text-align: center; }
@@ -805,12 +807,14 @@
                         <div class="form-group"><label>Costo Playera Fans Store ($)</label><input type="number" id="admCostStore" value="20"></div>
                     </div>
 
-                    <div class="section-title">3. Gestión de Galería (Subir y Eliminar)</div>
+                    <div class="section-title">3. Gestión de Galería (Subir Fotos y Videos de Entrenamientos)</div>
                     <div class="form-grid">
-                        <div class="form-group"><label>Título Multimedia</label><input type="text" id="adminMediaTitulo" placeholder="Ej. Bloqueo Raso"></div>
-                        <div class="form-group"><label>Archivo Foto/Video</label><input type="file" id="adminMediaFile" accept="image/*,video/*"></div>
+                        <div class="form-group"><label>Título Multimedia</label><input type="text" id="adminMediaTitulo" placeholder="Ej. Bloqueo Raso / Arena"></div>
+                        <div class="form-group"><label>Archivo Foto o Video *</label><input type="file" id="adminMediaFile" accept="image/*,video/*"></div>
                     </div>
-                    <div class="form-group"><label>Descripción</label><textarea id="adminMediaDesc" rows="2" placeholder="Detalles..."></textarea></div>
+                    <div class="form-group"><label>Descripción</label><textarea id="adminMediaDesc" rows="2" placeholder="Detalles de la sesión..."></textarea></div>
+                    <button type="button" class="btn btn-accent" onclick="agregarElementoGaleriaAdmin()">Subir Elemento a Galería</button>
+
                     <div id="panelGestionGaleria" style="margin-top: 1rem; background: #111; padding: 1rem; border-radius: 8px; border: 1px solid #333;">
                         <h4 style="color: var(--accent); margin-bottom: 8px; font-size: 0.9rem;">Elementos Actuales en Galería:</h4>
                         <div id="listaAdminGaleria">Cargando elementos...</div>
@@ -1473,6 +1477,35 @@
             contenedor.innerHTML = html;
         }
 
+        function agregarElementoGaleriaAdmin() {
+            const titulo = document.getElementById('adminMediaTitulo').value.trim() || "Entrenamiento KSA";
+            const desc = document.getElementById('adminMediaDesc').value.trim() || "Sesión de alto rendimiento";
+            const fileInput = document.getElementById('adminMediaFile');
+
+            if(fileInput.files && fileInput.files[0]) {
+                const archivo = fileInput.files[0];
+                const urlObjeto = URL.createObjectURL(archivo);
+                const esVideo = archivo.type.startsWith('video');
+
+                galeriaKSA.push({
+                    id: Date.now(),
+                    titulo: titulo,
+                    tipo: esVideo ? 'video' : 'imagen',
+                    url: urlObjeto,
+                    descripcion: desc
+                });
+
+                document.getElementById('adminMediaTitulo').value = '';
+                document.getElementById('adminMediaDesc').value = '';
+                fileInput.value = '';
+                cargarPanelAdministrativo();
+                cargarGaleria();
+                alert("¡Elemento multimedia agregado con éxito a la galería!");
+            } else {
+                alert("Por favor selecciona un archivo de imagen o video.");
+            }
+        }
+
         function cargarPanelAdministrativo() {
             document.getElementById('admTasaBase').value = localStorage.getItem('ksa_tasa_base') || 1000.00;
             document.getElementById('admPuntosExtra').value = localStorage.getItem('ksa_puntos_extra') || 4.41;
@@ -1482,7 +1515,7 @@
             let htmlGaleria = '';
             galeriaKSA.forEach(item => {
                 htmlGaleria += `<div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #222; font-size: 0.85rem;">
-                    <span><b>${item.titulo}</b></span>
+                    <span><b>${item.titulo}</b> (${item.tipo})</span>
                     <button type="button" class="logout-btn" onclick="eliminarElementoGaleria(${item.id})">Eliminar</button>
                 </div>`;
             });
@@ -1577,12 +1610,25 @@
             document.getElementById('loadingGaleria').style.display = 'none';
             let grid = document.getElementById('galleryGrid');
             let html = '';
+            
+            if(galeriaKSA.length === 0) {
+                grid.innerHTML = `<p style="color: #94a3b8; text-align: center; grid-column: 1/-1;">No hay elementos en la galería actualmente. Sube fotos o videos desde el panel de administración.</p>`;
+                return;
+            }
+
             galeriaKSA.forEach(item => {
+                let mediaElement = '';
+                if(item.tipo === 'video') {
+                    mediaElement = `<video src="${item.url}" class="gallery-media" controls></video>`;
+                } else {
+                    mediaElement = `<img src="${item.url}" class="gallery-media" alt="${item.titulo}">`;
+                }
+
                 html += `
                     <div class="gallery-card">
-                        <img src="${item.url}" class="gallery-media">
+                        ${mediaElement}
                         <div class="gallery-body">
-                            <h4 style="color:var(--light);">${item.titulo}</h4>
+                            <h4 style="color:var(--light); margin-bottom: 5px;">${item.titulo}</h4>
                             <p style="font-size:0.9rem; color:#94a3b8;">${item.descripcion}</p>
                         </div>
                     </div>
