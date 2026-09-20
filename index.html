@@ -102,10 +102,10 @@
         .atleta-info { text-align: left; font-size: 0.85rem; color: #94a3b8; margin-top: 1rem; line-height: 1.6; background: #181818; padding: 12px; border-radius: 6px; }
         .atleta-info b { color: var(--light); }
 
-        /* GALERÍA MULTIMEDIA CORREGIDA Y OPERATIVA */
+        /* GALERÍA MULTIMEDIA CORREGIDA (LIMPIA Y OPERATIVA) */
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
         .gallery-card { background: #111; border: 1px solid #333; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; border-top: 4px solid var(--accent); }
-        .gallery-media { width: 100%; height: 220px; object-fit: cover; background: #000; display: block; }
+        .gallery-media { width: 100%; height: 240px; object-fit: cover; background: #000; display: block; }
         .gallery-body { padding: 1.2rem; }
 
         .social-card { background: #111; border: 1px solid #333; padding: 1.5rem; border-radius: 12px; text-align: center; }
@@ -563,35 +563,24 @@
                             <label><i class="fa-solid fa-calendar-days" style="color: var(--accent);"></i> Mes a Cancelar *</label>
                             <select id="pagoMesCancelar" required>
                                 <option value="">Seleccione mes...</option>
-                                <option value="Enero">Enero</option>
-                                <option value="Febrero">Febrero</option>
-                                <option value="Marzo">Marzo</option>
-                                <option value="Abril">Abril</option>
-                                <option value="Mayo">Mayo</option>
-                                <option value="Junio">Junio</option>
-                                <option value="Julio">Julio</option>
-                                <option value="Agosto">Agosto</option>
-                                <option value="Septiembre">Septiembre</option>
-                                <option value="Octubre">Octubre</option>
-                                <option value="Noviembre">Noviembre</option>
-                                <option value="Diciembre">Diciembre</option>
+                                <option value="Enero">Enero</option><option value="Febrero">Febrero</option><option value="Marzo">Marzo</option>
+                                <option value="Abril">Abril</option><option value="Mayo">Mayo</option><option value="Junio">Junio</option>
+                                <option value="Julio">Julio</option><option value="Agosto">Agosto</option><option value="Septiembre">Septiembre</option>
+                                <option value="Octubre">Octubre</option><option value="Noviembre">Noviembre</option><option value="Diciembre">Diciembre</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label><i class="fa-solid fa-calendar-day" style="color: var(--accent);"></i> Día del Pago *</label>
                             <select id="pagoDiaPago" required>
                                 <option value="">Seleccione día...</option>
-                                <option value="1">1</option><option value="2">2</option><option value="3">3</option>
-                                <option value="4">4</option><option value="5">5</option><option value="6">6</option>
-                                <option value="7">7</option><option value="8">8</option><option value="9">9</option>
-                                <option value="10">10</option><option value="11">11</option><option value="12">12</option>
-                                <option value="13">13</option><option value="14">14</option><option value="15">15</option>
-                                <option value="16">16</option><option value="17">17</option><option value="18">18</option>
-                                <option value="19">19</option><option value="20">20</option><option value="21">21</option>
-                                <option value="22">22</option><option value="23">23</option><option value="24">24</option>
-                                <option value="25">25</option><option value="26">26</option><option value="27">27</option>
-                                <option value="28">28</option><option value="29">29</option><option value="30">30</option>
-                                <option value="31">31</option>
+                                <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>
+                                <option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option>
+                                <option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option>
+                                <option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option>
+                                <option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option>
+                                <option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option>
+                                <option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option>
+                                <option value="29">29</option><option value="30">30</option><option value="31">31</option>
                             </select>
                         </div>
                     </div>
@@ -676,9 +665,7 @@
 
                 <div id="contenedorSedesAlternativas" style="background: #111; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--accent); border: 1px solid #333;">
                     <h3 style="color: var(--accent);"><i class="fa-solid fa-map-location-dot"></i> Sedes Alternativas y Clínicas Especiales</h3>
-                    <div id="listaSedesExtra" style="margin-top: 10px; font-size: 0.9rem; color: var(--light);">
-                        <!-- SE DINÁMICO DESDE PANEL ADMIN -->
-                    </div>
+                    <div id="listaSedesExtra" style="margin-top: 10px; font-size: 0.9rem; color: var(--light);"></div>
                 </div>
             </div>
         </div>
@@ -718,9 +705,10 @@
             </div>
         </div>
 
+        <!-- SECCIÓN GALERÍA LIMPIA Y OPERATIVA -->
         <div id="galeria" class="section-container">
-            <div class="card" style="background: transparent; box-shadow: none; padding: 0; border: none;">
-                <h2 style="background: var(--card-bg); padding: 1.5rem; border-radius: 16px; border: 1px solid #333;"><i class="fa-solid fa-images"></i> Galería Multimedia</h2>
+            <div class="card">
+                <h2><i class="fa-solid fa-images"></i> Galería Multimedia</h2>
                 <div id="loadingGaleria" class="loading" style="display: block;"><i class="fa-solid fa-spinner fa-spin"></i> Cargando galería...</div>
                 <div id="galleryGrid" class="gallery-grid" style="margin-top: 1.5rem;"></div>
             </div>
