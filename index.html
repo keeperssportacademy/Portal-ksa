@@ -1536,7 +1536,7 @@
         function renderizarSedesPublicas() {
             const contenedor = document.getElementById('listaSedesExtra');
             if(sedesAlternativasKSA.length === 0) {
-                contenedor.innerHTML = `<p style="color: #94a3b8; font-style: italic;">No hay sedes alternativas registradas actualmente. Agrega una desde el panel de administración.</p>`;
+                contenedor.innerHTML = '';
                 return;
             }
             let html = '';
