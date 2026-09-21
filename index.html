@@ -103,7 +103,7 @@
         .atleta-info b { color: var(--light); }
 
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
-        .gallery-media { width: 100%; height: 200px; object-fit: cover; background: #000; }
+        .gallery-media { width: 100%; height: 220px; object-fit: cover; background: #000; }
         .gallery-body { padding: 1.2rem; }
 
         .social-card { background: #111; border: 1px solid #333; padding: 1.5rem; border-radius: 12px; text-align: center; }
@@ -525,7 +525,7 @@
             <div class="card">
                 <h2><i class="fa-solid fa-file-invoice-dollar"></i> Pasarela de Pagos, Abonos y Estado de Cuenta</h2>
                 
-                <!-- NUEVO COMPONENTE: AVISO INTELIGENTE DE DEUDAS Y ÚLTIMO ABONO -->
+                <!-- COMPONENTE INTELIGENTE DE DEUDAS Y ÚLTIMO ABONO -->
                 <div style="background: #121212; border: 2px solid var(--accent); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;">
                     <h3 style="color: var(--accent); font-size: 1.1rem; margin-bottom: 8px;"><i class="fa-solid fa-magnifying-glass-dollar"></i> Consulta tu Saldo Pendiente y Último Abono</h3>
                     <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 1rem;">Ingresa la cédula del representante o atleta para visualizar tu estado de cuenta al instante.</p>
@@ -535,7 +535,7 @@
                         <button type="button" onclick="consultarDeudaYUltimoPago()" class="btn btn-accent" style="width: auto; padding: 0.7rem 1.5rem; font-size: 0.9rem;">Consultar Estatus</button>
                     </div>
 
-                    <div id="panelResultadoDeuda" style="display: none; margin-top: 1.2rem; border-top: 1px solid #333; pt: 1rem;">
+                    <div id="panelResultadoDeuda" style="display: none; margin-top: 1.2rem; border-top: 1px solid #333; padding-top: 1rem;">
                         <div class="form-grid" style="margin-top: 1rem; margin-bottom: 0;">
                             <div style="background: #1a1a1a; padding: 1rem; border-radius: 8px; border: 1px solid #333;">
                                 <span style="font-size: 0.75rem; color: #94a3b8; display: block; margin-bottom: 4px;">ÚLTIMO PAGO / ABONO REALIZADO</span>
@@ -1624,11 +1624,11 @@
             let html = '';
             galeriaKSA.forEach(item => {
                 html += `
-                    <div class="gallery-card">
-                        <img src="${item.url}" class="gallery-media">
-                        <div class="gallery-body">
-                            <h4 style="color:var(--light);">${item.titulo}</h4>
-                            <p style="font-size:0.9rem; color:#94a3b8;">${item.descripcion}</p>
+                    <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 12px; overflow: hidden; border-top: 4px solid var(--accent);">
+                        <img src="${item.url}" class="gallery-media" style="width: 100%; height: 220px; object-fit: cover;" onerror="this.src='https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=600&q=80'">
+                        <div class="gallery-body" style="padding: 1.2rem;">
+                            <h4 style="color: var(--light); font-size: 1rem; margin-bottom: 6px;">${item.titulo}</h4>
+                            <p style="font-size: 0.85rem; color: #94a3b8; line-height: 1.5;">${item.descripcion}</p>
                         </div>
                     </div>
                 `;
