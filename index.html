@@ -525,7 +525,6 @@
             <div class="card">
                 <h2><i class="fa-solid fa-file-invoice-dollar"></i> Pasarela de Pagos, Abonos y Estado de Cuenta</h2>
                 
-                <!-- COMPONENTE INTELIGENTE DE DEUDAS Y ÚLTIMO ABONO -->
                 <div style="background: #121212; border: 2px solid var(--accent); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;">
                     <h3 style="color: var(--accent); font-size: 1.1rem; margin-bottom: 8px;"><i class="fa-solid fa-magnifying-glass-dollar"></i> Consulta tu Saldo Pendiente y Último Abono</h3>
                     <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 1rem;">Ingresa la cédula del representante o atleta para visualizar tu estado de cuenta al instante.</p>
@@ -835,10 +834,9 @@
                     <div class="section-title">3. Gestión de Galería (Subir y Eliminar)</div>
                     <div class="form-grid">
                         <div class="form-group"><label>Título Multimedia</label><input type="text" id="adminMediaTitulo" placeholder="Ej. Bloqueo Raso"></div>
-                        <div class="form-group"><label>Archivo Foto/Video *</label><input type="file" id="adminMediaFile" accept="image/*,video/*"></div>
+                        <div class="form-group"><label>Archivo Foto/Video</label><input type="file" id="adminMediaFile" accept="image/*,video/*"></div>
                     </div>
                     <div class="form-group"><label>Descripción</label><textarea id="adminMediaDesc" rows="2" placeholder="Detalles..."></textarea></div>
-                    <button type="button" class="btn btn-accent" onclick="subirElementoGaleriaAdmin()" style="margin-bottom: 1.5rem;"><i class="fa-solid fa-cloud-arrow-up"></i> Subir Multimedia a Galería</button>
 
                     <div id="panelGestionGaleria" style="margin-top: 1rem; background: #111; padding: 1rem; border-radius: 8px; border: 1px solid #333;">
                         <h4 style="color: var(--accent); margin-bottom: 8px; font-size: 0.9rem;">Elementos Actuales en Galería:</h4>
@@ -907,7 +905,7 @@
                     </div>
 
                     <div id="loadingAdmin" class="loading"><i class="fa-solid fa-spinner fa-spin"></i> Guardando cambios en el sistema...</div>
-                    <button type="submit" class="btn btn-accent" style="margin-top: 1rem;">Guardar Cambios Generales</button>
+                    <button type="submit" class="btn btn-accent" style="margin-top: 1rem;">Guardar Cambios y Subir Multimedia</button>
                 </form>
             </div>
         </div>
@@ -917,7 +915,6 @@
     <script>
         let modoAccesoActual = 'login';
         
-        // Base de Datos local persistente
         let baseDatosAtletasKSA = JSON.parse(localStorage.getItem('ksa_db_atletas')) || [
             { nombre: "Mateo Pérez", nac: "2014-05-12", equipo: "Academia F.C.", perfil: "Derecho", cedula: "V-34567890", representante: "Carlos Pérez", telRep: "0412-0000000", plan: "Plan Base", sesionesRestantes: 2, estatus: "Activo" }
         ];
@@ -1569,42 +1566,6 @@
             document.getElementById('tablaAdminAtletas').innerHTML = htmlAtletas;
         }
 
-        function subirElementoGaleriaAdmin() {
-            const titulo = document.getElementById('adminMediaTitulo').value.trim();
-            const desc = document.getElementById('adminMediaDesc').value.trim();
-            const fileInput = document.getElementById('adminMediaFile');
-
-            if(!titulo || fileInput.files.length === 0) {
-                alert("Por favor ingrese un título y seleccione un archivo multimedia.");
-                return;
-            }
-
-            const file = fileInput.files[0];
-            const reader = new FileReader();
-
-            reader.onload = function(e) {
-                const nuevaMedia = {
-                    id: Date.now(),
-                    titulo: titulo,
-                    tipo: file.type.startsWith('video') ? 'video' : 'imagen',
-                    url: e.target.result,
-                    descripcion: desc || 'Sede Vereda del Lago - KSA.'
-                };
-
-                galeriaKSA.push(nuevaMedia);
-                guardarBDLocal();
-                cargarPanelAdministrativo();
-                cargarGaleria();
-
-                document.getElementById('adminMediaTitulo').value = '';
-                document.getElementById('adminMediaDesc').value = '';
-                fileInput.value = '';
-                alert("¡Multimedia subida con éxito a la galería!");
-            };
-
-            reader.readAsDataURL(file);
-        }
-
         function alternarEstatusAtleta(index) {
             baseDatosAtletasKSA[index].estatus = baseDatosAtletasKSA[index].estatus === 'Activo' ? 'Inactivo' : 'Activo';
             guardarBDLocal();
@@ -1658,15 +1619,56 @@
             if(nuevaSede) {
                 sedesAlternativasKSA.push(nuevaSede);
                 document.getElementById('admNuevaSede').value = '';
-                guardarBDLocal();
                 renderizarSedesPublicas();
             }
 
+            const tituloMedia = document.getElementById('adminMediaTitulo').value.trim();
+            const descMedia = document.getElementById('adminMediaDesc').value.trim();
+            const fileInput = document.getElementById('adminMediaFile');
+
+            if(fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function(ev) {
+                    const nuevaMedia = {
+                        id: Date.now(),
+                        titulo: tituloMedia || "Entrenamiento KSA",
+                        tipo: file.type.startsWith('video') ? 'video' : 'imagen',
+                        url: ev.target.result,
+                        descripcion: descMedia || "Sede Vereda del Lago - KSA."
+                    };
+                    galeriaKSA.push(nuevaMedia);
+                    finalizarGuardadoAdmin();
+                };
+                reader.readAsDataURL(file);
+            } else {
+                if(tituloMedia) {
+                    // Si solo puso título sin foto nueva
+                    galeriaKSA.push({
+                        id: Date.now(),
+                        titulo: tituloMedia,
+                        tipo: 'imagen',
+                        url: "https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=600&q=80",
+                        descripcion: descMedia || "Sede Vereda del Lago - KSA."
+                    });
+                }
+                finalizarGuardadoAdmin();
+            }
+        }
+
+        function finalizarGuardadoAdmin() {
+            guardarBDLocal();
+            document.getElementById('adminMediaTitulo').value = '';
+            document.getElementById('adminMediaDesc').value = '';
+            document.getElementById('adminMediaFile').value = '';
+
             setTimeout(() => {
                 document.getElementById('loadingAdmin').style.display = 'none';
-                alert("¡Configuración general guardada con éxito!");
+                alert("¡Cambios guardados con éxito y multimedia agregada a la galería!");
                 cargarPanelAdministrativo();
-            }, 1000);
+                cargarGaleria();
+            }, 800);
         }
 
         function cargarGaleria() {
