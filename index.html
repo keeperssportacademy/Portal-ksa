@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Keepers Sport Academy GK - Portal Oficial y Panel Admin</title>
+    <title>Panel Administrativo - Keepers Sport Academy</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -13,15 +13,14 @@
 </head>
 <body class="bg-gray-950 text-gray-100 font-sans antialiased min-h-screen flex flex-col">
 
-    <!-- Cabecera Oficial del Portal y Panel -->
+    <!-- Cabecera del Panel con Logotipo -->
     <header class="brand-dark border-b border-gray-800 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-3">
-                <!-- Cambia 'logo-ksa.png' por el nombre exacto del archivo de tu logo si es distinto -->
-                <img src="logo-ksa.png" alt="Logo KSA" class="w-12 h-12 object-cover rounded-full border-2 border-[#FFDE00]" onerror="this.src='https://via.placeholder.com/50?text=KSA'">
+                <img src="Logo de Nombre con Iniciales Circular Tipográfico Blanco y Negro_20260917_095359_0000.png" alt="Logo KSA" class="w-12 h-12 object-cover rounded-full border-2 border-[#FFDE00]">
                 <div>
                     <h1 class="font-bold text-lg tracking-wider text-white">KEEPERS SPORT ACADEMY</h1>
-                    <span class="text-xs text-[#FFDE00] font-medium">Portal Oficial & Panel Administrativo</span>
+                    <span class="text-xs text-[#FFDE00] font-medium">Panel de Control Administrativo</span>
                 </div>
             </div>
             <div class="flex items-center space-x-3">
@@ -33,14 +32,14 @@
     <!-- Contenido Principal -->
     <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 space-y-6">
         
-        <!-- SECCIÓN: Panel Administrador - Atletas KSA (Base de datos CRUD) -->
+        <!-- Pestaña / Sección Atletas KSA -->
         <section class="bg-gray-900 border border-gray-800 rounded-2xl p-5 shadow-xl">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                 <div>
                     <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-users-gear text-[#FFDE00]"></i> Base de Datos: Atletas KSA
+                        <i class="fa-solid fa-users-gear text-[#FFDE00]"></i> Gestión de Atletas KSA
                     </h2>
-                    <p class="text-xs text-gray-400">Panel de control de arqueros y jugadores de la academia.</p>
+                    <p class="text-xs text-gray-400">Base de datos oficial de jugadores y arqueros de la academia.</p>
                 </div>
                 <button onclick="abrirModalAtleta()" class="brand-yellow text-gray-950 font-bold px-4 py-2.5 rounded-xl text-sm flex items-center gap-2 hover:opacity-90 transition cursor-pointer">
                     <i class="fa-solid fa-user-plus"></i> Añadir Atleta
@@ -52,7 +51,7 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="border-b border-gray-800 text-xs text-gray-400 uppercase bg-gray-950/50">
-                            <th class="p-3">Atleta / Avatar</th>
+                            <th class="p-3">Atleta</th>
                             <th class="p-3">Categoría</th>
                             <th class="p-3">Posición</th>
                             <th class="p-3">Contacto</th>
@@ -60,39 +59,9 @@
                         </tr>
                     </thead>
                     <tbody id="tabla-atletas-body" class="divide-y divide-gray-800 text-sm">
-                        <!-- Inyección dinámica de registros -->
+                        <!-- Inyección dinámica con JavaScript -->
                     </tbody>
                 </table>
-            </div>
-        </section>
-
-        <!-- SECCIÓN: Galería / Álbum Social KSA -->
-        <section class="bg-gray-900 border border-gray-800 rounded-2xl p-5 shadow-xl">
-            <div class="flex justify-between items-center mb-6">
-                <div>
-                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-images text-[#FFDE00]"></i> Galería de Entrenamientos
-                    </h2>
-                    <p class="text-xs text-gray-400">Momentos destacados en Vereda del Lago, Maracaibo.</p>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-gray-950 border border-gray-800 rounded-xl overflow-hidden shadow-lg">
-                    <div class="p-3 flex items-center space-x-3 border-b border-gray-900">
-                        <img src="logo-ksa.png" alt="Logo KSA" class="w-9 h-9 rounded-full object-cover border border-[#FFDE00]" onerror="this.src='https://via.placeholder.com/40?text=KSA'">
-                        <div>
-                            <h3 class="text-xs font-bold text-white">Keepers Sport Academy</h3>
-                            <span class="text-[10px] text-gray-400">Maracaibo, Edo. Zulia</span>
-                        </div>
-                    </div>
-                    <div class="aspect-video bg-gray-900 flex items-center justify-center">
-                        <img src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=600&h=400&fit=crop" alt="Entrenamiento" class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-3">
-                        <p class="text-xs text-gray-300"><strong class="text-[#FFDE00]">LEVEL CAMP:</strong> Formación integral y técnica especializada bajo los tres palos.</p>
-                    </div>
-                </div>
             </div>
         </section>
 
@@ -114,7 +83,7 @@
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-medium text-gray-400 mb-1">Categoría</label>
-                        <input type="text" id="atleta-categoria" placeholder="Ej. Sub-17" required class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#FFDE00]">
+                        <input type="text" id="atleta-categoria" placeholder="Ej. Sub-15" required class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#FFDE00]">
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-gray-400 mb-1">Posición</label>
@@ -129,7 +98,7 @@
 
                 <div>
                     <label class="block text-xs font-medium text-gray-400 mb-1">Teléfono</label>
-                    <input type="text" id="atleta-telefono" placeholder="0424-6891083" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#FFDE00]">
+                    <input type="text" id="atleta-telefono" placeholder="0424-XXXXXXX" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#FFDE00]">
                 </div>
 
                 <div>
@@ -145,8 +114,9 @@
         </div>
     </div>
 
-    <!-- Scripts de Funcionalidad y Base de Datos -->
+    <!-- Script de Gestión Local y Reloj -->
     <script>
+        // Base de datos simulada en localStorage
         let atletas = JSON.parse(localStorage.getItem('ksa_atletas')) || [
             { id: 1, nombre: 'Alejandro Martínez', categoria: 'Sub-17', posicion: 'Arquero', telefono: '0424-6891083', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop' }
         ];
@@ -210,8 +180,10 @@
             const avatar = document.getElementById('atleta-avatar').value || 'https://via.placeholder.com/100';
 
             if(id) {
+                // Editar
                 atletas = atletas.map(a => a.id == id ? { ...a, nombre, categoria, posicion, telefono, avatar } : a);
             } else {
+                // Añadir
                 const nuevoId = atletas.length > 0 ? Math.max(...atletas.map(a => a.id)) + 1 : 1;
                 atletas.push({ id: nuevoId, nombre, categoria, posicion, telefono, avatar });
             }
@@ -245,6 +217,7 @@
             }
         }
 
+        // Inicializar tabla al cargar
         renderizarTabla();
     </script>
 </body>
