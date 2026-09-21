@@ -102,9 +102,9 @@
         .atleta-info { text-align: left; font-size: 0.85rem; color: #94a3b8; margin-top: 1rem; line-height: 1.6; background: #181818; padding: 12px; border-radius: 6px; }
         .atleta-info b { color: var(--light); }
 
-        /* Estilo de Redes Sociales / Álbum tipo Instagram / Facebook */
+        /* Estilo Álbum Redes Sociales Profesional */
         .social-album-container { background: #121212; border: 1px solid #333; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-        .social-album-header { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid #262626; background: #181818; }
+        .social-album-header { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid #262626; background: #181818; flex-wrap: wrap; gap: 10px; }
         .social-profile-info { display: flex; align-items: center; gap: 12px; }
         .social-profile-avatar { width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; background: #000; }
         .social-profile-name { font-weight: 700; font-size: 0.95rem; color: var(--light); display: flex; align-items: center; gap: 6px; }
@@ -791,7 +791,7 @@
                             </div>
                         </div>
                         <div style="color: var(--accent); font-size: 0.85rem; font-weight: 700;">
-                            <i class="fa-solid fa-images"></i> <span id="lblContadorFotos">1</span> Publicaciones
+                            <i class="fa-solid fa-images"></i> <span id="lblContadorFotos">0</span> Publicaciones
                         </div>
                     </div>
                     
@@ -970,9 +970,7 @@
             { nombre: "Mateo Pérez", nac: "2014-05-12", equipo: "Academia F.C.", perfil: "Derecho", cedula: "V-34567890", representante: "Carlos Pérez", telRep: "0412-0000000", plan: "Plan Base", sesionesRestantes: 2, estatus: "Activo" }
         ];
 
-        let galeriaKSA = JSON.parse(localStorage.getItem('ksa_db_galeria')) || [
-            { id: 1, titulo: "Entrenamiento de Potencia en Arena", tipo: "imagen", url: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80", descripcion: "Sede Vereda del Lago - Alto Rendimiento GK." }
-        ];
+        let galeriaKSA = JSON.parse(localStorage.getItem('ksa_db_galeria')) || [];
 
         let sedesAlternativasKSA = JSON.parse(localStorage.getItem('ksa_db_sedes')) || [];
 
@@ -1629,7 +1627,7 @@
             guardarBDLocal();
             cargarPanelAdministrativo();
             cargarGaleria();
-            alert("Elemento eliminado de la galería.");
+            alert("Elemento eliminado del álbum.");
         }
 
         function eliminarSede(index) {
@@ -1688,7 +1686,7 @@
                         tipo: file.type.startsWith('video') ? 'video' : 'imagen',
                         url: ev.target.result,
                         descripcion: descMedia || "",
-                        likes: Math.floor(Math.random() * 25) + 12
+                        likes: Math.floor(Math.random() * 20) + 10
                     };
                     galeriaKSA.push(nuevaMedia);
                     finalizarGuardadoAdmin();
@@ -1702,7 +1700,7 @@
                         tipo: 'imagen',
                         url: "https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=600&q=80",
                         descripcion: descMedia || "",
-                        likes: Math.floor(Math.random() * 25) + 12
+                        likes: Math.floor(Math.random() * 20) + 10
                     });
                 }
                 finalizarGuardadoAdmin();
@@ -1763,7 +1761,7 @@
             let html = '';
             
             if(galeriaKSA.length === 0) {
-                grid.innerHTML = `<p style="color: #94a3b8; text-align: center; grid-column: 1/-1; padding: 2rem;">No hay publicaciones en el álbum actualmente.</p>`;
+                grid.innerHTML = `<p style="color: #94a3b8; text-align: center; grid-column: 1/-1; padding: 2rem;">No hay publicaciones en el álbum actualmente. Sube fotos desde el panel Admin.</p>`;
                 return;
             }
 
