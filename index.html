@@ -835,9 +835,11 @@
                     <div class="section-title">3. Gestión de Galería (Subir y Eliminar)</div>
                     <div class="form-grid">
                         <div class="form-group"><label>Título Multimedia</label><input type="text" id="adminMediaTitulo" placeholder="Ej. Bloqueo Raso"></div>
-                        <div class="form-group"><label>Archivo Foto/Video</label><input type="file" id="adminMediaFile" accept="image/*,video/*"></div>
+                        <div class="form-group"><label>Archivo Foto/Video *</label><input type="file" id="adminMediaFile" accept="image/*,video/*"></div>
                     </div>
                     <div class="form-group"><label>Descripción</label><textarea id="adminMediaDesc" rows="2" placeholder="Detalles..."></textarea></div>
+                    <button type="button" class="btn btn-accent" onclick="subirElementoGaleriaAdmin()" style="margin-bottom: 1.5rem;"><i class="fa-solid fa-cloud-arrow-up"></i> Subir Multimedia a Galería</button>
+
                     <div id="panelGestionGaleria" style="margin-top: 1rem; background: #111; padding: 1rem; border-radius: 8px; border: 1px solid #333;">
                         <h4 style="color: var(--accent); margin-bottom: 8px; font-size: 0.9rem;">Elementos Actuales en Galería:</h4>
                         <div id="listaAdminGaleria">Cargando elementos...</div>
@@ -905,7 +907,7 @@
                     </div>
 
                     <div id="loadingAdmin" class="loading"><i class="fa-solid fa-spinner fa-spin"></i> Guardando cambios en el sistema...</div>
-                    <button type="submit" class="btn btn-accent" style="margin-top: 1rem;">Guardar Cambios del Sistema</button>
+                    <button type="submit" class="btn btn-accent" style="margin-top: 1rem;">Guardar Cambios Generales</button>
                 </form>
             </div>
         </div>
@@ -914,15 +916,23 @@
 
     <script>
         let modoAccesoActual = 'login';
-        let baseDatosAtletasKSA = [
+        
+        // Base de Datos local persistente
+        let baseDatosAtletasKSA = JSON.parse(localStorage.getItem('ksa_db_atletas')) || [
             { nombre: "Mateo Pérez", nac: "2014-05-12", equipo: "Academia F.C.", perfil: "Derecho", cedula: "V-34567890", representante: "Carlos Pérez", telRep: "0412-0000000", plan: "Plan Base", sesionesRestantes: 2, estatus: "Activo" }
         ];
 
-        let galeriaKSA = [
+        let galeriaKSA = JSON.parse(localStorage.getItem('ksa_db_galeria')) || [
             { id: 1, titulo: "Entrenamiento de Potencia en Arena", tipo: "imagen", url: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80", descripcion: "Sede Vereda del Lago - Alto Rendimiento GK." }
         ];
 
-        let sedesAlternativasKSA = [];
+        let sedesAlternativasKSA = JSON.parse(localStorage.getItem('ksa_db_sedes')) || [];
+
+        function guardarBDLocal() {
+            localStorage.setItem('ksa_db_atletas', JSON.stringify(baseDatosAtletasKSA));
+            localStorage.setItem('ksa_db_galeria', JSON.stringify(galeriaKSA));
+            localStorage.setItem('ksa_db_sedes', JSON.stringify(sedesAlternativasKSA));
+        }
 
         function obtenerTasaDelDia() {
             let base = parseFloat(localStorage.getItem('ksa_tasa_base')) || 1000.00;
@@ -1281,7 +1291,6 @@
                 return;
             }
 
-            // Datos dinámicos conectados al estado de cuenta
             document.getElementById('resUltimoPago').innerText = "$30.00 USD (Bs. 28.500)";
             document.getElementById('resRefPago').innerText = "Ref: 10339 — Pagado el 01/09/2026";
             document.getElementById('resMontoPendiente').innerText = "$30.00 USD Restantes";
@@ -1382,7 +1391,7 @@
 
         function copiarTextoCompleto(texto) {
             navigator.clipboard.writeText(texto);
-            alert("¡Datos bancarios y monto copiados con éxito! Procede a pegar en tu banca.");
+            alert("¡Datos bancarios y monto copiados con éxito!");
         }
 
         function enviarInscripcion(e) {
@@ -1417,6 +1426,7 @@
                 estatus: 'Activo'
             });
 
+            guardarBDLocal();
             notificarCorreoOficial("Nueva Inscripción de Atleta", "Atleta: " + datos.nombreAtleta + " - Plan: " + datos.plan);
 
             setTimeout(() => {
@@ -1455,6 +1465,7 @@
                 estatus: 'Activo'
             });
 
+            guardarBDLocal();
             alert(`¡Atleta ${nombre} inscrito exitosamente desde el panel admin!`);
             document.getElementById('admRegNombre').value = '';
             document.getElementById('admRegCedula').value = '';
@@ -1558,14 +1569,52 @@
             document.getElementById('tablaAdminAtletas').innerHTML = htmlAtletas;
         }
 
+        function subirElementoGaleriaAdmin() {
+            const titulo = document.getElementById('adminMediaTitulo').value.trim();
+            const desc = document.getElementById('adminMediaDesc').value.trim();
+            const fileInput = document.getElementById('adminMediaFile');
+
+            if(!titulo || fileInput.files.length === 0) {
+                alert("Por favor ingrese un título y seleccione un archivo multimedia.");
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const nuevaMedia = {
+                    id: Date.now(),
+                    titulo: titulo,
+                    tipo: file.type.startsWith('video') ? 'video' : 'imagen',
+                    url: e.target.result,
+                    descripcion: desc || 'Sede Vereda del Lago - KSA.'
+                };
+
+                galeriaKSA.push(nuevaMedia);
+                guardarBDLocal();
+                cargarPanelAdministrativo();
+                cargarGaleria();
+
+                document.getElementById('adminMediaTitulo').value = '';
+                document.getElementById('adminMediaDesc').value = '';
+                fileInput.value = '';
+                alert("¡Multimedia subida con éxito a la galería!");
+            };
+
+            reader.readAsDataURL(file);
+        }
+
         function alternarEstatusAtleta(index) {
             baseDatosAtletasKSA[index].estatus = baseDatosAtletasKSA[index].estatus === 'Activo' ? 'Inactivo' : 'Activo';
+            guardarBDLocal();
             cargarPanelAdministrativo();
             alert("Estatus del atleta actualizado correctamente.");
         }
 
         function eliminarElementoGaleria(id) {
             galeriaKSA = galeriaKSA.filter(item => item.id !== id);
+            guardarBDLocal();
             cargarPanelAdministrativo();
             cargarGaleria();
             alert("Elemento eliminado de la galería.");
@@ -1573,6 +1622,7 @@
 
         function eliminarSede(index) {
             sedesAlternativasKSA.splice(index, 1);
+            guardarBDLocal();
             cargarPanelAdministrativo();
             renderizarSedesPublicas();
             alert("Sede alternativa eliminada.");
@@ -1608,12 +1658,13 @@
             if(nuevaSede) {
                 sedesAlternativasKSA.push(nuevaSede);
                 document.getElementById('admNuevaSede').value = '';
+                guardarBDLocal();
                 renderizarSedesPublicas();
             }
 
             setTimeout(() => {
                 document.getElementById('loadingAdmin').style.display = 'none';
-                alert("¡Configuración y datos administrativos guardados con éxito!");
+                alert("¡Configuración general guardada con éxito!");
                 cargarPanelAdministrativo();
             }, 1000);
         }
@@ -1622,6 +1673,12 @@
             document.getElementById('loadingGaleria').style.display = 'none';
             let grid = document.getElementById('galleryGrid');
             let html = '';
+            
+            if(galeriaKSA.length === 0) {
+                grid.innerHTML = `<p style="color: #94a3b8; text-align: center; grid-column: 1/-1;">No hay elementos en la galería actualmente.</p>`;
+                return;
+            }
+
             galeriaKSA.forEach(item => {
                 html += `
                     <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 12px; overflow: hidden; border-top: 4px solid var(--accent);">
