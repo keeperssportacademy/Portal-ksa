@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Administrativo y Portal - Keepers Sport Academy</title>
+    <title>Keepers Sport Academy GK - Portal Oficial y Panel Admin</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -13,14 +13,14 @@
 </head>
 <body class="bg-gray-950 text-gray-100 font-sans antialiased min-h-screen flex flex-col">
 
-    <!-- Cabecera del Panel con Logotipo Oficial -->
+    <!-- Cabecera Oficial del Portal y Panel -->
     <header class="brand-dark border-b border-gray-800 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-3">
                 <img src="Logo de Nombre con Iniciales Circular Tipográfico Blanco y Negro_20260917_095359_0000.png" alt="Logo KSA" class="w-12 h-12 object-cover rounded-full border-2 border-[#FFDE00]">
                 <div>
                     <h1 class="font-bold text-lg tracking-wider text-white">KEEPERS SPORT ACADEMY</h1>
-                    <span class="text-xs text-[#FFDE00] font-medium">Panel de Control & Gestión</span>
+                    <span class="text-xs text-[#FFDE00] font-medium">Portal Oficial & Panel Administrativo</span>
                 </div>
             </div>
             <div class="flex items-center space-x-3">
@@ -30,23 +30,23 @@
     </header>
 
     <!-- Contenido Principal -->
-    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 space-y-8">
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 space-y-6">
         
-        <!-- SECCIÓN 1: Gestión de Atletas KSA (CRUD Completo) -->
+        <!-- SECCIÓN: Panel Administrador - Atletas KSA -->
         <section class="bg-gray-900 border border-gray-800 rounded-2xl p-5 shadow-xl">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                 <div>
                     <h2 class="text-xl font-bold text-white flex items-center gap-2">
                         <i class="fa-solid fa-users-gear text-[#FFDE00]"></i> Base de Datos: Atletas KSA
                     </h2>
-                    <p class="text-xs text-gray-400">Administra los registros, avatares y categorías de los jugadores.</p>
+                    <p class="text-xs text-gray-400">Panel de control de arqueros y jugadores de la academia.</p>
                 </div>
                 <button onclick="abrirModalAtleta()" class="brand-yellow text-gray-950 font-bold px-4 py-2.5 rounded-xl text-sm flex items-center gap-2 hover:opacity-90 transition cursor-pointer">
                     <i class="fa-solid fa-user-plus"></i> Añadir Atleta
                 </button>
             </div>
 
-            <!-- Tabla de Atletas -->
+            <!-- Tabla de Atletas (CRUD) -->
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
@@ -65,33 +65,31 @@
             </div>
         </section>
 
-        <!-- SECCIÓN 2: Galería de Fotos / Álbum Social KSA -->
+        <!-- SECCIÓN: Galería / Álbum Social KSA -->
         <section class="bg-gray-900 border border-gray-800 rounded-2xl p-5 shadow-xl">
             <div class="flex justify-between items-center mb-6">
                 <div>
                     <h2 class="text-xl font-bold text-white flex items-center gap-2">
                         <i class="fa-solid fa-images text-[#FFDE00]"></i> Galería de Entrenamientos
                     </h2>
-                    <p class="text-xs text-gray-400">Álbum social y momentos destacados de la academia.</p>
+                    <p class="text-xs text-gray-400">Momentos destacados en Vereda del Lago, Maracaibo.</p>
                 </div>
             </div>
 
-            <!-- Contenedor del Álbum / Publicaciones -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="galeria-grid">
-                <!-- Tarjeta de Ejemplo vinculada al Logotipo KSA -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="bg-gray-950 border border-gray-800 rounded-xl overflow-hidden shadow-lg">
                     <div class="p-3 flex items-center space-x-3 border-b border-gray-900">
                         <img src="Logo de Nombre con Iniciales Circular Tipográfico Blanco y Negro_20260917_095359_0000.png" alt="Logo KSA" class="w-9 h-9 rounded-full object-cover border border-[#FFDE00]">
                         <div>
                             <h3 class="text-xs font-bold text-white">Keepers Sport Academy</h3>
-                            <span class="text-[10px] text-gray-400">Vereda del Lago, Maracaibo</span>
+                            <span class="text-[10px] text-gray-400">Maracaibo, Edo. Zulia</span>
                         </div>
                     </div>
-                    <div class="aspect-video bg-gray-900 flex items-center justify-center relative">
-                        <img src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=600&h=400&fit=crop" alt="Entrenamiento de Arqueros" class="w-full h-full object-cover">
+                    <div class="aspect-video bg-gray-900 flex items-center justify-center">
+                        <img src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=600&h=400&fit=crop" alt="Entrenamiento" class="w-full h-full object-cover">
                     </div>
                     <div class="p-3">
-                        <p class="text-xs text-gray-300"><strong class="text-[#FFDE00]">LEVEL CAMP 2026:</strong> Sesión técnica de blocaje y reacción bajo los tres palos.</p>
+                        <p class="text-xs text-gray-300"><strong class="text-[#FFDE00]">LEVEL CAMP:</strong> Formación integral y técnica especializada.</p>
                     </div>
                 </div>
             </div>
@@ -130,7 +128,7 @@
 
                 <div>
                     <label class="block text-xs font-medium text-gray-400 mb-1">Teléfono</label>
-                    <input type="text" id="atleta-telefono" placeholder="0424-XXXXXXX" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#FFDE00]">
+                    <input type="text" id="atleta-telefono" placeholder="0424-6891083" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#FFDE00]">
                 </div>
 
                 <div>
@@ -146,12 +144,14 @@
         </div>
     </div>
 
-    <!-- Script General -->
+    <!-- Scripts de Funcionalidad -->
     <script>
+        // Base de datos de Atletas KSA con persistencia local
         let atletas = JSON.parse(localStorage.getItem('ksa_atletas')) || [
             { id: 1, nombre: 'Alejandro Martínez', categoria: 'Sub-17', posicion: 'Arquero', telefono: '0424-6891083', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop' }
         ];
 
+        // Reloj sincronizado con hora de Venezuela
         function actualizarRelojVenezuela() {
             const opciones = { timeZone: 'America/Caracas', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
             const horaStr = new Intl.DateTimeFormat('es-VE', opciones).format(new Date());
@@ -160,6 +160,7 @@
         setInterval(actualizarRelojVenezuela, 1000);
         actualizarRelojVenezuela();
 
+        // Renderizar la tabla de atletas en el panel administrador
         function renderizarTabla() {
             const tbody = document.getElementById('tabla-atletas-body');
             tbody.innerHTML = '';
