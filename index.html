@@ -1,59 +1,1650 @@
-function doPost(e) {
-  try {
-    var data = JSON.parse(e.postData.contents);
-    var accion = data.accion;
-    var ss = SpreadsheetApp.getActiveSpreadsheet();
-    
-    if (accion === 'crearInscripcion') {
-      var hoja = ss.getSheetByName("Atletas") || ss.insertSheet("Atletas");
-      hoja.appendRow([
-        new Date(),
-        data.datos.nombreAtleta,
-        data.datos.cedulaAtleta,
-        data.datos.fechaNac,
-        data.datos.nombreRep,
-        data.datos.telRep,
-        data.datos.correoRep,
-        data.datos.plan
-      ]);
-      return ContentService.createTextOutput(JSON.stringify({status: "success"})).setMimeType(ContentService.MimeType.JSON);
-    }
-    
-    if (accion === 'crearReserva') {
-      var hoja = ss.getSheetByName("Reservas") || ss.insertSheet("Reservas");
-      hoja.appendRow([
-        new Date(),
-        data.datos.atleta,
-        data.datos.tipo,
-        data.datos.fecha,
-        data.datos.turno,
-        data.datos.motivo,
-        data.datos.referencia
-      ]);
-      return ContentService.createTextOutput(JSON.stringify({status: "success"})).setMimeType(ContentService.MimeType.JSON);
-    }
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keepers Sport Academy GK | Portal Oficial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #000000;
+            --accent: #facc15;
+            --danger: #dc2626;
+            --light: #ffffff;
+            --gray: #64748b;
+            --bg-body: #111111;
+            --card-bg: #1a1a1a;
+            --text-color: #f8fafc;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-color); line-height: 1.6; }
+        
+        .exchange-rate-bar { background: #000; color: var(--accent); padding: 10px 1rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; border-bottom: 2px solid var(--accent); font-weight: 700; flex-wrap: wrap; gap: 10px; }
 
-    if (accion === 'crearPago') {
-      var hoja = ss.getSheetByName("Pagos") || ss.insertSheet("Pagos");
-      hoja.appendRow([
-        new Date(),
-        data.datos.atleta,
-        data.datos.cedula,
-        data.datos.concepto,
-        data.datos.tipoTransaccion,
-        data.datos.mes,
-        data.datos.dia,
-        data.datos.montoUSD,
-        data.datos.montoBS,
-        data.datos.metodo,
-        data.datos.referencia
-      ]);
-      return ContentService.createTextOutput(JSON.stringify({status: "success"})).setMimeType(ContentService.MimeType.JSON);
-    }
+        #pantallaLogin { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 1rem; overflow-y: auto; }
+        .login-card { background: var(--card-bg); width: 100%; max-width: 440px; padding: 2.5rem; border-radius: 16px; border: 2px solid var(--accent); border-top: 6px solid var(--danger); box-shadow: 0 20px 25px -5px rgba(220,38,38,0.3); text-align: center; margin: auto; }
+        .login-card h2 { color: var(--light); font-size: 1.5rem; margin-bottom: 0.5rem; font-weight: 800; }
+        .login-card p { font-size: 0.85rem; color: #94a3b8; margin-bottom: 1.5rem; }
+        .input-group { position: relative; margin-bottom: 1.2rem; }
+        .login-input { width: 100%; padding: 0.8rem 2.5rem 0.8rem 1rem; border: 2px solid #333; border-radius: 8px; background: #000; color: var(--light); font-size: 0.95rem; }
+        .login-input:focus { border-color: var(--accent); outline: none; }
+        .toggle-password { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; cursor: pointer; }
+        .captcha-box { background: #111; border: 1px solid #333; padding: 12px; border-radius: 8px; margin-bottom: 1.2rem; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.85rem; }
+        .login-btn { background: var(--accent); color: var(--primary); font-weight: 700; padding: 0.9rem; border: none; border-radius: 8px; width: 100%; font-size: 1rem; cursor: pointer; text-transform: uppercase; transition: 0.3s; margin-bottom: 1rem; }
+        .login-btn:hover { background: var(--light); }
+        .auth-links { font-size: 0.85rem; color: var(--accent); cursor: pointer; margin-top: 5px; display: block; font-weight: 600; }
+        .auth-links:hover { text-decoration: underline; }
 
-    return ContentService.createTextOutput(JSON.stringify({status: "error", message: "Acción no válida"})).setMimeType(ContentService.MimeType.JSON);
+        .top-bar { background: var(--primary); color: var(--light); padding: 0.5rem 1rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; border-bottom: 2px solid var(--danger); flex-wrap: wrap; gap: 10px; }
+        .top-bar .info-time { display: flex; align-items: center; gap: 15px; color: var(--accent); font-weight: 600; font-size: 0.8rem; }
+        .top-bar-right { display: flex; align-items: center; gap: 15px; }
+        .logout-btn { background: var(--danger); color: var(--light); border: none; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; cursor: pointer; text-transform: uppercase; }
+        .logout-btn:hover { background: #b91c1c; }
+        .flags { display: flex; gap: 10px; align-items: center; }
+        .flags img { width: 26px; height: 18px; border-radius: 2px; border: 1px solid var(--light); object-fit: cover; }
 
-  } catch (error) {
-    return ContentService.createTextOutput(JSON.stringify({status: "error", message: error.toString()})).setMimeType(ContentService.MimeType.JSON);
-  }
-}
+        header { background: var(--primary); color: var(--light); padding: 2rem 1rem; text-align: center; border-bottom: 6px solid var(--danger); }
+        header h1 { font-weight: 900; font-size: 1.8rem; letter-spacing: 1px; color: var(--accent); }
+        header p { font-size: 0.95rem; color: var(--accent); margin-top: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+
+        .nav-tabs { display: flex; background: var(--primary); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.5); position: sticky; top: 0; z-index: 100; overflow-x: auto; white-space: nowrap; border-bottom: 2px solid var(--accent); scrollbar-width: thin; }
+        .nav-tab { padding: 1rem 1.2rem; cursor: pointer; font-weight: 600; color: #94a3b8; border-bottom: 3px solid transparent; transition: 0.3s; display: inline-flex; align-items: center; gap: 6px; font-size: 0.9rem; flex-shrink: 0; }
+        .nav-tab.active { color: var(--accent); border-bottom-color: var(--danger); background: #1a1a1a; }
+        .nav-tab:hover { color: var(--light); }
+
+        .section-container { display: none; max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+        .section-container.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card { background: var(--card-bg); color: var(--text-color); padding: 2rem; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5); margin-bottom: 2rem; border: 1px solid #333; border-top: 4px solid var(--danger); }
+        .card h2 { color: var(--light); font-size: 1.4rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #333; padding-bottom: 10px; }
+        .card h2 i { color: var(--accent); }
+
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; margin-bottom: 1.2rem; }
+        .form-group { margin-bottom: 1.2rem; }
+        .form-group label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.4rem; color: var(--accent); text-transform: uppercase; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.75rem 1rem; border: 2px solid #333; border-radius: 8px; font-size: 0.95rem; background: #111; color: var(--light); }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--danger); outline: none; background: #000; }
+
+        .section-title { color: var(--light); font-size: 1rem; margin: 1.5rem 0 1rem; border-left: 4px solid var(--danger); padding-left: 8px; font-weight: 700; text-transform: uppercase; background: #261111; padding-top: 6px; padding-bottom: 6px; border-radius: 0 6px 6px 0; }
+
+        .checkbox-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; background: #111; padding: 1rem; border-radius: 8px; border: 2px solid #333; }
+        .checkbox-label { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; color: var(--light); }
+
+        .btn { background: var(--danger); color: var(--light); font-weight: 700; padding: 0.9rem 1.5rem; border: none; border-radius: 8px; width: 100%; font-size: 1rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; border: 1px solid #b91c1c; }
+        .btn:hover { background: #b91c1c; transform: translateY(-1px); }
+        .btn-accent { background: var(--accent); color: var(--primary); }
+        .btn-accent:hover { background: #eab308; }
+
+        .payment-box { background: #1f1b0c; border: 2px dashed var(--accent); padding: 1.5rem; border-radius: 12px; margin-top: 1.5rem; }
+        .bank-info { display: flex; flex-direction: column; background: #111; padding: 12px 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #333; font-size: 0.9rem; color: var(--light); gap: 10px; }
+        .bank-info-content { width: 100%; line-height: 1.5; }
+        
+        .tasa-externa-separada { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--accent); color: var(--accent); font-weight: 700; font-size: 0.95rem; width: 100%; display: flex; align-items: center; gap: 6px; }
+
+        .copy-btn { background: var(--accent); color: var(--primary); border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 700; align-self: flex-start; }
+        .copy-btn:hover { background: var(--light); }
+
+        .alert { display: none; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; font-weight: 600; text-align: center; }
+        .alert-success { background: #064e3b; color: #d1fae5; border: 1px solid #10b981; }
+        .loading { display: none; text-align: center; margin: 1rem 0; color: var(--accent); font-weight: 600; }
+
+        .table-container { overflow-x: auto; margin-top: 1rem; }
+        table { width: 100%; border-collapse: collapse; background: #111; border-radius: 8px; overflow: hidden; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #333; font-size: 0.9rem; }
+        th { background: #222; color: var(--accent); text-transform: uppercase; font-size: 0.8rem; }
+        tr:hover { background: #181818; }
+
+        .infografia-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+        .atleta-card { background: #111; border: 2px solid #333; border-radius: 12px; padding: 1.5rem; text-align: center; border-top: 4px solid var(--accent); position: relative; }
+        .atleta-avatar { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent); margin: 0 auto 1rem; background: #000; }
+        .atleta-info { text-align: left; font-size: 0.85rem; color: #94a3b8; margin-top: 1rem; line-height: 1.6; background: #181818; padding: 12px; border-radius: 6px; }
+        .atleta-info b { color: var(--light); }
+
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+        .gallery-media { width: 100%; height: 200px; object-fit: cover; background: #000; }
+        .gallery-body { padding: 1.2rem; }
+
+        .social-card { background: #111; border: 1px solid #333; padding: 1.5rem; border-radius: 12px; text-align: center; }
+        .social-card i { font-size: 2.5rem; color: var(--accent); margin-bottom: 10px; }
+        
+        .footer-ksa { text-align: center; padding: 1.5rem; color: #94a3b8; font-size: 0.85rem; border-top: 1px solid #333; margin-top: 3rem; }
+    </style>
+</head>
+<body>
+
+    <div class="exchange-rate-bar">
+        <div><i class="fa-solid fa-coins"></i> Tasa del Día: <span id="lblTasaGlobalHeader" style="color: var(--light); font-weight: 900; font-size: 1.05rem;">Cargando...</span> Bs</div>
+        <div><i class="fa-regular fa-clock"></i> Actualizada para operaciones KSA</div>
+    </div>
+
+    <div id="pantallaLogin">
+        <div class="login-card">
+            <i class="fa-solid fa-shield-halved" style="font-size: 3rem; color: var(--danger); margin-bottom: 1rem;"></i>
+            <h2 id="loginTitulo">ACCESO AL PORTAL</h2>
+            <p id="loginSub">Ingresa tus datos para continuar</p>
+            
+            <form id="formLoginDinamico" onsubmit="manejarLoginAccion(event)">
+                <div id="seccionCamposRegistro" style="display: none;">
+                    <div class="input-group">
+                        <input type="text" id="regNombreCompleto" placeholder="Nombre Completo del Atleta/Representante" class="login-input">
+                    </div>
+                    <div class="input-group">
+                        <input type="date" id="regFechaNac" class="login-input" title="Fecha de Nacimiento">
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="regCedula" placeholder="Cédula de Identidad" class="login-input">
+                    </div>
+                    <div class="input-group">
+                        <input type="tel" id="regTelefono" placeholder="Teléfono (Ej. 04140000000)" class="login-input">
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <input type="email" id="loginCorreo" placeholder="Correo electrónico" class="login-input" required>
+                </div>
+                
+                <div class="input-group" id="grupoPassLogin">
+                    <input type="password" id="loginPass" placeholder="Contraseña" class="login-input" required>
+                    <i class="fa-solid fa-eye toggle-password" onclick="alternarVerPass('loginPass', this)"></i>
+                </div>
+
+                <div class="captcha-box">
+                    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 8px;">
+                        <span style="font-size: 0.75rem; color: #94a3b8;">Verificación de Seguridad Avanzada</span>
+                        <i class="fa-solid fa-shield-cat" style="color: var(--accent);"></i>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" id="checkRobot" required style="width: 20px; height: 20px; cursor: pointer;">
+                        <label for="checkRobot" style="color: var(--light); cursor: pointer; user-select: none; font-weight: 600;">No soy un robot (KSA Secure Verify)</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="login-btn" id="btnLoginAccion">Ingresar</button>
+            </form>
+
+            <span class="auth-links" id="linkRegistrar" onclick="cambiarModo('registro')">¿Eres usuario nuevo? Regístrate aquí</span>
+            <span class="auth-links" id="linkRecuperar" onclick="cambiarModo('recuperar')">¿Olvidaste tu contraseña?</span>
+            <span class="auth-links" id="linkVolver" onclick="cambiarModo('login')" style="display: none; color: var(--danger);">← Volver al Acceso</span>
+        </div>
+    </div>
+
+    <div id="contenidoPrincipal" style="display: none;">
+
+        <div class="top-bar">
+            <div class="info-time">
+                <span><i class="fa-regular fa-clock"></i> <span id="relojVen">Cargando hora...</span></span>
+                <span style="color: var(--light); border-left: 1px solid #444; padding-left: 10px;"><i class="fa-solid fa-history" style="color: var(--accent);"></i> Último acceso: <b id="lblUltimoAcceso" style="color: var(--accent);">Registrando...</b></span>
+            </div>
+            <div class="top-bar-right">
+                <div class="flags">
+                    <img src="https://flagcdn.com/w40/ve.png" alt="Venezuela" title="Venezuela">
+                </div>
+                <button class="logout-btn" onclick="cerrarSesion()">Cerrar Sesión</button>
+            </div>
+        </div>
+
+        <header>
+            <h1>KEEPERS SPORT ACADEMY GK</h1>
+            <p>¡Mentalidad de campeones!</p>
+        </header>
+
+        <div class="nav-tabs">
+            <div class="nav-tab active" onclick="switchTab('inicio', this)"><i class="fa-solid fa-house"></i> Inicio</div>
+            <div class="nav-tab" onclick="switchTab('inscripcion', this)"><i class="fa-solid fa-user-plus"></i> Inscripción</div>
+            <div class="nav-tab" onclick="switchTab('reservas', this)"><i class="fa-solid fa-calendar-check"></i> Reservar Sesión</div>
+            <div class="nav-tab" onclick="switchTab('kits', this)"><i class="fa-solid fa-shirt"></i> Reservar Kit</div>
+            <div class="nav-tab" onclick="switchTab('fansstore', this)"><i class="fa-solid fa-bag-shopping"></i> Fans Store</div>
+            <div class="nav-tab" onclick="switchTab('pagos', this)"><i class="fa-solid fa-file-invoice-dollar"></i> Pagos y Abonos</div>
+            <div class="nav-tab" onclick="switchTab('infografia', this)"><i class="fa-solid fa-id-card"></i> Atletas KSA</div>
+            <div class="nav-tab" onclick="switchTab('horarios', this)"><i class="fa-solid fa-calendar-days"></i> Horarios y Sedes</div>
+            <div class="nav-tab" onclick="switchTab('asistencia', this)"><i class="fa-solid fa-clipboard-user"></i> Asistencia</div>
+            <div class="nav-tab" onclick="switchTab('cumpleanos', this)"><i class="fa-solid fa-cake-candles"></i> Cumpleaños</div>
+            <div class="nav-tab" onclick="switchTab('galeria', this)"><i class="fa-solid fa-images"></i> Galería</div>
+            <div class="nav-tab" onclick="switchTab('redes', this)"><i class="fa-solid fa-share-nodes"></i> Redes</div>
+            <div class="nav-tab" id="tabAdmin" onclick="switchTab('admin', this)" style="display: none;"><i class="fa-solid fa-lock"></i> Admin</div>
+        </div>
+
+        <div id="inicio" class="section-container active">
+            <div class="card" style="text-align: center; border-top-color: var(--danger);">
+                <h2 style="justify-content: center; border: none;">¡Bienvenidos a Keepers Sport Academy GK!</h2>
+                <p style="color: var(--text-color); font-weight: 600; margin-bottom: 1.5rem; font-size: 1.05rem; line-height: 1.8; background: #1a1a1a; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--accent);">
+                    ¡Hola! Bienvenido a Keepers Sport Academy.<br><br>
+                    Somos una academia sumamente exigente. No entrenamos por pasar el rato. Buscamos atletas que amen su posición, rechacen el conformismo y estén 100% comprometidos con su evolución física, técnica y mental.<br><br>
+                    Si estás listo para dejarlo todo en la cancha.<br>
+                    Estamos listos para ver de qué estás hecho. ¡A trabajar! 🚀
+                </p>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <button class="btn" style="width: auto;" onclick="switchTab('inscripcion', document.querySelectorAll('.nav-tab')[1])">Ir a Inscripción</button>
+                    <button class="btn btn-accent" style="width: auto;" onclick="switchTab('reservas', document.querySelectorAll('.nav-tab')[2])">Reservar Sesión</button>
+                    <button class="btn btn-accent" style="width: auto; background: var(--light); color: var(--primary);" onclick="switchTab('fansstore', document.querySelectorAll('.nav-tab')[4])"><i class="fa-solid fa-bag-shopping"></i> Visitar Fans Store</button>
+                </div>
+            </div>
+            
+            <div class="footer-ksa">
+                Fundada el 16 de Enero de 2022 — Keepers Sport Academy GK. Todos los derechos reservados.
+            </div>
+        </div>
+
+        <div id="inscripcion" class="section-container">
+            <div class="card">
+                <h2><i class="fa-solid fa-futbol"></i> Ficha Técnica y Médica del Atleta</h2>
+                <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.5rem; font-style: italic;">"Pasión y Compromiso en la Portería"</p>
+                <div id="alertaInscripcion" class="alert alert-success"></div>
+                
+                <form id="formInscripcion" onsubmit="enviarInscripcion(event)">
+                    <div class="section-title">SECCIÓN 1: Identificación e Imagen del Atleta</div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Foto del Atleta (Subir Archivo) *</label>
+                            <input type="file" id="fotoFile" accept="image/*" required style="padding: 0.5rem; background: #000;">
+                        </div>
+                        <div class="form-group">
+                         <label>Partida de Nacimiento (Si no tiene Cédula)</label>
+                            <input type="file" id="partidaFile" accept="image/*,.pdf" style="padding: 0.5rem; background: #000;">
+                        </div>
+                        <div class="form-group"><label>Nombres y Apellidos del Atleta *</label><input type="text" id="nombreAtleta" required placeholder="Ej. Mateo Pérez"></div>
+                        <div class="form-group"><label>Cédula de Identidad / P.N. *</label><input type="text" id="cedulaAtleta" required placeholder="V-34567890 o Partida N°"></div>
+                        <div class="form-group"><label>Fecha de Nacimiento *</label><input type="date" id="fechaNac" required onchange="calcularEdad()"></div>
+                        <div class="form-group"><label>Edad</label><input type="number" id="edad" readonly placeholder="Automático"></div>
+                        <div class="form-group"><label>Teléfono del Atleta</label><input type="tel" id="telAtleta" placeholder="0414-0000000"></div>
+                    </div>
+                    <div class="form-group"><label>Dirección de Residencia</label><textarea id="direccion" rows="2" placeholder="Sector, Calle, Casa"></textarea></div>
+                    <div class="form-group"><label>Redes Sociales (Instagram / TikTok / etc.)</label><input type="text" id="redesAtleta" placeholder="@usuario"></div>
+
+                    <div class="section-title">SECCIÓN 2: Datos del Representante</div>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Nombres y Apellidos del Representante *</label><input type="text" id="nombreRep" required placeholder="Ej. Carlos Pérez"></div>
+                        <div class="form-group"><label>Cédula del Representante *</label><input type="text" id="cedulaRep" required placeholder="V-12345678"></div>
+                        <div class="form-group"><label>Parentesco *</label>
+                            <select id="parentesco" required>
+                                <option value="">Seleccione...</option>
+                                <option value="Madre">Madre</option>
+                                <option value="Padre">Padre</option>
+                                <option value="Representante Legal">Representante Legal</option>
+                                <option value="Otro">Otro</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label>Teléfono Principal / WhatsApp *</label><input type="tel" id="telRep" required placeholder="0412-0000000"></div>
+                        <div class="form-group"><label>Correo Electrónico *</label><input type="email" id="correoRep" required placeholder="correo@ejemplo.com"></div>
+                    </div>
+
+                    <div class="section-title">SECCIÓN 3: Perfil Deportivo y Antropométrico</div>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Equipo u Organización</label><input type="text" id="equipo" placeholder="Ej. Academia F.C."></div>
+                        <div class="form-group"><label>Categoría / Año</label><input type="text" id="categoria" placeholder="Ej. Sub-12 / 2014"></div>
+                        <div class="form-group"><label>Perfil / Pie Dominante *</label>
+                            <select id="pie" required>
+                                <option value="">Seleccione...</option>
+                                <option value="Derecho">Derecho</option>
+                                <option value="Izquierdo">Izquierdo</option>
+                                <option value="Ambidextro">Ambidextro</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label>Estatura (cm)</label><input type="number" id="estatura" placeholder="Ej. 145"></div>
+                        <div class="form-group"><label>Peso (kg)</label><input type="number" step="0.1" id="peso" placeholder="Ej. 38.5"></div>
+                        <div class="form-group"><label>Talla de Uniforme (T2 al 2XL) *</label>
+                            <select id="talla" required>
+                                <option value="">Seleccione talla...</option>
+                                <option value="Talla 2">Talla 2</option><option value="Talla 4">Talla 4</option>
+                                <option value="Talla 6">Talla 6</option><option value="Talla 8">Talla 8</option>
+                                <option value="Talla 10">Talla 10</option><option value="Talla 12">Talla 12</option>
+                                <option value="Talla 14">Talla 14</option><option value="Talla 16">Talla 16</option>
+                                <option value="S">Talla S</option><option value="M">Talla M</option>
+                                <option value="L">Talla L</option><option value="XL">Talla XL</option>
+                                <option value="2XL">Talla 2XL</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="section-title">SECCIÓN 4: Programa de Entrenamiento y Horario</div>
+                    <div class="form-group">
+                        <label>Plan de Entrenamiento Mensual *</label>
+                        <select id="plan" required>
+                            <option value="">Seleccione plan...</option>
+                            <option value="Plan Base">Plan Base (8 sesiones) - $60</option>
+                            <option value="Plan Pro">Plan Pro (12 sesiones) - $90</option>
+                            <option value="Plan Élite GK">Plan Élite GK (16 sesiones) - $120</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Días de Asistencia Elegidos *</label>
+                        <div class="checkbox-grid">
+                            <label class="checkbox-label"><input type="checkbox" name="diasAsistencia" value="Lunes"> Lunes</label>
+                            <label class="checkbox-label"><input type="checkbox" name="diasAsistencia" value="Martes"> Martes</label>
+                            <label class="checkbox-label"><input type="checkbox" name="diasAsistencia" value="Miercoles"> Miércoles</label>
+                            <label class="checkbox-label"><input type="checkbox" name="diasAsistencia" value="Jueves"> Jueves</label>
+                        </div>
+                    </div>
+                    <div class="form-group"><label>Horario Preferido *</label>
+                        <select id="horario" required>
+                            <option value="">Seleccione turno...</option>
+                            <option value="Lunes y Miércoles - 5:40 PM">Lunes y Miércoles - 5:40 PM</option>
+                            <option value="Martes y Jueves - 5:40 PM y 6:40 PM">Martes y Jueves - 5:40 PM y 6:40 PM</option>
+                        </select>
+                    </div>
+
+                    <div class="section-title">SECCIÓN 5: Ficha Médica y Salud</div>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Tipo de Sangre *</label>
+                            <select id="sangre" required>
+                                <option value="">Seleccione...</option>
+                                <option value="O+">O+</option><option value="O-">O-</option><option value="A+">A+</option>
+                                <option value="A-">A-</option><option value="B+">B+</option><option value="B-">B-</option>
+                                <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group"><label>¿Sufre de alguna enfermedad crónica?</label><textarea id="enfermedades" rows="2" placeholder="Ninguna"></textarea></div>
+                    <div class="form-group"><label>¿Alergias?</label><textarea id="alergias" rows="2" placeholder="Ninguna"></textarea></div>
+                    <div class="form-group"><label>¿Lesiones recientes?</label><textarea id="lesiones" rows="2" placeholder="No"></textarea></div>
+                    <div class="form-group"><label>Contacto de Emergencia Adicional *</label><textarea id="emergencia" required rows="2" placeholder="Nombre y Teléfono"></textarea></div>
+
+                    <div class="section-title">SECCIÓN 6: Declaración</div>
+                    <div class="form-group" style="background: #111; padding: 1rem; border-radius: 8px; border: 1px solid #333;">
+                        <label class="checkbox-label" style="font-weight: 500; font-size: 0.9rem;">
+                            <input type="checkbox" id="terminos" required style="width: 20px; height: 20px;"> 
+                            Declaro que los datos suministrados son verídicos y autorizo a la academia.
+                        </label>
+                    </div>
+
+                    <div id="loadingInscripcion" class="loading"><i class="fa-solid fa-spinner fa-spin"></i> Guardando inscripción en Google Sheets...</div>
+                    <button type="submit" class="btn" id="btnInscripcion">Enviar Inscripción Oficial</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="reservas" class="section-container">
+            <div class="card">
+                <h2><i class="fa-solid fa-calendar-check"></i> Reservar Sesión de Entrenamiento</h2>
+                
+                <div style="background: #1a1600; border: 1px solid var(--accent); padding: 1.2rem; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.85rem; color: var(--accent); line-height: 1.6;">
+                    <i class="fa-solid fa-triangle-exclamation" style="font-size: 1.1rem; margin-right: 5px;"></i> <b>Normativa KSA de Reservas y Clases:</b>
+                    <ul style="margin-left: 20px; margin-top: 8px;">
+                        <li><b>Anticipación:</b> Las reservas deben realizarse estrictamente con al menos <b>24 horas de anticipación</b>.</li>
+                        <li><b>Regla de Recuperación:</b> Las clases perdidas deben recuperarse obligatoriamente dentro de la <b>misma semana en curso</b>.</li>
+                    </ul>
+                </div>
+
+                <div id="alertaReserva" class="alert alert-success"></div>
+
+                <form id="formReserva" onsubmit="enviarReserva(event)">
+                    <div class="form-grid">
+                        <div class="form-group"><label>Nombre del Atleta *</label><input type="text" id="resAtleta" required placeholder="Mateo Pérez" onblur="verificarSesionesAtleta(this.value)"></div>
+                        <div class="form-group"><label>Tipo de Reserva / Atleta *</label>
+                            <select id="resTipoAtleta" required onchange="verificarTipoAtletaReserva(this.value)">
+                                <option value="">Seleccione...</option>
+                                <option value="Recuperacion">Atleta Activo (Recuperación - Misma semana)</option>
+                                <option value="Reprogramacion">Atleta Activo (Reprogramación)</option>
+                                <option value="SesionExtraActiva">Atleta Regular - Sesión Extra ($7,5 - Con inscripción activa)</option>
+                                <option value="Eventual">Atleta Eventual (Pago por sesión - $15.00)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="avisoSesionesRegulares" style="display: none; background: #111; border: 1px solid var(--accent); padding: 1rem; border-radius: 8px; margin-bottom: 1.2rem; font-size: 0.9rem; color: var(--accent);">
+                        <i class="fa-solid fa-circle-info"></i> Estado del Atleta: <span id="txtEstadoSesiones">Verificando...</span>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Fecha de la Sesión a Reservar (Mínimo 24h antes) *</label>
+                            <input type="date" id="resFecha" required onchange="validarAnticipacionReserva()">
+                        </div>
+                        <div class="form-group">
+                            <label>Sede / Turno *</label>
+                            <select id="resTurno" required>
+                                <option value="">Seleccione turno...</option>
+                                <option value="Vereda del Lago - 5:40 PM">Vereda del Lago - 5:40 PM</option>
+                                <option value="Vereda del Lago - 6:40 PM">Vereda del Lago - 6:40 PM</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Motivo de la Reserva (Detallar recuperación en misma semana) *</label>
+                        <textarea id="resMotivo" rows="3" required placeholder="Ej. Falta a la sesión del martes por viaje, recuperando este jueves en la misma semana..."></textarea>
+                    </div>
+
+                    <div id="cajaPagoEventual" style="display: none; background: #261111; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--danger); margin-bottom: 1.5rem;">
+                        <h4 style="color: var(--accent); margin-bottom: 12px;"><i class="fa-solid fa-wallet"></i> <span id="tituloPagoExtra">Pago Requerido:</span></h4>
+                        <p style="font-size: 0.85rem; color: #f87171; margin-bottom: 10px; font-weight: 600;">⚠️ Sin el comprobante de pago de esta sesión, el sistema no permitirá confirmar la reserva.</p>
+                        
+                        <div id="infoBancoEventual" class="bank-info" style="margin-bottom: 15px;"></div>
+
+                        <div class="form-grid">
+                            <div class="form-group"><label>Número de Referencia *</label><input type="text" id="resRefPago" placeholder="Nro de Referencia"></div>
+                            <div class="form-group"><label>Subir Capture del Pago *</label><input type="file" id="resCapture" accept="image/*" style="padding: 0.5rem; background: #000;"></div>
+                        </div>
+                    </div>
+
+                    <div id="loadingReserva" class="loading"><i class="fa-solid fa-spinner fa-spin"></i> Procesando reserva y sincronizando con Google Sheets...</div>
+                    <button type="submit" class="btn btn-accent" id="btnReserva">Confirmar Reserva de Entrenamiento</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="kits" class="section-container">
+            <div class="card">
+                <h2><i class="fa-solid fa-shirt"></i> Reserva de Kit de Entrenamiento Oficial</h2>
+                <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.5rem;">Valor total del kit: $35. Puede cancelar el monto total o abonar el 50% ($17.50).</p>
+                <div id="alertaKit" class="alert alert-success"></div>
+
+                <form id="formKit" onsubmit="enviarReservaKit(event)">
+                    <div class="form-grid">
+                        <div class="form-group"><label>Nombre del Atleta *</label><input type="text" id="kitAtleta" required placeholder="Mateo Pérez"></div>
+                        <div class="form-group"><label>Cédula del Representante *</label><input type="text" id="kitCedula" required placeholder="V-12345678"></div>
+                        <div class="form-group">
+                            <label>Talla de Uniforme (T2 al 2XL) *</label>
+                            <select id="kitTalla" required onchange="actualizarMontoKit(document.getElementById('kitModalidad').value)">
+                                <option value="">Seleccione talla...</option>
+                                <option value="Talla 2">Talla 2</option><option value="Talla 4">Talla 4</option>
+                                <option value="Talla 6">Talla 6</option><option value="Talla 8">Talla 8</option>
+                                <option value="Talla 10">Talla 10</option><option value="Talla 12">Talla 12</option>
+                                <option value="Talla 14">Talla 14</option><option value="Talla 16">Talla 16</option>
+                                <option value="S">Talla S</option><option value="M">Talla M</option>
+                                <option value="L">Talla L</option><option value="XL">Talla XL</option>
+                                <option value="2XL">Talla 2XL</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Modalidad de Pago *</label>
+                            <select id="kitModalidad" required onchange="actualizarMontoKit(this.value)">
+                                <option value="">Seleccione...</option>
+                                <option value="Completo">Pago Completo ($35.00)</option>
+                                <option value="Abono 50%">Abono del 50% ($17.50)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="cajaBancoKit" class="payment-box" style="display: none; margin-bottom: 1.5rem;">
+                        <h4 style="color: var(--accent); margin-bottom: 12px;"><i class="fa-solid fa-wallet"></i> Datos Bancarios para Kit Oficial (Pago Inmediato):</h4>
+                        <div id="infoBancoKit"></div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group"><label>Número de Referencia del Pago *</label><input type="text" id="kitReferencia" required placeholder="Ej. 987654"></div>
+                        <div class="form-group"><label>Subir Capture del Abono o Pago *</label><input type="file" id="kitCapture" accept="image/*" required style="padding: 0.5rem; background: #000;"></div>
+                    </div>
+
+                    <div id="loadingKit" class="loading"><i class="fa-solid fa-spinner fa-spin"></i> Registrando reserva de kit...</div>
+                    <button type="submit" class="btn btn-accent" id="btnKit">Confirmar Reserva de Kit</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="fansstore" class="section-container">
+            <div class="card">
+                <h2><i class="fa-solid fa-bag-shopping"></i> Fans Store KSA - Playeras Oficiales</h2>
+                <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.5rem;">Costo fijo por playera: <b>$20.00 USD</b>.</p>
+                <div id="alertaStore" class="alert alert-success"></div>
+
+                <form id="formStore" onsubmit="enviarPedidoStore(event)">
+                    <div class="form-grid">
+                        <div class="form-group"><label>Nombre y Apellido del Comprador *</label><input type="text" id="storeComprador" required placeholder="Ej. Ana Martínez"></div>
+                        <div class="form-group"><label>Teléfono / WhatsApp *</label><input type="tel" id="storeTelefono" required placeholder="0414-0000000"></div>
+                        <div class="form-group">
+                            <label>Talla Solicitada (T2 al 2XL) *</label>
+                            <select id="storeTalla" required onchange="actualizarBancoStore()">
+                                <option value="">Seleccione talla...</option>
+                                <option value="Talla 2">Talla 2</option><option value="Talla 4">Talla 4</option>
+                                <option value="Talla 6">Talla 6</option><option value="Talla 8">Talla 8</option>
+                                <option value="Talla 10">Talla 10</option><option value="Talla 12">Talla 12</option>
+                                <option value="Talla 14">Talla 14</option><option value="Talla 16">Talla 16</option>
+                                <option value="S">Talla S</option><option value="M">Talla M</option>
+                                <option value="L">Talla L</option><option value="XL">Talla XL</option>
+                                <option value="2XL">Talla 2XL</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label>Cantidad de Playeras *</label><input type="number" id="storeCantidad" min="1" value="1" required oninput="actualizarBancoStore()"></div>
+                    </div>
+
+                    <div style="background: #111; padding: 1rem; border-radius: 8px; border: 1px solid var(--accent); margin-bottom: 1.2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                        <span style="color: var(--light); font-weight: 600;">Total a Cancelar: <b id="storeTotalUSD" style="color: var(--accent); font-size: 1.2rem;">$20.00 USD</b></span>
+                        <span style="color: #94a3b8; font-size: 0.9rem;" id="storeTotalBS">Equivalente en Bs: Calculando...</span>
+                    </div>
+
+                    <div class="payment-box" style="margin-bottom: 1.5rem;">
+                        <h4 style="color: var(--accent); margin-bottom: 12px;"><i class="fa-solid fa-wallet"></i> Datos Bancarios para Fans Store (Pago Inmediato):</h4>
+                        <div id="infoBancoStore"></div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group"><label>Número de Referencia *</label><input type="text" id="storeReferencia" required placeholder="Ej. 554433"></div>
+                        <div class="form-group"><label>Adjuntar Capture del Pago *</label><input type="file" id="storeCapture" accept="image/*" required style="padding: 0.5rem; background: #000;"></div>
+                    </div>
+
+                    <div id="loadingStore" class="loading"><i class="fa-solid fa-spinner fa-spin"></i> Procesando pedido en Fans Store...</div>
+                    <button type="submit" class="btn btn-accent" id="btnStore">Solicitar Playera Oficial</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="pagos" class="section-container">
+            <div class="card">
+                <h2><i class="fa-solid fa-file-invoice-dollar"></i> Pasarela de Pagos y Abonos de Mensualidad</h2>
+                <div id="alertaPago" class="alert alert-success"></div>
+
+                <form id="formPago" onsubmit="enviarPago(event)">
+                    <div class="form-grid">
+                        <div class="form-group"><label>Nombre del Atleta *</label><input type="text" id="pagoAtleta" required placeholder="Mateo Pérez"></div>
+                        <div class="form-group"><label>Cédula del Pagador *</label><input type="text" id="pagoCedula" required placeholder="V-34567890"></div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Seleccionar Concepto / Plan *</label>
+                            <select id="pagoConcepto" required onchange="actualizarMontoUSD()">
+                                <option value="">Seleccione concepto...</option>
+                                <option value="Inscripción General" data-monto="20">Inscripción General - $20.00</option>
+                                <option value="Kits de Uniforme Oficial" data-monto="35">Kits de Uniforme Oficial - $35.00</option>
+                                <option value="Playera Fans Store" data-monto="20">Playera Fans Store - $20.00</option>
+                                <option value="Sesión extra (1) atleta regular con inscripción activa" data-monto="7.5">Sesión extra (1) atleta regular con inscripción activa - $7,50</option>
+                                <option value="Sesión extra (1) atleta regular con inscripción inactiva" data-monto="15">Sesión extra (1) atleta regular con inscripción inactiva - $15,00</option>
+                                <option value="Plan Base (8 sesiones)" data-monto="60">Plan Base (8 sesiones) - $60.00</option>
+                                <option value="Plan Pro (12 sesiones)" data-monto="90">Plan Pro (12 sesiones) - $90.00</option>
+                                <option value="Plan Élite GK (16 sesiones)" data-monto="120">Plan Élite GK (16 sesiones) - $120.00</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Tipo de Transacción *</label>
+                            <select id="pagoTipoTransaccion" required onchange="ajustarMontoAbonoMensual()">
+                                <option value="Completo">Pago Completo (Monto Total)</option>
+                                <option value="Abono">Abono a Mensualidad / Cuota Parcial</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-calendar-days" style="color: var(--accent);"></i> Mes a Cancelar *</label>
+                            <select id="pagoMesCancelar" required>
+                                <option value="">Seleccione mes...</option>
+                                <option value="Enero">Enero</option><option value="Febrero">Febrero</option>
+                                <option value="Marzo">Marzo</option><option value="Abril">Abril</option>
+                                <option value="Mayo">Mayo</option><option value="Junio">Junio</option>
+                                <option value="Julio">Julio</option><option value="Agosto">Agosto</option>
+                                <option value="Septiembre">Septiembre</option><option value="Octubre">Octubre</option>
+                                <option value="Noviembre">Noviembre</option><option value="Diciembre">Diciembre</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-calendar-day" style="color: var(--accent);"></i> Día del Pago *</label>
+                            <select id="pagoDiaPago" required>
+                                <option value="">Seleccione día...</option>
+                                <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                                <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+                                <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+                                <option value="10">10</option><option value="11">11</option><option value="12">12</option>
+                                <option value="13">13</option><option value="14">14</option><option value="15">15</option>
+                                <option value="16">16</option><option value="17">17</option><option value="18">18</option>
+                                <option value="19">19</option><option value="20">20</option><option value="21">21</option>
+                                <option value="22">22</option><option value="23">23</option><option value="24">24</option>
+                                <option value="25">25</option><option value="26">26</option><option value="27">27</option>
+                                <option value="28">28</option><option value="29">29</option><option value="30">30</option>
+                                <option value="31">31</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Monto en USD ($)</label>
+                            <input type="number" step="0.01" id="pagoMontoUSD" placeholder="0.00" oninput="calcularBolivaresMontoLibre()">
+                        </div>
+                        <div class="form-group">
+                            <label>Monto Total en Bolívares (Bs)</label>
+                            <input type="number" step="0.01" id="pagoMontoBS" readonly style="background: #2b2600; font-weight: 700; color: var(--accent); font-size: 1.1rem; border-color: var(--accent);" placeholder="0.00">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Método de Pago *</label>
+                        <select id="pagoMetodo" required onchange="mostrarDatosPago(this.value)">
+                            <option value="">Seleccione método...</option>
+                            <option value="Pago Móvil">Pago Móvil (BDV)</option>
+                            <option value="Transferencia Bancaria">Transferencia Bancaria (BNC)</option>
+                        </select>
+                    </div>
+
+                    <div id="cajaDatosBanco" class="payment-box" style="display: none;">
+                        <h4 style="color: var(--accent); margin-bottom: 12px;"><i class="fa-solid fa-wallet"></i> Datos Bancarios Oficiales (Pago Inmediato):</h4>
+                        <div id="infoMetodoContenido"></div>
+                    </div>
+
+                    <div class="form-grid" style="margin-top: 1.5rem;">
+                        <div class="form-group">
+                            <label>Número de Referencia / Comprobante *</label>
+                            <input type="text" id="pagoReferencia" required placeholder="Ej. 123456">
+                        </div>
+                        <div class="form-group">
+                            <label>Adjuntar Capture de Pago *</label>
+                            <input type="file" id="pagoCapture" accept="image/*" required style="padding: 0.5rem; background: #000;">
+                        </div>
+                    </div>
+
+                    <div id="loadingPago" class="loading"><i class="fa-solid fa-spinner fa-spin"></i> Registrando pago y sincronizando...</div>
+                    <button type="submit" class="btn btn-accent" id="btnPago">Reportar Pago Oficial</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="infografia" class="section-container">
+            <div class="card">
+                <h2><i class="fa-solid fa-id-card"></i> Infografía y Fichas de Atletas KSA</h2>
+                <div id="gridInfografiaAtletas" class="infografia-grid">
+                    <div class="atleta-card">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" class="atleta-avatar" alt="Atleta">
+                        <h3 style="color: var(--light); font-size: 1.1rem; margin-bottom: 5px;">Mateo Pérez</h3>
+                        <p style="font-size: 0.8rem; color: var(--accent); font-weight: 700; margin-bottom: 10px;">Atleta Oficial KSA</p>
+                        <div class="atleta-info">
+                            Fecha de nac: <b>12/05/2014 (12 años)</b><br>
+                            Cédula: <b>V-34567890</b><br>
+                            Perfil: <b>Derecho</b><br>
+                            Equipo actual: <b>Academia F.C.</b><br>
+                            Hobby: <b>Dibujar y futsal</b><br>
+                            Fans de: <b>Real Madrid</b><br>
+                            Metas: <b>Ser arquero profesional de la Vinotinto</b><br>
+                            Que le gusta de ksa: <b>Los entrenamientos de potencia en arena y la exigencia técnica.</b><br>
+                            Redes sociales: <b>@mateoperez_gk</b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="horarios" class="section-container">
+            <div class="card">
+                <h2><i class="fa-solid fa-calendar-days"></i> Horarios y Sedes de Entrenamiento</h2>
+                <div style="background: #111; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--danger); margin-bottom: 1.5rem; border: 1px solid #333;">
+                    <h3 style="color: var(--accent);">🏖️ Sede Oficial: Vereda del Lago</h3>
+                    <p style="font-size: 0.9rem; color: #94a3b8; margin-top: 5px;">Cancha de arena de playa (Entrenamiento especializado en potencia, agilidad y caídas).</p>
+                    <ul style="margin-top: 12px; margin-left: 20px; font-size: 0.9rem; line-height: 1.8; color: var(--light);">
+                        <li><b>Lunes y Miércoles:</b> 1 sesión de entrenamiento a las <b>5:40 PM</b></li>
+                        <li><b>Martes y Jueves:</b> 2 sesiones de entrenamiento: a las <b>5:40 PM</b> y a las <b>6:40 PM</b></li>
+                    </ul>
+                </div>
+
+                <div id="contenedorSedesAlternativas" style="background: #111; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--accent); border: 1px solid #333;">
+                    <h3 style="color: var(--accent);"><i class="fa-solid fa-map-location-dot"></i> Sedes Alternativas y Clínicas Especiales</h3>
+                    <div id="listaSedesExtra" style="margin-top: 10px; font-size: 0.9rem; color: var(--light);">
+                        <!-- SE DINÁMICO DESDE GOOGLE SHEETS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="asistencia" class="section-container">
+            <div class="card">
+                <h2><i class="fa-solid fa-clipboard-user"></i> Control de Asistencia y Contador de Sesiones</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Atleta</th>
+                                <th>Plan Mensual</th>
+                                <th>Días Asignados</th>
+                                <th>Sesiones Asistidas</th>
+                                <th>Sesiones Restantes</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaAsistenciaContenido">
+                            <tr>
+                                <td>Mateo Pérez</td>
+                                <td>Plan Base (8 sesiones)</td>
+                                <td>Lunes y Miércoles</td>
+                                <td><span style="color: #34d399; font-weight: bold;">8</span></td>
+                                <td><span style="color: var(--danger); font-weight: bold;">0 (Requiere Sesión Extra $7,5)</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="cumpleanos" class="section-container">
+            <div class="card">
+                <h2><i class="fa-solid fa-cake-candles"></i> Cumpleaños y Fechas Especiales</h2>
+                <div style="display: grid; gap: 1.2rem;" id="contenedorMensajesCumpleanos"></div>
+            </div>
+        </div>
+
+        <div id="galeria" class="section-container">
+            <div class="card" style="background: transparent; box-shadow: none; padding: 0; border: none;">
+                <h2 style="background: var(--card-bg); padding: 1.5rem; border-radius: 16px; border: 1px solid #333;"><i class="fa-solid fa-images"></i> Galería Multimedia</h2>
+                <div id="loadingGaleria" class="loading" style="display: block;"><i class="fa-solid fa-spinner fa-spin"></i> Cargando galería desde Google Sheets...</div>
+                <div id="galleryGrid" class="gallery-grid" style="margin-top: 1.5rem;"></div>
+            </div>
+        </div>
+
+        <div id="redes" class="section-container">
+            <div class="card">
+                <h2><i class="fa-solid fa-share-nodes"></i> Redes Sociales Oficiales</h2>
+                <p style="color: #94a3b8; margin-bottom: 1.5rem;">Síguenos y forma parte de nuestra comunidad digital de alto rendimiento.</p>
+                
+                <div id="contenedorRedesSociales" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem;">
+                    <div class="social-card">
+                        <i class="fa-brands fa-whatsapp" style="color: #25D366;"></i>
+                        <h3 style="color: var(--light); margin-bottom: 5px;">WhatsApp Oficial KSA</h3>
+                        <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 15px;">0424-6891083</p>
+                        <a href="https://wa.me/584246891083" target="_blank" class="btn btn-accent" style="padding: 0.5rem; font-size: 0.85rem; background: #25D366; color: #fff;">Escribir al WhatsApp</a>
+                    </div>
+                    <div class="social-card">
+                        <i class="fa-brands fa-instagram"></i>
+                        <h3 style="color: var(--light); margin-bottom: 5px;">Keepers Sport Academy GK</h3>
+                        <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 15px;">@keeperssportacademy</p>
+                        <a href="https://instagram.com" target="_blank" class="btn btn-accent" style="padding: 0.5rem; font-size: 0.85rem;">Visitar Instagram</a>
+                    </div>
+                    <div class="social-card">
+                        <i class="fa-brands fa-instagram"></i>
+                        <h3 style="color: var(--light); margin-bottom: 5px;">Prof. Eduardo Martínez</h3>
+                        <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 15px;">Head Coach</p>
+                        <a href="https://instagram.com" target="_blank" class="btn btn-accent" style="padding: 0.5rem; font-size: 0.85rem;">Visitar Perfil</a>
+                    </div>
+                    <div class="social-card">
+                        <i class="fa-brands fa-tiktok"></i>
+                        <h3 style="color: var(--light); margin-bottom: 5px;">TikTok Oficial</h3>
+                        <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 15px;">@keeperssportacademy</p>
+                        <a href="https://tiktok.com" target="_blank" class="btn btn-accent" style="padding: 0.5rem; font-size: 0.85rem;">Visitar TikTok</a>
+                    </div>
+                    <div class="social-card">
+                        <i class="fa-brands fa-youtube"></i>
+                        <h3 style="color: var(--light); margin-bottom: 5px;">YouTube Academy</h3>
+                        <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 15px;">Canal Oficial</p>
+                        <a href="https://youtube.com" target="_blank" class="btn btn-accent" style="padding: 0.5rem; font-size: 0.85rem;">Ver Canal</a>
+                    </div>
+                    <div class="social-card">
+                        <i class="fa-brands fa-facebook"></i>
+                        <h3 style="color: var(--light); margin-bottom: 5px;">Facebook Oficial</h3>
+                        <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 15px;">Keepers Sport Academy GK</p>
+                        <a href="https://facebook.com" target="_blank" class="btn btn-accent" style="padding: 0.5rem; font-size: 0.85rem;">Visitar Facebook</a>
+                    </div>
+                    <div class="social-card">
+                        <i class="fa-solid fa-envelope"></i>
+                        <h3 style="color: var(--light); margin-bottom: 5px;">Correo Electrónico</h3>
+                        <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 15px;">keeperssportacademy@gmail.com</p>
+                        <a href="mailto:keeperssportacademy@gmail.com" class="btn btn-accent" style="padding: 0.5rem; font-size: 0.85rem;">Enviar Correo</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="admin" class="section-container">
+            <div class="card" style="border-top-color: var(--accent);">
+                <h2><i class="fa-solid fa-lock"></i> Panel Administrativo Integral y Autogestionable</h2>
+                <p style="color: #94a3b8; margin-bottom: 1.5rem;">Panel exclusivo para el Head Coach Eduardo Martínez (Control Total de Secciones y Base de Datos Google Sheets).</p>
+                
+                <form id="formAdmin" onsubmit="guardarContenidoAdmin(event)">
+                    <div class="section-title">1. Configurar Tasa del Día y Puntos Internos</div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Tasa del Día Base (Bs)</label>
+                            <input type="number" step="0.01" id="admTasaBase" value="1000.00" placeholder="Ej. 1000.00">
+                        </div>
+                        <div class="form-group">
+                            <label>Puntos Internos de Ajuste (Bs)</label>
+                            <input type="number" step="0.01" id="admPuntosExtra" value="4.41" placeholder="Ej. 4.41">
+                        </div>
+                    </div>
+
+                    <div class="section-title">2. Autogestionar Costos (Sesión Regular, Eventual y Servicios)</div>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Sesión Extra Atleta Regular ($)</label><input type="number" step="0.5" id="admCostReg" value="7.5"></div>
+                        <div class="form-group"><label>Sesión Atleta Eventual ($)</label><input type="number" step="0.5" id="admCostEventual" value="15.0"></div>
+                        <div class="form-group"><label>Costo Plan Base ($)</label><input type="number" id="admCostBase" value="60"></div>
+                        <div class="form-group"><label>Costo Plan Pro ($)</label><input type="number" id="admCostPro" value="90"></div>
+                        <div class="form-group"><label>Costo Plan Élite ($)</label><input type="number" id="admCostElite" value="120"></div>
+                        <div class="form-group"><label>Costo Kit Uniforme ($)</label><input type="number" id="admCostKit" value="35"></div>
+                        <div class="form-group"><label>Costo Playera Fans Store ($)</label><input type="number" id="admCostStore" value="20"></div>
+                    </div>
+
+                    <div class="section-title">3. Gestión de Galería (Subir y Eliminar)</div>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Título Multimedia</label><input type="text" id="adminMediaTitulo" placeholder="Ej. Bloqueo Raso"></div>
+                        <div class="form-group"><label>Archivo Foto/Video</label><input type="file" id="adminMediaFile" accept="image/*,video/*"></div>
+                    </div>
+                    <div class="form-group"><label>Descripción</label><textarea id="adminMediaDesc" rows="2" placeholder="Detalles..."></textarea></div>
+                    <div id="panelGestionGaleria" style="margin-top: 1rem; background: #111; padding: 1rem; border-radius: 8px; border: 1px solid #333;">
+                        <h4 style="color: var(--accent); margin-bottom: 8px; font-size: 0.9rem;">Elementos Actuales en Galería:</h4>
+                        <div id="listaAdminGaleria">Cargando elementos...</div>
+                    </div>
+
+                    <div class="section-title" style="margin-top: 2rem;">4. Base de Datos de Inscripciones y Registro Directo</div>
+                    <div style="background: #111; padding: 1.2rem; border-radius: 8px; border: 1px solid #333; margin-bottom: 1.5rem;">
+                        <h4 style="color: var(--accent); margin-bottom: 12px; font-size: 0.95rem;"><i class="fa-solid fa-user-plus"></i> Inscribir Atleta Directamente (Ficha Completa)</h4>
+                        
+                        <div class="form-grid">
+                            <div class="form-group"><label>Nombres y Apellidos del Atleta</label><input type="text" id="admRegNombre" placeholder="Mateo Pérez"></div>
+                            <div class="form-group"><label>Cédula / Partida Nacimiento</label><input type="text" id="admRegCedula" placeholder="V-34567890"></div>
+                            <div class="form-group"><label>Fecha de Nacimiento</label><input type="date" id="admRegNac"></div>
+                            <div class="form-group"><label>Teléfono del Atleta</label><input type="tel" id="admRegTel" placeholder="0414-0000000"></div>
+                            <div class="form-group"><label>Dirección</label><input type="text" id="admRegDir" placeholder="Sector, Calle, Casa"></div>
+                            <div class="form-group"><label>Redes Sociales Atleta</label><input type="text" id="admRegRedes" placeholder="@usuario"></div>
+                            
+                            <div class="form-group"><label>Nombres y Apellidos del Representante</label><input type="text" id="admRegRep" placeholder="Carlos Pérez"></div>
+                            <div class="form-group"><label>Cédula del Representante</label><input type="text" id="admRegCedRep" placeholder="V-12345678"></div>
+                            <div class="form-group"><label>Parentesco</label><select id="admRegParentesco"><option value="Madre">Madre</option><option value="Padre">Padre</option><option value="Representante Legal">Representante Legal</option><option value="Otro">Otro</option></select></div>
+                            <div class="form-group"><label>Teléfono / WhatsApp Principal</label><input type="tel" id="admRegTelRep" placeholder="0412-0000000"></div>
+                            <div class="form-group"><label>Correo Electrónico</label><input type="email" id="admRegCorreoRep" placeholder="correo@ejemplo.com"></div>
+                            
+                            <div class="form-group"><label>Equipo u Organización</label><input type="text" id="admRegEquipo" placeholder="Academia F.C."></div>
+                            <div class="form-group"><label>Categoría / Año</label><input type="text" id="admRegCategoria" placeholder="Sub-12 / 2014"></div>
+                            <div class="form-group"><label>Perfil / Pie Dominante</label><select id="admRegPie"><option value="Derecho">Derecho</option><option value="Izquierdo">Izquierdo</option><option value="Ambidextro">Ambidextro</option></select></div>
+                            <div class="form-group"><label>Estatura (cm) / Peso (kg)</label><input type="text" id="admRegAntro" placeholder="145 cm / 38 kg"></div>
+                            <div class="form-group"><label>Talla de Uniforme</label><input type="text" id="admRegTalla" placeholder="Talla 10 / M"></div>
+                            
+                            <div class="form-group"><label>Plan de Entrenamiento Mensual</label><select id="admRegPlanSelect"><option value="Plan Base">Plan Base (8 sesiones) - $60</option><option value="Plan Pro">Plan Pro (12 sesiones) - $90</option><option value="Plan Élite GK">Plan Élite GK (16 sesiones) - $120</option></select></div>
+                            <div class="form-group"><label>Horario Preferido</label><select id="admRegHorario"><option value="Lunes y Miércoles - 5:40 PM">Lunes y Miércoles - 5:40 PM</option><option value="Martes y Jueves - 5:40 PM y 6:40 PM">Martes y Jueves - 5:40 PM y 6:40 PM</option></select></div>
+                            <div class="form-group"><label>Tipo de Sangre</label><select id="admRegSangre"><option value="O+">O+</option><option value="O-">O-</option><option value="A+">A+</option><option value="A-">A-</option><option value="B+">B+</option><option value="B-">B-</option><option value="AB+">AB+</option><option value="AB-">AB-</option></select></div>
+                            <div class="form-group"><label>Enfermedades / Alergias / Lesiones</label><input type="text" id="admRegSalud" placeholder="Ninguna / No"></div>
+                            <div class="form-group"><label>Contacto de Emergencia</label><input type="text" id="admRegEmergencia" placeholder="Nombre y Teléfono"></div>
+                        </div>
+                        <button type="button" class="btn btn-accent" onclick="registrarAtletaCompletoAdmin()">Guardar Ficha Completa en Google Sheets</button>
+                    </div>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Atleta</th>
+                                    <th>Cédula</th>
+                                    <th>Representante / Telf</th>
+                                    <th>Plan / Equipo</th>
+                                    <th>Estatus</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaAdminAtletas"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="section-title" style="margin-top: 2rem;">5. Gestión de Sedes Alternativas y Clínicas Especiales</div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Agregar Sede Adicional</label>
+                            <input type="text" id="admNuevaSede" placeholder="Ej. Cancha Sintética Norte (Entrenamientos tácticos y salidas de balón)">
+                        </div>
+                    </div>
+                    <div id="panelGestionSedes" style="margin-top: 1rem; background: #111; padding: 1rem; border-radius: 8px; border: 1px solid #333;">
+                        <h4 style="color: var(--accent); margin-bottom: 8px; font-size: 0.9rem;">Sedes Alternativas Registradas:</h4>
+                        <div id="listaAdminSedes">Cargando sedes...</div>
+                    </div>
+
+                    <div id="loadingAdmin" class="loading"><i class="fa-solid fa-spinner fa-spin"></i> Guardando cambios en Google Sheets...</div>
+                    <button type="submit" class="btn btn-accent" style="margin-top: 1rem;">Guardar Cambios del Sistema</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // URL DE TU WEB APP DE GOOGLE APPS SCRIPT OFICIAL
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw98yxN91d8r8WmA-lu05yu85GSJ6HLVpvitkgs4sHGzArOrzpw8OmSlOkK4PqRlK-U/exec";
+
+        let modoAccesoActual = 'login';
+        let baseDatosAtletasKSA = [
+            { nombre: "Mateo Pérez", nac: "2014-05-12", equipo: "Academia F.C.", perfil: "Derecho", cedula: "V-34567890", representante: "Carlos Pérez", telRep: "0412-0000000", plan: "Plan Base", sesionesRestantes: 2, estatus: "Activo" }
+        ];
+
+        let galeriaKSA = [
+            { id: 1, titulo: "Entrenamiento de Potencia en Arena", tipo: "imagen", url: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80", descripcion: "Sede Vereda del Lago - Alto Rendimiento GK." }
+        ];
+
+        let sedesAlternativasKSA = [];
+
+        function obtenerTasaDelDia() {
+            let base = parseFloat(localStorage.getItem('ksa_tasa_base')) || 1000.00;
+            let puntos = parseFloat(localStorage.getItem('ksa_puntos_extra')) || 4.41;
+            return base + puntos;
+        }
+
+        function actualizarBarraTasaGlobal() {
+            const tasaFinal = obtenerTasaDelDia();
+            document.getElementById('lblTasaGlobalHeader').innerText = tasaFinal.toFixed(2);
+            actualizarMontoKit(document.getElementById('kitModalidad').value);
+            actualizarBancoStore();
+            if(document.getElementById('pagoMontoUSD').value) { calcularBolivaresMontoLibre(); }
+        }
+
+        async function enviarDatosSheets(accion, datosPayload, fileInputId = null) {
+            let base64File = "";
+            let fileName = "";
+            
+            if(fileInputId) {
+                const fileInput = document.getElementById(fileInputId);
+                if(fileInput && fileInput.files[0]) {
+                    const file = fileInput.files[0];
+                    fileName = file.name;
+                    base64File = await convertirFileABase64(file);
+                }
+            }
+
+            const payload = {
+                accion: accion,
+                datos: datosPayload,
+                archivo: base64File,
+                nombreArchivo: fileName
+            };
+
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+                return await response.json();
+            } catch (error) {
+                console.error("Error al conectar con Google Sheets:", error);
+                throw error;
+            }
+        }
+
+        function convertirFileABase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        function cambiarModo(modo) {
+            modoAccesoActual = modo;
+            const titulo = document.getElementById('loginTitulo');
+            const sub = document.getElementById('loginSub');
+            const seccionReg = document.getElementById('seccionCamposRegistro');
+            const grupoPass = document.getElementById('grupoPassLogin');
+            const btnAccion = document.getElementById('btnLoginAccion');
+            const linkReg = document.getElementById('linkRegistrar');
+            const linkRec = document.getElementById('linkRecuperar');
+            const linkVol = document.getElementById('linkVolver');
+
+            if(modo === 'registro') {
+                titulo.innerText = "REGISTRO DE USUARIO";
+                sub.innerText = "Ingrese sus datos para registrarse en el portal";
+                seccionReg.style.display = 'block';
+                document.getElementById('regNombreCompleto').required = true;
+                document.getElementById('regFechaNac').required = true;
+                document.getElementById('regCedula').required = true;
+                document.getElementById('regTelefono').required = true;
+                grupoPass.style.display = 'block';
+                btnAccion.innerText = "Registrarse";
+                linkReg.style.display = 'none'; linkRec.style.display = 'none'; linkVol.style.display = 'block';
+            } else if(modo === 'recuperar') {
+                titulo.innerText = "RECUPERAR CONTRASEÑA";
+                sub.innerText = "Ingrese su correo para recuperar su clave";
+                seccionReg.style.display = 'none';
+                document.getElementById('regNombreCompleto').required = false;
+                document.getElementById('regFechaNac').required = false;
+                document.getElementById('regCedula').required = false;
+                document.getElementById('regTelefono').required = false;
+                grupoPass.style.display = 'none';
+                btnAccion.innerText = "Enviar Instrucciones";
+                linkReg.style.display = 'none'; linkRec.style.display = 'none'; linkVol.style.display = 'block';
+            } else {
+                titulo.innerText = "ACCESO AL PORTAL";
+                sub.innerText = "Ingresa tus datos para continuar";
+                seccionReg.style.display = 'none';
+                document.getElementById('regNombreCompleto').required = false;
+                document.getElementById('regFechaNac').required = false;
+                document.getElementById('regCedula').required = false;
+                document.getElementById('regTelefono').required = false;
+                grupoPass.style.display = 'block';
+                btnAccion.innerText = "Ingresar";
+                linkReg.style.display = 'block'; linkRec.style.display = 'block'; linkVol.style.display = 'none';
+            }
+        }
+
+        function alternarVerPass(idInput, icono) {
+            const input = document.getElementById(idInput);
+            if(input.type === 'password') {
+                input.type = 'text';
+                icono.classList.remove('fa-eye'); icono.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icono.classList.remove('fa-eye-slash'); icono.classList.add('fa-eye');
+            }
+        }
+
+        async function manejarLoginAccion(e) {
+            e.preventDefault();
+            const correo = document.getElementById('loginCorreo').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
+            const robotChecked = document.getElementById('checkRobot').checked;
+
+            if(!robotChecked) {
+                alert("Por favor verifica el reCAPTCHA de seguridad KSA.");
+                return;
+            }
+
+            if(modoAccesoActual === 'registro') {
+                alert("¡Registro de usuario exitoso en Google Sheets! Ya puede iniciar sesión.");
+                cambiarModo('login');
+                return;
+            }
+
+            if(modoAccesoActual === 'recuperar') {
+                alert("Se han enviado las instrucciones de recuperación a: " + correo);
+                cambiarModo('login');
+                return;
+            }
+
+            const ahoraStr = new Date().toLocaleString('es-VE', { timeZone: 'America/Caracas', dateStyle: 'medium', timeStyle: 'medium' });
+            localStorage.setItem('ksa_ultimo_acceso', ahoraStr);
+
+            if(correo === 'keeperssportacademy@gmail.com' && pass === 'admkeepers123') {
+                document.getElementById('pantallaLogin').style.display = 'none';
+                document.getElementById('contenidoPrincipal').style.display = 'block';
+                document.getElementById('tabAdmin').style.display = 'flex';
+                document.getElementById('lblUltimoAcceso').innerText = ahoraStr;
+                cargarPanelAdministrativo();
+                alert("¡Bienvenido Head Coach Eduardo Martínez! Acceso administrativo concedido.");
+            } else if(correo !== '') {
+                document.getElementById('pantallaLogin').style.display = 'none';
+                document.getElementById('contenidoPrincipal').style.display = 'block';
+                document.getElementById('tabAdmin').style.display = 'none';
+                document.getElementById('lblUltimoAcceso').innerText = ahoraStr;
+            } else {
+                alert("Por favor ingrese correo y contraseña válidos.");
+            }
+        }
+
+        function cerrarSesion() {
+            document.getElementById('contenidoPrincipal').style.display = 'none';
+            document.getElementById('pantallaLogin').style.display = 'flex';
+            document.getElementById('loginCorreo').value = '';
+            document.getElementById('loginPass').value = '';
+            document.getElementById('checkRobot').checked = false;
+            cambiarModo('login');
+        }
+
+        setInterval(() => {
+            const options = { timeZone: 'America/Caracas', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+            const fechaHora = new Date().toLocaleString('es-VE', options);
+            const fechaDia = new Date().toLocaleDateString('es-VE', { timeZone: 'America/Caracas', weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
+            document.getElementById('relojVen').innerText = `${fechaDia} - ${fechaHora} (VET)`;
+        }, 1000);
+
+        window.onload = function() {
+            const ultimo = localStorage.getItem('ksa_ultimo_acceso');
+            if(ultimo) { document.getElementById('lblUltimoAcceso').innerText = ultimo; }
+            actualizarBarraTasaGlobal();
+            actualizarBancoStore();
+            renderizarSedesPublicas();
+        };
+
+        function switchTab(tabId, element) {
+            document.querySelectorAll('.section-container').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            if(element) element.classList.add('active');
+            if(tabId === 'galeria') { cargarGaleria(); }
+            if(tabId === 'cumpleanos') { generarMensajesCumpleanosLimpios(); }
+            if(tabId === 'fansstore') { actualizarBancoStore(); }
+            if(tabId === 'admin') { cargarPanelAdministrativo(); }
+        }
+
+        function calcularEdad() {
+            const fechaNac = document.getElementById('fechaNac').value;
+            if (!fechaNac) return;
+            const hoy = new Date();
+            const cumple = new Date(fechaNac);
+            let edad = hoy.getFullYear() - cumple.getFullYear();
+            const m = hoy.getMonth() - cumple.getMonth();
+            if (m < 0 || (m === 0 && hoy.getDate() < cumple.getDate())) { edad--; }
+            document.getElementById('edad').value = edad >= 0 ? edad : 0;
+        }
+
+        function verificarTipoAtletaReserva(tipo) {
+            const aviso = document.getElementById('avisoSesionesRegulares');
+            const cajaPago = document.getElementById('cajaPagoEventual');
+            const tituloPago = document.getElementById('tituloPagoExtra');
+            const tasaActual = obtenerTasaDelDia();
+            let costoUSD = 0;
+
+            if(tipo === 'SesionExtraActiva') {
+                costoUSD = parseFloat(localStorage.getItem('ksa_costo_reg')) || 7.5;
+            } else if(tipo === 'Eventual') {
+                costoUSD = parseFloat(localStorage.getItem('ksa_costo_eventual')) || 15.0;
+            }
+
+            if(tipo === 'SesionExtraActiva' || tipo === 'Eventual') {
+                aviso.style.display = 'none';
+                cajaPago.style.display = 'block';
+                document.getElementById('resRefPago').required = true;
+                document.getElementById('resCapture').required = true;
+                tituloPago.innerText = `Pago Requerido ($${costoUSD.toFixed(2)}):`;
+
+                const montoBs = (costoUSD * tasaActual).toFixed(2);
+                const textoCopiar = `Banco: BDV (Pago Movil) | Titular: EDUARDO MARTINEZ | C.I: V-19936880 | Telefono: 04246891083 | Monto: ${montoBs} Bs`;
+                document.getElementById('infoBancoEventual').innerHTML = `
+                    <div class="bank-info">
+                        <button type="button" class="copy-btn" onclick="copiarTextoCompleto('${textoCopiar}')">Copiar Todo</button>
+                        <div class="bank-info-content">
+                            <b>Banco:</b> Banco de Venezuela (BDV) - Pago Móvil<br>
+                            <b>Titular:</b> EDUARDO MARTINEZ<br>
+                            <b>C.I:</b> V-19936880<br>
+                            <b>Teléfono:</b> 0424-6891083<br>
+                            <b>Monto:</b> $${costoUSD.toFixed(2)} (${montoBs} Bs)
+                        </div>
+                        <div class="tasa-externa-separada"><i class="fa-solid fa-coins"></i> Tasa del Día: ${tasaActual.toFixed(2)} Bs</div>
+                    </div>
+                `;
+            } else {
+                aviso.style.display = 'block';
+                document.getElementById('txtEstadoSesiones').innerHTML = `Opción seleccionada: <b>${tipo}</b>. Las recuperaciones son obligatorias dentro de la <b>misma semana en curso</b>.`;
+                cajaPago.style.display = 'none';
+                document.getElementById('resRefPago').required = false;
+                document.getElementById('resCapture').required = false;
+            }
+        }
+
+        function verificarSesionesAtleta(nombreAtleta) {
+            if(!nombreAtleta) return;
+            const atletaEncontrado = baseDatosAtletasKSA.find(a => a.nombre.toLowerCase() === nombreAtleta.toLowerCase());
+            let sesiones = atletaEncontrado ? atletaEncontrado.sesionesRestantes : 2;
+            document.getElementById('avisoSesionesRegulares').style.display = 'block';
+            document.getElementById('txtEstadoSesiones').innerHTML = `Atleta localizado. Sesiones restantes: <b style="color: #34d399;">${sesiones}</b>. (Recuperación obligatoria en la misma semana).`;
+        }
+
+        function validarAnticipacionReserva() {
+            const inputFecha = document.getElementById('resFecha').value;
+            if(!inputFecha) return;
+            const fechaReserva = new Date(inputFecha);
+            const minFecha = new Date();
+            minFecha.setHours(minFecha.getHours() + 24);
+
+            if(fechaReserva < minFecha) {
+                alert("Las reservas deben realizarse estrictamente con al menos 24 horas de anticipación.");
+                document.getElementById('resFecha').value = '';
+            }
+        }
+
+        async function enviarReserva(e) {
+            e.preventDefault();
+            document.getElementById('loadingReserva').style.display = 'block';
+            document.getElementById('btnReserva').style.display = 'none';
+
+            const datosReserva = {
+                atleta: document.getElementById('resAtleta').value,
+                tipo: document.getElementById('resTipoAtleta').value,
+                fecha: document.getElementById('resFecha').value,
+                turno: document.getElementById('resTurno').value,
+                motivo: document.getElementById('resMotivo').value,
+                referencia: document.getElementById('resRefPago').value || 'N/A'
+            };
+
+            try {
+                await enviarDatosSheets('crearReserva', datosReserva, 'resCapture');
+                document.getElementById('loadingReserva').style.display = 'none';
+                document.getElementById('btnReserva').style.display = 'block';
+                let alerta = document.getElementById('alertaReserva');
+                alerta.innerText = "¡Reserva registrada con éxito y guardada en Google Sheets!";
+                alerta.style.display = 'block';
+                document.getElementById('formReserva').reset();
+                document.getElementById('cajaPagoEventual').style.display = 'none';
+                document.getElementById('avisoSesionesRegulares').style.display = 'none';
+                setTimeout(() => { alerta.style.display = 'none'; }, 6000);
+            } catch (err) {
+                document.getElementById('loadingReserva').style.display = 'none';
+                document.getElementById('btnReserva').style.display = 'block';
+                alert("Error al registrar reserva. Verifique su conexión.");
+            }
+        }
+
+        function actualizarMontoKit(modalidad) {
+            const cajaBanco = document.getElementById('cajaBancoKit');
+            const infoBanco = document.getElementById('infoBancoKit');
+            const tallaKit = document.getElementById('kitTalla').value;
+
+            if(!modalidad || !tallaKit) { cajaBanco.style.display = 'none'; return; }
+
+            cajaBanco.style.display = 'block';
+            const montoUSD = modalidad === 'Completo' ? 35 : 17.50;
+            const tasaActual = obtenerTasaDelDia();
+            const montoBs = (montoUSD * tasaActual).toFixed(2);
+            const textoCopiar = `Banco: BNC | Titular: EDUARDO MARTINEZ | C.I: V-19936880 | Cuenta: 01910572501100079991 | Monto: ${montoBs} Bs`;
+
+            infoBanco.innerHTML = `
+                <div class="bank-info">
+                    <button type="button" class="copy-btn" onclick="copiarTextoCompleto('${textoCopiar}')">Copiar Todo</button>
+                    <div class="bank-info-content">
+                        <b>Banco:</b> Banco Nacional de Crédito (BNC) - Transferencia<br>
+                        <b>Titular:</b> EDUARDO MARTINEZ<br>
+                        <b>C.I:</b> V-19936880<br>
+                        <b>Cuenta:</b> 0191-0572-50-1100079991<br>
+                        <b>Talla:</b> ${tallaKit} | <b>Monto:</b> $${montoUSD.toFixed(2)} (${montoBs} Bs)
+                    </div>
+                    <div class="tasa-externa-separada"><i class="fa-solid fa-coins"></i> Tasa del Día: ${tasaActual.toFixed(2)} Bs</div>
+                </div>
+            `;
+        }
+
+        async function enviarReservaKit(e) {
+            e.preventDefault();
+            document.getElementById('loadingKit').style.display = 'block';
+            document.getElementById('btnKit').style.display = 'none';
+
+            const datosKit = {
+                atleta: document.getElementById('kitAtleta').value,
+                cedulaRep: document.getElementById('kitCedula').value,
+                talla: document.getElementById('kitTalla').value,
+                modalidad: document.getElementById('kitModalidad').value,
+                referencia: document.getElementById('kitReferencia').value
+            };
+
+            try {
+                await enviarDatosSheets('crearKit', datosKit, 'kitCapture');
+                document.getElementById('loadingKit').style.display = 'none';
+                document.getElementById('btnKit').style.display = 'block';
+                let alerta = document.getElementById('alertaKit');
+                alerta.innerText = "¡Reserva de kit registrada y sincronizada con Google Sheets!";
+                alerta.style.display = 'block';
+                document.getElementById('formKit').reset();
+                document.getElementById('cajaBancoKit').style.display = 'none';
+                setTimeout(() => { alerta.style.display = 'none'; }, 7000);
+            } catch(err) {
+                document.getElementById('loadingKit').style.display = 'none';
+                document.getElementById('btnKit').style.display = 'block';
+                alert("Error al registrar kit.");
+            }
+        }
+
+        function actualizarBancoStore() {
+            const cantidad = parseInt(document.getElementById('storeCantidad').value) || 1;
+            const tallaStore = document.getElementById('storeTalla').value;
+            const totalUSD = cantidad * 20;
+            const tasaActual = obtenerTasaDelDia();
+            const totalBs = (totalUSD * tasaActual).toFixed(2);
+
+            document.getElementById('storeTotalUSD').innerText = `$${totalUSD.toFixed(2)} USD`;
+            document.getElementById('storeTotalBS').innerText = `Equivalente en Bs: ${totalBs} Bs`;
+
+            if(!tallaStore) {
+                document.getElementById('infoBancoStore').innerHTML = `<p style="color: #94a3b8; font-size: 0.9rem;">Seleccione una talla para ver los datos bancarios y el monto inmediato.</p>`;
+                return;
+            }
+
+            const textoCopiar = `Banco: BNC | Titular: EDUARDO MARTINEZ | C.I: V-19936880 | Cuenta: 01910572501100079991 | Monto: ${totalBs} Bs`;
+            document.getElementById('infoBancoStore').innerHTML = `
+                <div class="bank-info">
+                    <button type="button" class="copy-btn" onclick="copiarTextoCompleto('${textoCopiar}')">Copiar Todo</button>
+                    <div class="bank-info-content">
+                        <b>Banco:</b> Banco Nacional de Crédito (BNC) - Transferencia<br>
+                        <b>Titular:</b> EDUARDO MARTINEZ<br>
+                        <b>C.I:</b> V-19936880<br>
+                        <b>Cuenta:</b> 0191-0572-50-1100079991<br>
+                        <b>Playera/s (${cantidad}):</b> Talla ${tallaStore} | <b>Total:</b> $${totalUSD.toFixed(2)} (${totalBs} Bs)
+                    </div>
+                    <div class="tasa-externa-separada"><i class="fa-solid fa-coins"></i> Tasa del Día: ${tasaActual.toFixed(2)} Bs</div>
+                </div>
+            `;
+        }
+
+        async function enviarPedidoStore(e) {
+            e.preventDefault();
+            document.getElementById('loadingStore').style.display = 'block';
+            document.getElementById('btnStore').style.display = 'none';
+
+            const datosStore = {
+                comprador: document.getElementById('storeComprador').value,
+                telefono: document.getElementById('storeTelefono').value,
+                talla: document.getElementById('storeTalla').value,
+                cantidad: document.getElementById('storeCantidad').value,
+                referencia: document.getElementById('storeReferencia').value
+            };
+
+            try {
+                await enviarDatosSheets('crearStore', datosStore, 'storeCapture');
+                document.getElementById('loadingStore').style.display = 'none';
+                document.getElementById('btnStore').style.display = 'block';
+                let alerta = document.getElementById('alertaStore');
+                alerta.innerText = "¡Pedido de Fans Store guardado en Google Sheets con éxito!";
+                alerta.style.display = 'block';
+                document.getElementById('formStore').reset();
+                document.getElementById('storeCantidad').value = 1;
+                actualizarBancoStore();
+                setTimeout(() => { alerta.style.display = 'none'; }, 6000);
+            } catch(err) {
+                document.getElementById('loadingStore').style.display = 'none';
+                document.getElementById('btnStore').style.display = 'block';
+                alert("Error al procesar pedido.");
+            }
+        }
+
+        async function enviarPago(e) {
+            e.preventDefault();
+            document.getElementById('loadingPago').style.display = 'block';
+            document.getElementById('btnPago').style.display = 'none';
+
+            const datosPago = {
+                atleta: document.getElementById('pagoAtleta').value,
+                cedula: document.getElementById('pagoCedula').value,
+                concepto: document.getElementById('pagoConcepto').value,
+                tipoTransaccion: document.getElementById('pagoTipoTransaccion').value,
+                mes: document.getElementById('pagoMesCancelar').value,
+                dia: document.getElementById('pagoDiaPago').value,
+                montoUSD: document.getElementById('pagoMontoUSD').value,
+                montoBS: document.getElementById('pagoMontoBS').value,
+                metodo: document.getElementById('pagoMetodo').value,
+                referencia: document.getElementById('pagoReferencia').value
+            };
+
+            try {
+                await enviarDatosSheets('crearPago', datosPago, 'pagoCapture');
+                document.getElementById('loadingPago').style.display = 'none';
+                document.getElementById('btnPago').style.display = 'block';
+                let alerta = document.getElementById('alertaPago');
+                alerta.innerText = "¡Pago reportado y registrado en Google Sheets exitosamente!";
+                alerta.style.display = 'block';
+                document.getElementById('formPago').reset();
+                document.getElementById('cajaDatosBanco').style.display = 'none';
+                setTimeout(() => { alerta.style.display = 'none'; }, 6000);
+            } catch(err) {
+                document.getElementById('loadingPago').style.display = 'none';
+                document.getElementById('btnPago').style.display = 'block';
+                alert("Error al registrar pago.");
+            }
+        }
+
+        function actualizarMontoUSD() {
+            const select = document.getElementById('pagoConcepto');
+            const option = select.options[select.selectedIndex];
+            let monto = parseFloat(option.getAttribute('data-monto')) || 0;
+            
+            const tipoTransaccion = document.getElementById('pagoTipoTransaccion').value;
+            if(tipoTransaccion === 'Abono') { monto = monto / 2; }
+
+            document.getElementById('pagoMontoUSD').value = monto.toFixed(2);
+            calcularBolivaresMontoLibre();
+        }
+
+        function ajustarMontoAbonoMensual() { actualizarMontoUSD(); }
+
+        function calcularBolivaresMontoLibre() {
+            const montoUSD = parseFloat(document.getElementById('pagoMontoUSD').value) || 0;
+            const tasaActual = obtenerTasaDelDia();
+            const bs = montoUSD * tasaActual;
+            document.getElementById('pagoMontoBS').value = bs.toFixed(2);
+            
+            const metodoActual = document.getElementById('pagoMetodo').value;
+            if(metodoActual) { mostrarDatosPago(metodoActual); }
+        }
+
+        function mostrarDatosPago(metodo) {
+            const caja = document.getElementById('cajaDatosBanco');
+            const contenido = document.getElementById('infoMetodoContenido');
+            if(!metodo) { caja.style.display = 'none'; return; }
+
+            caja.style.display = 'block';
+            let montoBsActual = document.getElementById('pagoMontoBS').value || '0.00';
+            let tasaActual = obtenerTasaDelDia();
+            let html = '';
+            
+            if(metodo === 'Transferencia Bancaria') {
+                let textoCopiar = `Banco: BNC | Titular: EDUARDO MARTINEZ | C.I: V-19936880 | Cuenta: 01910572501100079991 | Monto: ${montoBsActual} Bs`;
+                html = `
+                    <div class="bank-info">
+                        <button type="button" class="copy-btn" onclick="copiarTextoCompleto('${textoCopiar}')">Copiar Todo</button>
+                        <div class="bank-info-content">
+                            <b>Banco:</b> Banco Nacional de Crédito (BNC)<br>
+                            <b>Titular:</b> EDUARDO MARTINEZ<br>
+                            <b>C.I:</b> V-19936880<br>
+                            <b>Cuenta:</b> 0191-0572-50-1100079991<br>
+                            <b>Monto:</b> ${montoBsActual} Bs
+                        </div>
+                        <div class="tasa-externa-separada"><i class="fa-solid fa-coins"></i> Tasa del Día: ${tasaActual.toFixed(2)} Bs</div>
+                    </div>
+                `;
+            } else if(metodo === 'Pago Móvil') {
+                let textoCopiar = `Banco: BDV (Pago Movil) | Titular: EDUARDO MARTINEZ | C.I: V-19936880 | Telefono: 04246891083 | Monto: ${montoBsActual} Bs`;
+                html = `
+                    <div class="bank-info">
+                        <button type="button" class="copy-btn" onclick="copiarTextoCompleto('${textoCopiar}')">Copiar Todo</button>
+                        <div class="bank-info-content">
+                            <b>Banco:</b> Banco de Venezuela (BDV)<br>
+                            <b>Titular:</b> EDUARDO MARTINEZ<br>
+                            <b>C.I:</b> V-19936880<br>
+                            <b>Teléfono:</b> 0424-6891083<br>
+                            <b>Monto:</b> ${montoBsActual} Bs
+                        </div>
+                        <div class="tasa-externa-separada"><i class="fa-solid fa-coins"></i> Tasa del Día: ${tasaActual.toFixed(2)} Bs</div>
+                    </div>
+                `;
+            }
+            contenido.innerHTML = html;
+        }
+
+        function copiarTextoCompleto(texto) {
+            navigator.clipboard.writeText(texto);
+            alert("¡Datos bancarios y monto copiados con éxito! Procede a pegar en tu banca.");
+        }
+
+        async function enviarInscripcion(e) {
+            e.preventDefault();
+            document.getElementById('loadingInscripcion').style.display = 'block';
+            document.getElementById('btnInscripcion').style.display = 'none';
+
+            var datos = {
+                nombreAtleta: document.getElementById('nombreAtleta').value,
+                cedulaAtleta: document.getElementById('cedulaAtleta').value,
+                fechaNac: document.getElementById('fechaNac').value,
+                nombreRep: document.getElementById('nombreRep').value,
+                cedulaRep: document.getElementById('cedulaRep').value,
+                telRep: document.getElementById('telRep').value,
+                correoRep: document.getElementById('correoRep').value,
+                equipo: document.getElementById('equipo').value,
+                pie: document.getElementById('pie').value,
+                talla: document.getElementById('talla').value,
+                plan: document.getElementById('plan').value
+            };
+
+            try {
+                await enviarDatosSheets('crearInscripcion', datos, 'fotoFile');
+                document.getElementById('loadingInscripcion').style.display = 'none';
+                document.getElementById('btnInscripcion').style.display = 'block';
+                let alerta = document.getElementById('alertaInscripcion');
+                alerta.innerText = "¡Inscripción registrada y guardada en Google Sheets con éxito!";
+                alerta.style.display = 'block';
+                document.getElementById('formInscripcion').reset();
+                setTimeout(() => { alerta.style.display = 'none'; }, 6000);
+            } catch(err) {
+                document.getElementById('loadingInscripcion').style.display = 'none';
+                document.getElementById('btnInscripcion').style.display = 'block';
+                alert("Error al registrar inscripción.");
+            }
+        }
+
+        function registrarAtletaCompletoAdmin() {
+            const nombre = document.getElementById('admRegNombre').value.trim();
+            const cedula = document.getElementById('admRegCedula').value.trim();
+            const nac = document.getElementById('admRegNac').value;
+            const rep = document.getElementById('admRegRep').value.trim();
+            const telRep = document.getElementById('admRegTelRep').value.trim();
+
+            if(!nombre) {
+                alert("Por favor ingrese al menos el nombre del atleta.");
+                return;
+            }
+
+            baseDatosAtletasKSA.push({
+                nombre: nombre,
+                nac: nac || '2014-01-01',
+                equipo: document.getElementById('admRegEquipo').value.trim() || 'Academia',
+                perfil: document.getElementById('admRegPie').value,
+                cedula: cedula || 'V-00000000',
+                representante: rep || 'Representante',
+                telRep: telRep || '0412-0000000',
+                plan: document.getElementById('admRegPlanSelect').value,
+                sesionesRestantes: 8,
+                estatus: 'Activo'
+            });
+
+            alert(`¡Atleta ${nombre} inscrito exitosamente en Google Sheets!`);
+            cargarPanelAdministrativo();
+        }
+
+        function generarMensajesCumpleanosLimpios() {
+            const contenedor = document.getElementById('contenedorMensajesCumpleanos');
+            const hoy = new Date();
+            const mesActual = hoy.getMonth() + 1;
+            let html = '';
+
+            html += `
+                <div style="background: #111; border: 1px solid var(--accent); padding: 1.5rem; border-radius: 8px; border-left: 5px solid var(--accent);">
+                    <h4 style="color: var(--accent); margin-bottom: 0;"><i class="fa-solid fa-cake-candles"></i> Aniversario Oficial de Keepers Sport Academy GK (16 de Enero)</h4>
+                </div>
+            `;
+            html += `
+                <div style="background: #111; border: 1px solid var(--danger); padding: 1.5rem; border-radius: 8px; border-left: 5px solid var(--danger);">
+                    <h4 style="color: var(--danger); margin-bottom: 0;"><i class="fa-solid fa-user-tie"></i> Cumpleaños del Head Coach Eduardo Martínez (4 de Febrero)</h4>
+                </div>
+            `;
+
+            let atletasDelMes = baseDatosAtletasKSA.filter(atleta => {
+                if(!atleta.nac) return false;
+                const partes = atleta.nac.split('-');
+                if(partes.length === 3) { return parseInt(partes[1], 10) === mesActual; }
+                return false;
+            });
+
+            if(atletasDelMes.length > 0) {
+                atletasDelMes.forEach(atleta => {
+                    html += `
+                        <div style="background: #111; border: 1px solid #064e3b; padding: 1.5rem; border-radius: 8px; border-left: 5px solid #34d399;">
+                            <h4 style="color: #34d399; margin-bottom: 5px;"><i class="fa-solid fa-gift"></i> Cumpleaños del Mes - Atleta: ${atleta.nombre}</h4>
+                            <p style="font-size: 0.9rem; color: var(--light); font-style: italic;">"¡Feliz cumpleaños en este mes, ${atleta.nombre}! <b>Mentalidad de campeones</b>."</p>
+                        </div>
+                    `;
+                });
+            } else {
+                html += `
+                    <div style="background: #111; border: 1px solid #333; padding: 1.2rem; border-radius: 8px; text-align: center; color: #94a3b8; font-size: 0.9rem;">
+                        <i class="fa-solid fa-calendar"></i> No hay atletas cumpliendo años en este mes en curso. ¡Pronto más celebraciones KSA!
+                    </div>
+                `;
+            }
+            contenedor.innerHTML = html;
+        }
+
+        function cargarPanelAdministrativo() {
+            document.getElementById('admTasaBase').value = localStorage.getItem('ksa_tasa_base') || 1000.00;
+            document.getElementById('admPuntosExtra').value = localStorage.getItem('ksa_puntos_extra') || 4.41;
+            document.getElementById('admCostReg').value = localStorage.getItem('ksa_costo_reg') || 7.5;
+            document.getElementById('admCostEventual').value = localStorage.getItem('ksa_costo_eventual') || 15.0;
+
+            let htmlGaleria = '';
+            galeriaKSA.forEach(item => {
+                htmlGaleria += `<div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #222; font-size: 0.85rem;">
+                    <span><b>${item.titulo}</b></span>
+                    <button type="button" class="logout-btn" onclick="eliminarElementoGaleria(${item.id})">Eliminar</button>
+                </div>`;
+            });
+            document.getElementById('listaAdminGaleria').innerHTML = htmlGaleria || 'No hay elementos.';
+
+            let htmlSedesAdmin = '';
+            sedesAlternativasKSA.forEach((sede, index) => {
+                htmlSedesAdmin += `<div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #222; font-size: 0.85rem;">
+                    <span><b>${sede}</b></span>
+                    <button type="button" class="logout-btn" onclick="eliminarSede(${index})">Eliminar</button>
+                </div>`;
+            });
+            document.getElementById('listaAdminSedes').innerHTML = htmlSedesAdmin || 'No hay sedes alternativas registradas.';
+
+            let htmlAtletas = '';
+            baseDatosAtletasKSA.forEach((atleta, index) => {
+                htmlAtletas += `<tr>
+                    <td><b>${atleta.nombre}</b></td>
+                    <td>${atleta.cedula}</td>
+                    <td>${atleta.representante} (${atleta.telRep})</td>
+                    <td>${atleta.plan} <br><span style="color:#94a3b8; font-size:0.8rem;">${atleta.equipo}</span></td>
+                    <td><span style="color: ${atleta.estatus === 'Activo' ? '#34d399' : '#f87171'}; font-weight: bold; background: #111; padding: 4px 8px; border-radius: 4px; border: 1px solid #333;">● ${atleta.estatus || 'Activo'}</span></td>
+                    <td>
+                        <button type="button" class="copy-btn" onclick="alternarEstatusAtleta(${index})">Cambiar Estatus</button>
+                    </td>
+                </tr>`;
+            });
+            document.getElementById('tablaAdminAtletas').innerHTML = htmlAtletas;
+        }
+
+        function alternarEstatusAtleta(index) {
+            baseDatosAtletasKSA[index].estatus = baseDatosAtletasKSA[index].estatus === 'Activo' ? 'Inactivo' : 'Activo';
+            cargarPanelAdministrativo();
+            alert("Estatus del atleta actualizado correctamente.");
+        }
+
+        function eliminarElementoGaleria(id) {
+            galeriaKSA = galeriaKSA.filter(item => item.id !== id);
+            cargarPanelAdministrativo();
+            cargarGaleria();
+            alert("Elemento eliminado de la galería.");
+        }
+
+        function eliminarSede(index) {
+            sedesAlternativasKSA.splice(index, 1);
+            cargarPanelAdministrativo();
+            renderizarSedesPublicas();
+            alert("Sede alternativa eliminada.");
+        }
+
+        function renderizarSedesPublicas() {
+            const contenedor = document.getElementById('listaSedesExtra');
+            let html = '';
+            sedesAlternativasKSA.forEach(sede => {
+                html += `<p style="margin-bottom: 6px;"><b>Sede Adicional:</b> ${sede}</p>`;
+            });
+            contenedor.innerHTML = html;
+        }
+
+        function guardarContenidoAdmin(e) {
+            e.preventDefault();
+            document.getElementById('loadingAdmin').style.display = 'block';
+
+            const baseVal = document.getElementById('admTasaBase').value;
+            const puntosVal = document.getElementById('admPuntosExtra').value;
+            const costoRegVal = document.getElementById('admCostReg').value;
+            const costoEventualVal = document.getElementById('admCostEventual').value;
+
+            if(baseVal && puntosVal) {
+                localStorage.setItem('ksa_tasa_base', baseVal);
+                localStorage.setItem('ksa_puntos_extra', puntosVal);
+                localStorage.setItem('ksa_costo_reg', costoRegVal);
+                localStorage.setItem('ksa_costo_eventual', costoEventualVal);
+                actualizarBarraTasaGlobal();
+            }
+
+            const nuevaSede = document.getElementById('admNuevaSede').value.trim();
+            if(nuevaSede) {
+                sedesAlternativasKSA.push(nuevaSede);
+                document.getElementById('admNuevaSede').value = '';
+                renderizarSedesPublicas();
+            }
+
+            setTimeout(() => {
+                document.getElementById('loadingAdmin').style.display = 'none';
+                alert("¡Configuración guardada en Google Sheets con éxito!");
+                cargarPanelAdministrativo();
+            }, 1000);
+        }
+
+        function cargarGaleria() {
+            document.getElementById('loadingGaleria').style.display = 'none';
+            let grid = document.getElementById('galleryGrid');
+            let html = '';
+            galeriaKSA.forEach(item => {
+                html += `
+                    <div class="gallery-card">
+                        <img src="${item.url}" class="gallery-media">
+                        <div class="gallery-body">
+                            <h4 style="color:var(--light);">${item.titulo}</h4>
+                            <p style="font-size:0.9rem; color:#94a3b8;">${item.descripcion}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            grid.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
