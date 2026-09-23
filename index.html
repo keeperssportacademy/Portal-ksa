@@ -71,11 +71,20 @@
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--danger); outline: none; background: #000; }
 
         .section-title { color: var(--light); font-size: 1rem; margin: 1.5rem 0 1rem; border-left: 4px solid var(--danger); padding-left: 8px; font-weight: 700; text-transform: uppercase; background: #261111; padding-top: 6px; padding-bottom: 6px; border-radius: 0 6px 6px 0; }
+        .checkbox-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; background: #111; padding: 1rem; border-radius: 8px; border: 2px solid #333; }
+        .checkbox-label { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; color: var(--light); }
 
         .btn { background: var(--danger); color: var(--light); font-weight: 700; padding: 0.9rem 1.5rem; border: none; border-radius: 8px; width: 100%; font-size: 1rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; border: 1px solid #b91c1c; }
         .btn:hover { background: #b91c1c; transform: translateY(-1px); }
         .btn-accent { background: var(--accent); color: var(--primary); }
         .btn-accent:hover { background: #eab308; }
+
+        .payment-box { background: #1f1b0c; border: 2px dashed var(--accent); padding: 1.5rem; border-radius: 12px; margin-top: 1.5rem; }
+        .bank-info { display: flex; flex-direction: column; background: #111; padding: 12px 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #333; font-size: 0.9rem; color: var(--light); gap: 10px; }
+        .bank-info-content { width: 100%; line-height: 1.5; }
+        .tasa-externa-separada { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--accent); color: var(--accent); font-weight: 700; font-size: 0.95rem; width: 100%; display: flex; align-items: center; gap: 6px; }
+        .copy-btn { background: var(--accent); color: var(--primary); border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 700; align-self: flex-start; }
+        .copy-btn:hover { background: var(--light); }
 
         .alert { display: none; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; font-weight: 600; text-align: center; }
         .alert-success { background: #064e3b; color: #d1fae5; border: 1px solid #10b981; }
@@ -83,14 +92,14 @@
 
         .table-container { overflow-x: auto; margin-top: 1rem; }
         table { width: 100%; border-collapse: collapse; background: #111; border-radius: 8px; overflow: hidden; }
-        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #333; font-size: 0.85rem; }
-        th { background: #222; color: var(--accent); text-transform: uppercase; font-size: 0.75rem; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #333; font-size: 0.9rem; }
+        th { background: #222; color: var(--accent); text-transform: uppercase; font-size: 0.8rem; }
         tr:hover { background: #181818; }
 
         .edit-btn { background: #3b82f6; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700; }
         .delete-btn { background: var(--danger); color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700; }
 
-        /* ESTILO RED SOCIAL - FEED DE GALERÍA */
+        /* GALERÍA ESTILO RED SOCIAL (FEED) */
         .social-feed { display: flex; flex-direction: column; gap: 2rem; max-width: 600px; margin: 0 auto; }
         .social-post { background: var(--card-bg); border: 1px solid #333; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
         .social-post-header { display: flex; align-items: center; gap: 12px; padding: 1rem; border-bottom: 1px solid #222; }
@@ -103,13 +112,14 @@
         .social-action-btn { background: none; border: none; color: inherit; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.9rem; font-weight: 600; }
         .social-action-btn:hover, .social-action-btn.liked { color: var(--danger); }
 
-        .infografia-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+        .infografia-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
         .atleta-card { background: #111; border: 2px solid #333; border-radius: 12px; padding: 1.5rem; text-align: center; border-top: 4px solid var(--accent); }
         .atleta-avatar { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent); margin: 0 auto 1rem; background: #000; }
+        .atleta-info { text-align: left; font-size: 0.85rem; color: #94a3b8; margin-top: 1rem; line-height: 1.6; background: #181818; padding: 12px; border-radius: 6px; }
+        .atleta-info b { color: var(--light); }
 
         .social-card { background: #111; border: 1px solid #333; padding: 1.5rem; border-radius: 12px; text-align: center; }
         .social-card i { font-size: 2.5rem; color: var(--accent); margin-bottom: 10px; }
-        
         .footer-ksa { text-align: center; padding: 1.5rem; color: #94a3b8; font-size: 0.85rem; border-top: 1px solid #333; margin-top: 3rem; }
     </style>
 </head>
@@ -191,98 +201,189 @@
             <div class="card" style="text-align: center; border-top-color: var(--danger);">
                 <h2 style="justify-content: center; border: none;">¡Bienvenidos a Keepers Sport Academy GK!</h2>
                 <p style="color: var(--text-color); font-weight: 600; margin-bottom: 1.5rem; font-size: 1.05rem; line-height: 1.8; background: #1a1a1a; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--accent);">
+                    ¡Hola! Bienvenido a Keepers Sport Academy.<br><br>
                     Somos una academia sumamente exigente. No entrenamos por pasar el rato. Buscamos atletas que amen su posición, rechacen el conformismo y estén 100% comprometidos con su evolución física, técnica y mental.<br><br>
-                    ¡A dejarlo todo en la cancha! 🚀
+                    Si estás listo para dejarlo todo en la cancha.<br>
+                    Estamos listos para ver de qué estás hecho. ¡A trabajar! 🚀
                 </p>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <button class="btn" style="width: auto;" onclick="switchTab('inscripcion', document.querySelectorAll('.nav-tab')[1])">Ir a Inscripción</button>
+                    <button class="btn btn-accent" style="width: auto;" onclick="switchTab('reservas', document.querySelectorAll('.nav-tab')[2])">Reservar Sesión</button>
+                    <button class="btn btn-accent" style="width: auto; background: var(--light); color: var(--primary);" onclick="switchTab('fansstore', document.querySelectorAll('.nav-tab')[4])"><i class="fa-solid fa-bag-shopping"></i> Visitar Fans Store</button>
+                </div>
             </div>
             <div class="footer-ksa">Fundada el 16 de Enero de 2022 — Keepers Sport Academy GK. Todos los derechos reservados.</div>
         </div>
 
+        <!-- SECCIÓN INSCRIPCIÓN ORIGINAL CON CÓDIGO DE ATLETA (ID) -->
         <div id="inscripcion" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-futbol"></i> Ficha Técnica y Médica del Atleta</h2>
+                <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.5rem; font-style: italic;">"Pasión y Compromiso en la Portería"</p>
                 <div id="alertaInscripcion" class="alert alert-success"></div>
+                
                 <form id="formInscripcion" onsubmit="enviarInscripcion(event)">
+                    <div class="section-title">SECCIÓN 1: Identificación e Imagen del Atleta</div>
                     <div class="form-grid">
-                        <div class="form-group"><label>Nombre del Atleta *</label><input type="text" id="nombreAtleta" required placeholder="Mateo Pérez"></div>
-                        <div class="form-group"><label>Código Asignado (Ej. K-099) *</label><input type="text" id="codigoAtleta" required placeholder="K-099"></div>
-                        <div class="form-group"><label>Cédula *</label><input type="text" id="cedulaAtleta" required placeholder="V-34567890"></div>
-                        <div class="form-group"><label>Representante *</label><input type="text" id="nombreRep" required placeholder="Carlos Pérez"></div>
-                        <div class="form-group"><label>Plan Mensual *</label>
-                            <select id="plan" required><option value="Plan Base">Plan Base ($60)</option><option value="Plan Pro">Plan Pro ($90)</option><option value="Plan Élite GK">Plan Élite GK ($120)</option></select>
+                        <div class="form-group"><label>Código de Atleta KSA (Ej. K-099) *</label><input type="text" id="codigoAtleta" required placeholder="Ej. K-099"></div>
+                        <div class="form-group"><label>Foto del Atleta (Subir Archivo) *</label><input type="file" id="fotoFile" accept="image/*" required style="padding: 0.5rem; background: #000;"></div>
+                        <div class="form-group"><label>Partida de Nacimiento (Si no tiene Cédula)</label><input type="file" id="partidaFile" accept="image/*,.pdf" style="padding: 0.5rem; background: #000;"></div>
+                        <div class="form-group"><label>Nombres y Apellidos del Atleta *</label><input type="text" id="nombreAtleta" required placeholder="Ej. Mateo Pérez"></div>
+                        <div class="form-group"><label>Cédula de Identidad / P.N. *</label><input type="text" id="cedulaAtleta" required placeholder="V-34567890"></div>
+                        <div class="form-group"><label>Fecha de Nacimiento *</label><input type="date" id="fechaNac" required onchange="calcularEdad()"></div>
+                        <div class="form-group"><label>Edad</label><input type="number" id="edad" readonly placeholder="Automático"></div>
+                        <div class="form-group"><label>Teléfono del Atleta</label><input type="tel" id="telAtleta" placeholder="0414-0000000"></div>
+                    </div>
+                    <div class="form-group"><label>Dirección de Residencia</label><textarea id="direccion" rows="2" placeholder="Sector, Calle, Casa"></textarea></div>
+                    <div class="form-group"><label>Redes Sociales (Instagram / TikTok / etc.)</label><input type="text" id="redesAtleta" placeholder="@usuario"></div>
+
+                    <div class="section-title">SECCIÓN 2: Datos del Representante</div>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Nombres y Apellidos del Representante *</label><input type="text" id="nombreRep" required placeholder="Ej. Carlos Pérez"></div>
+                        <div class="form-group"><label>Cédula del Representante *</label><input type="text" id="cedulaRep" required placeholder="V-12345678"></div>
+                        <div class="form-group"><label>Parentesco *</label>
+                            <select id="parentesco" required><option value="">Seleccione...</option><option value="Madre">Madre</option><option value="Padre">Padre</option><option value="Representante Legal">Representante Legal</option></select>
+                        </div>
+                        <div class="form-group"><label>Teléfono Principal / WhatsApp *</label><input type="tel" id="telRep" required placeholder="0412-0000000"></div>
+                        <div class="form-group"><label>Correo Electrónico *</label><input type="email" id="correoRep" required placeholder="correo@ejemplo.com"></div>
+                    </div>
+
+                    <div class="section-title">SECCIÓN 3: Perfil Deportivo y Antropométrico</div>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Equipo u Organización</label><input type="text" id="equipo" placeholder="Ej. Academia F.C."></div>
+                        <div class="form-group"><label>Categoría / Año</label><input type="text" id="categoria" placeholder="Ej. Sub-12 / 2014"></div>
+                        <div class="form-group"><label>Perfil / Pie Dominante *</label>
+                            <select id="pie" required><option value="">Seleccione...</option><option value="Derecho">Derecho</option><option value="Izquierdo">Izquierdo</option><option value="Ambidextro">Ambidextro</option></select>
+                        </div>
+                        <div class="form-group"><label>Estatura (cm)</label><input type="number" id="estatura" placeholder="Ej. 145"></div>
+                        <div class="form-group"><label>Peso (kg)</label><input type="number" step="0.1" id="peso" placeholder="Ej. 38.5"></div>
+                        <div class="form-group"><label>Talla de Uniforme (T2 al 2XL) *</label>
+                            <select id="talla" required><option value="">Seleccione talla...</option><option value="Talla 10">Talla 10</option><option value="M">Talla M</option><option value="L">Talla L</option></select>
                         </div>
                     </div>
-                    <button type="submit" class="btn">Enviar Inscripción</button>
+
+                    <div class="section-title">SECCIÓN 4: Programa de Entrenamiento y Horario</div>
+                    <div class="form-group">
+                        <label>Plan de Entrenamiento Mensual *</label>
+                        <select id="plan" required><option value="">Seleccione plan...</option><option value="Plan Base">Plan Base (8 sesiones) - $60</option><option value="Plan Pro">Plan Pro (12 sesiones) - $90</option><option value="Plan Élite GK">Plan Élite GK (16 sesiones) - $120</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Días de Asistencia Elegidos *</label>
+                        <div class="checkbox-grid">
+                            <label class="checkbox-label"><input type="checkbox" name="diasAsistencia" value="Lunes"> Lunes</label>
+                            <label class="checkbox-label"><input type="checkbox" name="diasAsistencia" value="Martes"> Martes</label>
+                            <label class="checkbox-label"><input type="checkbox" name="diasAsistencia" value="Miercoles"> Miércoles</label>
+                            <label class="checkbox-label"><input type="checkbox" name="diasAsistencia" value="Jueves"> Jueves</label>
+                        </div>
+                    </div>
+                    <div class="form-group"><label>Horario Preferido *</label>
+                        <select id="horario" required><option value="">Seleccione turno...</option><option value="Lunes y Miércoles - 5:40 PM">Lunes y Miércoles - 5:40 PM</option><option value="Martes y Jueves - 5:40 PM y 6:40 PM">Martes y Jueves - 5:40 PM y 6:40 PM</option></select>
+                    </div>
+
+                    <div class="section-title">SECCIÓN 5: Ficha Médica y Salud</div>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Tipo de Sangre *</label>
+                            <select id="sangre" required><option value="">Seleccione...</option><option value="O+">O+</option><option value="A+">A+</option><option value="B+">B+</option></select>
+                        </div>
+                    </div>
+                    <div class="form-group"><label>¿Sufre de alguna enfermedad crónica?</label><textarea id="enfermedades" rows="2" placeholder="Ninguna"></textarea></div>
+                    <div class="form-group"><label>¿Alergias?</label><textarea id="alergias" rows="2" placeholder="Ninguna"></textarea></div>
+                    <div class="form-group"><label>¿Lesiones recientes?</label><textarea id="lesiones" rows="2" placeholder="No"></textarea></div>
+                    <div class="form-group"><label>Contacto de Emergencia Adicional *</label><textarea id="emergencia" required rows="2" placeholder="Nombre y Teléfono"></textarea></div>
+
+                    <div class="section-title">SECCIÓN 6: Declaración</div>
+                    <div class="form-group" style="background: #111; padding: 1rem; border-radius: 8px; border: 1px solid #333;">
+                        <label class="checkbox-label" style="font-weight: 500; font-size: 0.9rem;">
+                            <input type="checkbox" id="terminos" required style="width: 20px; height: 20px;"> Declaro que los datos suministrados son verídicos.
+                        </label>
+                    </div>
+
+                    <div id="loadingInscripcion" class="loading"><i class="fa-solid fa-spinner fa-spin"></i> Guardando inscripción...</div>
+                    <button type="submit" class="btn" id="btnInscripcion">Enviar Inscripción Oficial</button>
                 </form>
             </div>
         </div>
 
+        <!-- SECCIÓN RESERVAS ORIGINAL -->
         <div id="reservas" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-calendar-check"></i> Reservar Sesión de Entrenamiento</h2>
+                <div style="background: #1a1600; border: 1px solid var(--accent); padding: 1.2rem; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.85rem; color: var(--accent);">
+                    <i class="fa-solid fa-triangle-exclamation"></i> <b>Normativa KSA:</b> Las reservas deben realizarse con al menos 24 horas de anticipación. Las clases perdidas se recuperan en la misma semana.
+                </div>
                 <div id="alertaReserva" class="alert alert-success"></div>
                 <form id="formReserva" onsubmit="enviarReserva(event)">
                     <div class="form-grid">
-                        <div class="form-group"><label>Atleta *</label><input type="text" id="resAtleta" required placeholder="Mateo Pérez"></div>
-                        <div class="form-group"><label>Fecha *</label><input type="date" id="resFecha" required></div>
-                        <div class="form-group"><label>Motivo *</label><input type="text" id="resMotivo" required placeholder="Recuperación"></div>
+                        <div class="form-group"><label>Nombre del Atleta *</label><input type="text" id="resAtleta" required placeholder="Mateo Pérez"></div>
+                        <div class="form-group"><label>Tipo de Reserva *</label>
+                            <select id="resTipoAtleta" required><option value="Recuperacion">Recuperación (Misma semana)</option><option value="SesionExtraActiva">Sesión Extra ($7,5)</option><option value="Eventual">Atleta Eventual ($15.00)</option></select>
+                        </div>
+                        <div class="form-group"><label>Fecha de la Sesión *</label><input type="date" id="resFecha" required></div>
+                        <div class="form-group"><label>Sede / Turno *</label><select id="resTurno" required><option value="Vereda del Lago - 5:40 PM">Vereda del Lago - 5:40 PM</option></select></div>
                     </div>
-                    <button type="submit" class="btn btn-accent">Confirmar Reserva</button>
+                    <div class="form-group"><label>Motivo de la Reserva *</label><textarea id="resMotivo" rows="3" required placeholder="Detalle..."></textarea></div>
+                    <button type="submit" class="btn btn-accent" id="btnReserva">Confirmar Reserva de Entrenamiento</button>
                 </form>
             </div>
         </div>
 
+        <!-- SECCIÓN KITS ORIGINAL -->
         <div id="kits" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-shirt"></i> Reserva de Kit de Entrenamiento Oficial</h2>
+                <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.5rem;">Costo total: $35. O abono del 50% ($17.50).</p>
                 <div id="alertaKit" class="alert alert-success"></div>
                 <form id="formKit" onsubmit="enviarReservaKit(event)">
                     <div class="form-grid">
-                        <div class="form-group"><label>Atleta *</label><input type="text" id="kitAtleta" required placeholder="Mateo Pérez"></div>
-                        <div class="form-group"><label>Talla *</label><input type="text" id="kitTalla" required placeholder="Talla 10 / M"></div>
-                        <div class="form-group"><label>Referencia *</label><input type="text" id="kitReferencia" required placeholder="Ref de pago"></div>
+                        <div class="form-group"><label>Nombre del Atleta *</label><input type="text" id="kitAtleta" required placeholder="Mateo Pérez"></div>
+                        <div class="form-group"><label>Talla de Uniforme *</label><select id="kitTalla" required><option value="Talla 10">Talla 10</option><option value="M">Talla M</option><option value="L">Talla L</option></select></div>
+                        <div class="form-group"><label>Modalidad de Pago *</label><select id="kitModalidad" required><option value="Completo">Pago Completo ($35)</option><option value="Abono 50%">Abono 50% ($17.50)</option></select></div>
+                        <div class="form-group"><label>Número de Referencia *</label><input type="text" id="kitReferencia" required placeholder="Ej. 987654"></div>
                     </div>
-                    <button type="submit" class="btn btn-accent">Confirmar Kit</button>
+                    <button type="submit" class="btn btn-accent" id="btnKit">Confirmar Reserva de Kit</button>
                 </form>
             </div>
         </div>
 
+        <!-- SECCIÓN FANS STORE ORIGINAL -->
         <div id="fansstore" class="section-container">
             <div class="card">
-                <h2><i class="fa-solid fa-bag-shopping"></i> Fans Store - Playera Oficial ($20)</h2>
+                <h2><i class="fa-solid fa-bag-shopping"></i> Fans Store KSA - Playeras Oficiales</h2>
+                <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.5rem;">Costo fijo: <b>$20.00 USD</b>.</p>
                 <div id="alertaStore" class="alert alert-success"></div>
                 <form id="formStore" onsubmit="enviarPedidoStore(event)">
                     <div class="form-grid">
-                        <div class="form-group"><label>Comprador *</label><input type="text" id="storeComprador" required placeholder="Ana Martínez"></div>
+                        <div class="form-group"><label>Nombre y Apellido *</label><input type="text" id="storeComprador" required placeholder="Ana Martínez"></div>
+                        <div class="form-group"><label>Teléfono *</label><input type="tel" id="storeTelefono" required placeholder="04140000000"></div>
                         <div class="form-group"><label>Talla *</label><input type="text" id="storeTalla" required placeholder="M"></div>
-                        <div class="form-group"><label>Referencia *</label><input type="text" id="storeReferencia" required placeholder="Ref de pago"></div>
+                        <div class="form-group"><label>Referencia de Pago *</label><input type="text" id="storeReferencia" required placeholder="Ej. 554433"></div>
                     </div>
-                    <button type="submit" class="btn btn-accent">Solicitar Playera</button>
+                    <button type="submit" class="btn btn-accent">Solicitar Playera Oficial</button>
                 </form>
             </div>
         </div>
 
-        <!-- SECCIÓN PAGOS CON CONSULTA DE SALDO POR CÓDIGO -->
+        <!-- SECCIÓN PAGOS CON CONSULTA DE DEUDA POR CÓDIGO (EJ. K-099) -->
         <div id="pagos" class="section-container">
             <div class="card">
-                <h2><i class="fa-solid fa-file-invoice-dollar"></i> Consulta de Deuda y Reporte de Pagos</h2>
+                <h2><i class="fa-solid fa-file-invoice-dollar"></i> Pasarela de Pagos y Consulta de Saldo</h2>
                 
                 <div style="background: #111; border: 1px solid var(--accent); padding: 1.2rem; border-radius: 8px; margin-bottom: 1.5rem;">
-                    <h4 style="color: var(--accent); margin-bottom: 8px;"><i class="fa-solid fa-magnifying-glass"></i> Consultar Estado de Cuenta por Código (Ej. K-099)</h4>
+                    <h4 style="color: var(--accent); margin-bottom: 8px;"><i class="fa-solid fa-magnifying-glass"></i> Consultar Estado de Cuenta por Código de Atleta (Ej. K-099)</h4>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <input type="text" id="inputConsultaCodigo" placeholder="Ingrese su código (Ej. K-099)" style="flex: 1; padding: 0.6rem; border-radius: 6px; border: 1px solid #444; background: #000; color: #fff;">
-                        <button type="button" class="btn btn-accent" style="width: auto; padding: 0.6rem 1.2rem;" onclick="consultarDeudaCodigo()">Consultar</button>
+                        <input type="text" id="inputConsultaCodigo" placeholder="Ingrese su código (Ej. K-099)" style="flex: 1; padding: 0.7rem; border-radius: 6px; border: 1px solid #444; background: #000; color: #fff;">
+                        <button type="button" class="btn btn-accent" style="width: auto; padding: 0.7rem 1.5rem;" onclick="consultarDeudaCodigo()">Consultar Saldo</button>
                     </div>
-                    <div id="resultadoConsultaSaldo" style="margin-top: 10px; font-weight: 600; font-size: 0.95rem;"></div>
+                    <div id="resultadoConsultaSaldo" style="margin-top: 12px; font-weight: 600; font-size: 0.95rem;"></div>
                 </div>
 
                 <div id="alertaPago" class="alert alert-success"></div>
                 <form id="formPago" onsubmit="enviarPago(event)">
                     <div class="form-grid">
-                        <div class="form-group"><label>Código del Atleta / C.I *</label><input type="text" id="pagoAtleta" required placeholder="K-099 o V-34567890"></div>
-                        <div class="form-group"><label>Concepto *</label><input type="text" id="pagoConcepto" required placeholder="Plan Base"></div>
+                        <div class="form-group"><label>Código de Atleta / C.I *</label><input type="text" id="pagoAtleta" required placeholder="K-099 o V-34567890"></div>
+                        <div class="form-group"><label>Concepto / Plan *</label><input type="text" id="pagoConcepto" required placeholder="Plan Base ($60)"></div>
                         <div class="form-group"><label>Monto USD ($) *</label><input type="number" step="0.01" id="pagoMontoUSD" required placeholder="60.00"></div>
-                        <div class="form-group"><label>Referencia *</label><input type="text" id="pagoReferencia" required placeholder="Ref bancaria"></div>
+                        <div class="form-group"><label>Número de Referencia *</label><input type="text" id="pagoReferencia" required placeholder="Ej. 123456"></div>
                     </div>
                     <button type="submit" class="btn btn-accent">Reportar Pago Oficial</button>
                 </form>
@@ -291,13 +392,18 @@
 
         <div id="infografia" class="section-container">
             <div class="card">
-                <h2><i class="fa-solid fa-id-card"></i> Atletas KSA - Fichas Oficiales</h2>
+                <h2><i class="fa-solid fa-id-card"></i> Infografía y Fichas de Atletas KSA</h2>
                 <div id="gridInfografiaAtletas" class="infografia-grid">
                     <div class="atleta-card">
                         <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" class="atleta-avatar">
                         <h3 style="color: var(--light);">Mateo Pérez</h3>
-                        <p style="font-size: 0.8rem; color: var(--accent);">Código: <b>K-099</b> | Atleta KSA</p>
-                        <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 8px;">Plan: Plan Base ($60) — Al día</p>
+                        <p style="font-size: 0.8rem; color: var(--accent);">Código: <b>K-099</b> | Atleta Oficial KSA</p>
+                        <div class="atleta-info">
+                            Cédula: <b>V-34567890</b><br>
+                            Perfil: <b>Derecho</b><br>
+                            Plan: <b>Plan Base ($60)</b><br>
+                            Estatus: <b style="color: #34d399;">Al día</b>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -306,8 +412,14 @@
         <div id="horarios" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-calendar-days"></i> Horarios y Sedes de Entrenamiento</h2>
-                <p style="color: var(--light); margin-bottom: 10px;"><b>Sede Oficial:</b> Vereda del Lago (Cancha de arena).</p>
-                <p style="color: #94a3b8;">Lunes a Jueves en turnos de 5:40 PM y 6:40 PM.</p>
+                <div style="background: #111; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--danger); border: 1px solid #333;">
+                    <h3 style="color: var(--accent);">🏖️ Sede Oficial: Vereda del Lago</h3>
+                    <p style="font-size: 0.9rem; color: #94a3b8; margin-top: 5px;">Cancha de arena de playa (Entrenamiento especializado en potencia y agilidad).</p>
+                    <ul style="margin-top: 12px; margin-left: 20px; font-size: 0.9rem; line-height: 1.8; color: var(--light);">
+                        <li><b>Lunes y Miércoles:</b> 5:40 PM</li>
+                        <li><b>Martes y Jueves:</b> 5:40 PM y 6:40 PM</li>
+                    </ul>
+                </div>
             </div>
         </div>
 
@@ -316,8 +428,8 @@
                 <h2><i class="fa-solid fa-clipboard-user"></i> Control de Asistencia y Sesiones</h2>
                 <div class="table-container">
                     <table>
-                        <thead><tr><th>Código</th><th>Atleta</th><th>Sesiones Asistidas</th><th>Estado</th></tr></thead>
-                        <tbody><tr><td>K-099</td><td>Mateo Pérez</td><td>8 / 8</td><td><span style="color: #34d399;">Completado</span></td></tr></tbody>
+                        <thead><tr><th>Código</th><th>Atleta</th><th>Plan Mensual</th><th>Sesiones Asistidas</th></tr></thead>
+                        <tbody><tr><td>K-099</td><td>Mateo Pérez</td><td>Plan Base</td><td><span style="color: #34d399; font-weight: bold;">8 / 8</span></td></tr></tbody>
                     </table>
                 </div>
             </div>
@@ -325,16 +437,22 @@
 
         <div id="cumpleanos" class="section-container">
             <div class="card">
-                <h2><i class="fa-solid fa-cake-candles"></i> Cumpleaños y Aniversarios KSA</h2>
-                <p style="color: var(--accent); margin-bottom: 8px;"><i class="fa-solid fa-star"></i> 16 de Enero: Fundación de Keepers Sport Academy GK.</p>
-                <p style="color: var(--danger);"><i class="fa-solid fa-user-tie"></i> 4 de Febrero: Cumpleaños del Head Coach Eduardo Martínez.</p>
+                <h2><i class="fa-solid fa-cake-candles"></i> Cumpleaños y Fechas Especiales</h2>
+                <div style="display: grid; gap: 1rem;">
+                    <div style="background: #111; padding: 1.2rem; border-radius: 8px; border-left: 4px solid var(--accent);">
+                        <h4 style="color: var(--accent);">16 de Enero: Aniversario Oficial KSA</h4>
+                    </div>
+                    <div style="background: #111; padding: 1.2rem; border-radius: 8px; border-left: 4px solid var(--danger);">
+                        <h4 style="color: var(--danger);">4 de Febrero: Cumpleaños del Head Coach Eduardo Martínez</h4>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- GALERÍA ESTILO RED SOCIAL (FEED) -->
         <div id="galeria" class="section-container">
             <div class="card" style="background: transparent; box-shadow: none; padding: 0; border: none;">
-                <h2 style="background: var(--card-bg); padding: 1.5rem; border-radius: 16px; border: 1px solid #333;"><i class="fa-solid fa-images"></i> Feed Social KSA</h2>
+                <h2 style="background: var(--card-bg); padding: 1.5rem; border-radius: 16px; border: 1px solid #333;"><i class="fa-solid fa-images"></i> Feed Social Multimedia</h2>
                 <div id="socialFeedContainer" class="social-feed" style="margin-top: 1.5rem;"></div>
             </div>
         </div>
@@ -342,23 +460,23 @@
         <div id="redes" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-share-nodes"></i> Redes Sociales Oficiales</h2>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 1rem;">
-                    <div class="social-card"><i class="fa-brands fa-instagram"></i><h3>Instagram</h3><p>@keeperssportacademy</p></div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
                     <div class="social-card"><i class="fa-brands fa-whatsapp" style="color: #25D366;"></i><h3>WhatsApp</h3><p>0424-6891083</p></div>
+                    <div class="social-card"><i class="fa-brands fa-instagram"></i><h3>Instagram</h3><p>@keeperssportacademy</p></div>
                 </div>
             </div>
         </div>
 
-        <!-- PANEL ADMINISTRATIVO INTEGRAL (VER, EDITAR, AÑADIR, BORRAR) -->
+        <!-- PANEL ADMINISTRATIVO UNIVERSAL (VER, EDITAR, AÑADIR, BORRAR) -->
         <div id="admin" class="section-container">
             <div class="card" style="border-top-color: var(--accent);">
                 <h2><i class="fa-solid fa-lock"></i> Panel Administrativo y Base de Datos General</h2>
-                <p style="color: #94a3b8; margin-bottom: 1.5rem;">Control absoluto del Head Coach Eduardo Martínez.</p>
+                <p style="color: #94a3b8; margin-bottom: 1.5rem;">Control exclusivo del Head Coach Eduardo Martínez.</p>
                 
                 <!-- 1. GALERÍA -->
-                <div class="section-title">1. Gestión de Feed / Galería Social (Añadir / Borrar)</div>
+                <div class="section-title">1. Gestión de Feed Social (Añadir / Borrar)</div>
                 <div class="form-grid">
-                    <div class="form-group"><label>Título / Leyenda del Post</label><input type="text" id="adminMediaTitulo" placeholder="Entrenamiento de potencia..."></div>
+                    <div class="form-group"><label>Título del Post</label><input type="text" id="adminMediaTitulo" placeholder="Entrenamiento..."></div>
                     <div class="form-group"><label>Archivo Foto/Video</label><input type="file" id="adminMediaFile" accept="image/*,video/*" style="padding: 0.5rem; background: #000;"></div>
                 </div>
                 <button type="button" class="btn btn-accent" onclick="subirFotoGaleriaAdmin()">Publicar en el Feed Social</button>
@@ -379,7 +497,7 @@
                 </div>
 
                 <!-- 3. RESERVAS -->
-                <div class="section-title" style="margin-top: 2rem;">3. Base de Datos: Reservas de Sesiones</div>
+                <div class="section-title" style="margin-top: 2rem;">3. Base de Datos: Reservas</div>
                 <div class="table-container">
                     <table>
                         <thead><tr><th>Atleta</th><th>Fecha</th><th>Motivo</th><th>Acciones</th></tr></thead>
@@ -388,7 +506,7 @@
                 </div>
 
                 <!-- 4. KITS -->
-                <div class="section-title" style="margin-top: 2rem;">4. Base de Datos: Kits de Uniforme</div>
+                <div class="section-title" style="margin-top: 2rem;">4. Base de Datos: Kits</div>
                 <div class="table-container">
                     <table>
                         <thead><tr><th>Atleta</th><th>Talla</th><th>Referencia</th><th>Acciones</th></tr></thead>
@@ -409,7 +527,7 @@
                 <div class="section-title" style="margin-top: 2rem;">6. Base de Datos: Pagos Reportados</div>
                 <div class="table-container">
                     <table>
-                        <thead><tr><th>Código / Atleta</th><th>Concepto</th><th>Monto</th><th>Referencia</th><th>Acciones</th></tr></thead>
+                        <thead><tr><th>Atleta / Código</th><th>Concepto</th><th>Monto</th><th>Referencia</th><th>Acciones</th></tr></thead>
                         <tbody id="tablaAdminPagos"></tbody>
                     </table>
                 </div>
@@ -421,9 +539,8 @@
     <script>
         let modoAccesoActual = 'login';
 
-        // Base de datos completa en LocalStorage con códigos de atleta (ej. K-099)
         let dbInscripciones = JSON.parse(localStorage.getItem('ksa_db_inscripciones')) || [
-            { id: 1, codigo: "K-099", nombre: "Mateo Pérez", cedula: "V-34567890", rep: "Carlos Pérez", plan: "Plan Base", saldoPendiente: 0 }
+            { id: 1, codigo: "K-099", nombre: "Mateo Pérez", cedula: "V-34567890", plan: "Plan Base ($60)", saldoPendiente: 0 }
         ];
         let dbReservas = JSON.parse(localStorage.getItem('ksa_db_reservas')) || [];
         let dbKits = JSON.parse(localStorage.getItem('ksa_db_kits')) || [];
@@ -533,7 +650,18 @@
             if(tabId === 'admin') { cargarPanelAdministrativo(); }
         }
 
-        // Consultar saldo o deuda por código de atleta (Ej. K-099)
+        function calcularEdad() {
+            const fechaNac = document.getElementById('fechaNac').value;
+            if (!fechaNac) return;
+            const hoy = new Date();
+            const cumple = new Date(fechaNac);
+            let edad = hoy.getFullYear() - cumple.getFullYear();
+            const m = hoy.getMonth() - cumple.getMonth();
+            if (m < 0 || (m === 0 && hoy.getDate() < cumple.getDate())) { edad--; }
+            document.getElementById('edad').value = edad >= 0 ? edad : 0;
+        }
+
+        // Consulta de deuda por código de atleta (Ej. K-099)
         function consultarDeudaCodigo() {
             const codigo = document.getElementById('inputConsultaCodigo').value.trim().toUpperCase();
             const resultado = document.getElementById('resultadoConsultaSaldo');
@@ -551,7 +679,6 @@
             }
         }
 
-        // Formularios públicos
         async function enviarInscripcion(e) {
             e.preventDefault();
             dbInscripciones.push({
@@ -559,12 +686,11 @@
                 codigo: document.getElementById('codigoAtleta').value.trim().toUpperCase(),
                 nombre: document.getElementById('nombreAtleta').value,
                 cedula: document.getElementById('cedulaAtleta').value,
-                rep: document.getElementById('nombreRep').value,
                 plan: document.getElementById('plan').value,
                 saldoPendiente: 0
             });
             localStorage.setItem('ksa_db_inscripciones', JSON.stringify(dbInscripciones));
-            document.getElementById('alertaInscripcion').innerText = "¡Inscripción exitosa!";
+            document.getElementById('alertaInscripcion').innerText = "¡Inscripción registrada con éxito!";
             document.getElementById('alertaInscripcion').style.display = 'block';
             document.getElementById('formInscripcion').reset();
             setTimeout(() => { document.getElementById('alertaInscripcion').style.display = 'none'; }, 4000);
@@ -606,7 +732,6 @@
             setTimeout(() => { document.getElementById('alertaPago').style.display = 'none'; }, 4000);
         }
 
-        // --- GALERÍA ESTILO RED SOCIAL (FEED) ---
         function convertirFileABase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -628,7 +753,7 @@
             localStorage.setItem('ksa_galeria', JSON.stringify(galeriaKSA));
             document.getElementById('adminMediaTitulo').value = ''; fileInput.value = '';
             cargarPanelAdministrativo(); renderizarFeedSocial();
-            alert("¡Publicado en el feed social con éxito!");
+            alert("¡Publicado con éxito!");
         }
 
         function toggleLike(id) {
@@ -656,9 +781,7 @@
                             </div>
                         </div>
                         ${post.tipo === 'video' ? `<video src="${post.url}" controls class="social-media-content"></video>` : `<img src="${post.url}" class="social-media-content">`}
-                        <div class="social-post-body">
-                            <p style="font-size: 0.95rem; color: #f8fafc;"><b>@keeperssportacademy</b> ${post.titulo}</p>
-                        </div>
+                        <div class="social-post-body"><p style="font-size: 0.95rem; color: #f8fafc;"><b>@keeperssportacademy</b> ${post.titulo}</p></div>
                         <div class="social-post-actions">
                             <button class="social-action-btn ${post.liked ? 'liked' : ''}" onclick="toggleLike(${post.id})">
                                 <i class="fa-${post.liked ? 'solid' : 'regular'} fa-heart"></i> ${post.likes} Me gusta
@@ -667,47 +790,40 @@
                     </div>
                 `;
             });
-            container.innerHTML = html || '<p style="color:#94a3b8; text-align:center;">No hay publicaciones en el feed.</p>';
+            container.innerHTML = html || '<p style="color:#94a3b8; text-align:center;">No hay publicaciones.</p>';
         }
 
-        // PANEL ADMINISTRATIVO UNIVERSAL (CRUD COMPLETO)
         function cargarPanelAdministrativo() {
-            // Galería admin
             let htmlG = '';
             galeriaKSA.forEach(item => {
                 htmlG += `<tr><td><b>${item.titulo}</b></td><td>${item.tipo}</td><td><button class="delete-btn" onclick="borrarPost(${item.id})">Borrar</button></td></tr>`;
             });
             document.getElementById('tablaAdminGaleria').innerHTML = htmlG || '<tr><td colspan="3">Sin publicaciones</td></tr>';
 
-            // Inscripciones admin
             let htmlIns = '';
             dbInscripciones.forEach(item => {
                 htmlIns += `<tr><td><b>${item.codigo}</b></td><td>${item.nombre}</td><td>${item.cedula}</td><td>${item.plan} (Saldo: $${item.saldoPendiente})</td><td><button class="edit-btn" onclick="editarSaldo(${item.id})">Editar Saldo</button> <button class="delete-btn" onclick="borrarReg('inscripciones', ${item.id})">Borrar</button></td></tr>`;
             });
             document.getElementById('tablaAdminInscripciones').innerHTML = htmlIns || '<tr><td colspan="5">Sin inscripciones</td></tr>';
 
-            // Reservas admin
             let htmlRes = '';
             dbReservas.forEach(item => {
                 htmlRes += `<tr><td>${item.atleta}</td><td>${item.fecha}</td><td>${item.motivo}</td><td><button class="delete-btn" onclick="borrarReg('reservas', ${item.id})">Borrar</button></td></tr>`;
             });
             document.getElementById('tablaAdminReservas').innerHTML = htmlRes || '<tr><td colspan="4">Sin reservas</td></tr>';
 
-            // Kits admin
             let htmlK = '';
             dbKits.forEach(item => {
                 htmlK += `<tr><td>${item.atleta}</td><td>${item.talla}</td><td>${item.referencia}</td><td><button class="delete-btn" onclick="borrarReg('kits', ${item.id})">Borrar</button></td></tr>`;
             });
             document.getElementById('tablaAdminKits').innerHTML = htmlK || '<tr><td colspan="4">Sin kits</td></tr>';
 
-            // Store admin
             let htmlS = '';
             dbStore.forEach(item => {
                 htmlS += `<tr><td>${item.comprador}</td><td>${item.talla}</td><td>${item.referencia}</td><td><button class="delete-btn" onclick="borrarReg('store', ${item.id})">Borrar</button></td></tr>`;
             });
             document.getElementById('tablaAdminStore').innerHTML = htmlS || '<tr><td colspan="4">Sin pedidos</td></tr>';
 
-            // Pagos admin
             let htmlP = '';
             dbPagos.forEach(item => {
                 htmlP += `<tr><td>${item.atleta}</td><td>${item.concepto}</td><td>$${item.monto}</td><td>${item.referencia}</td><td><button class="delete-btn" onclick="borrarReg('pagos', ${item.id})">Borrar</button></td></tr>`;
