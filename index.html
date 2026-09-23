@@ -99,7 +99,7 @@
         .edit-btn { background: #3b82f6; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700; }
         .delete-btn { background: var(--danger); color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700; }
 
-        /* GALERÍA ESTILO RED SOCIAL (FEED) */
+        /* FEED SOCIAL GALERÍA */
         .social-feed { display: flex; flex-direction: column; gap: 2rem; max-width: 600px; margin: 0 auto; }
         .social-post { background: var(--card-bg); border: 1px solid #333; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
         .social-post-header { display: flex; align-items: center; gap: 12px; padding: 1rem; border-bottom: 1px solid #222; }
@@ -113,7 +113,7 @@
         .social-action-btn:hover, .social-action-btn.liked { color: var(--danger); }
 
         .infografia-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
-        .atleta-card { background: #111; border: 2px solid #333; border-radius: 12px; padding: 1.5rem; text-align: center; border-top: 4px solid var(--accent); }
+        .atleta-card { background: #111; border: 2px solid #333; border-radius: 12px; padding: 1.5rem; text-align: center; border-top: 4px solid var(--accent); position: relative; }
         .atleta-avatar { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent); margin: 0 auto 1rem; background: #000; }
         .atleta-info { text-align: left; font-size: 0.85rem; color: #94a3b8; margin-top: 1rem; line-height: 1.6; background: #181818; padding: 12px; border-radius: 6px; }
         .atleta-info b { color: var(--light); }
@@ -215,7 +215,7 @@
             <div class="footer-ksa">Fundada el 16 de Enero de 2022 — Keepers Sport Academy GK. Todos los derechos reservados.</div>
         </div>
 
-        <!-- SECCIÓN INSCRIPCIÓN ORIGINAL CON CÓDIGO DE ATLETA (ID) -->
+        <!-- SECCIÓN INSCRIPCIÓN ORIGINAL COMPLETA CON CÓDIGO DE ATLETA -->
         <div id="inscripcion" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-futbol"></i> Ficha Técnica y Médica del Atleta</h2>
@@ -229,7 +229,7 @@
                         <div class="form-group"><label>Foto del Atleta (Subir Archivo) *</label><input type="file" id="fotoFile" accept="image/*" required style="padding: 0.5rem; background: #000;"></div>
                         <div class="form-group"><label>Partida de Nacimiento (Si no tiene Cédula)</label><input type="file" id="partidaFile" accept="image/*,.pdf" style="padding: 0.5rem; background: #000;"></div>
                         <div class="form-group"><label>Nombres y Apellidos del Atleta *</label><input type="text" id="nombreAtleta" required placeholder="Ej. Mateo Pérez"></div>
-                        <div class="form-group"><label>Cédula de Identidad / P.N. *</label><input type="text" id="cedulaAtleta" required placeholder="V-34567890"></div>
+                        <div class="form-group"><label>Cédula de Identidad / P.N. *</label><input type="text" id="cedulaAtleta" required placeholder="V-34567890 o Partida N°"></div>
                         <div class="form-group"><label>Fecha de Nacimiento *</label><input type="date" id="fechaNac" required onchange="calcularEdad()"></div>
                         <div class="form-group"><label>Edad</label><input type="number" id="edad" readonly placeholder="Automático"></div>
                         <div class="form-group"><label>Teléfono del Atleta</label><input type="tel" id="telAtleta" placeholder="0414-0000000"></div>
@@ -242,7 +242,7 @@
                         <div class="form-group"><label>Nombres y Apellidos del Representante *</label><input type="text" id="nombreRep" required placeholder="Ej. Carlos Pérez"></div>
                         <div class="form-group"><label>Cédula del Representante *</label><input type="text" id="cedulaRep" required placeholder="V-12345678"></div>
                         <div class="form-group"><label>Parentesco *</label>
-                            <select id="parentesco" required><option value="">Seleccione...</option><option value="Madre">Madre</option><option value="Padre">Padre</option><option value="Representante Legal">Representante Legal</option></select>
+                            <select id="parentesco" required><option value="">Seleccione...</option><option value="Madre">Madre</option><option value="Padre">Padre</option><option value="Representante Legal">Representante Legal</option><option value="Otro">Otro</option></select>
                         </div>
                         <div class="form-group"><label>Teléfono Principal / WhatsApp *</label><input type="tel" id="telRep" required placeholder="0412-0000000"></div>
                         <div class="form-group"><label>Correo Electrónico *</label><input type="email" id="correoRep" required placeholder="correo@ejemplo.com"></div>
@@ -258,7 +258,7 @@
                         <div class="form-group"><label>Estatura (cm)</label><input type="number" id="estatura" placeholder="Ej. 145"></div>
                         <div class="form-group"><label>Peso (kg)</label><input type="number" step="0.1" id="peso" placeholder="Ej. 38.5"></div>
                         <div class="form-group"><label>Talla de Uniforme (T2 al 2XL) *</label>
-                            <select id="talla" required><option value="">Seleccione talla...</option><option value="Talla 10">Talla 10</option><option value="M">Talla M</option><option value="L">Talla L</option></select>
+                            <select id="talla" required><option value="">Seleccione talla...</option><option value="Talla 2">Talla 2</option><option value="Talla 4">Talla 4</option><option value="Talla 6">Talla 6</option><option value="Talla 8">Talla 8</option><option value="Talla 10">Talla 10</option><option value="Talla 12">Talla 12</option><option value="Talla 14">Talla 14</option><option value="Talla 16">Talla 16</option><option value="S">Talla S</option><option value="M">Talla M</option><option value="L">Talla L</option><option value="XL">Talla XL</option><option value="2XL">Talla 2XL</option></select>
                         </div>
                     </div>
 
@@ -283,7 +283,7 @@
                     <div class="section-title">SECCIÓN 5: Ficha Médica y Salud</div>
                     <div class="form-grid">
                         <div class="form-group"><label>Tipo de Sangre *</label>
-                            <select id="sangre" required><option value="">Seleccione...</option><option value="O+">O+</option><option value="A+">A+</option><option value="B+">B+</option></select>
+                            <select id="sangre" required><option value="">Seleccione...</option><option value="O+">O+</option><option value="O-">O-</option><option value="A+">A+</option><option value="A-">A-</option><option value="B+">B+</option><option value="B-">B-</option><option value="AB+">AB+</option><option value="AB-">AB-</option></select>
                         </div>
                     </div>
                     <div class="form-group"><label>¿Sufre de alguna enfermedad crónica?</label><textarea id="enfermedades" rows="2" placeholder="Ninguna"></textarea></div>
@@ -294,7 +294,7 @@
                     <div class="section-title">SECCIÓN 6: Declaración</div>
                     <div class="form-group" style="background: #111; padding: 1rem; border-radius: 8px; border: 1px solid #333;">
                         <label class="checkbox-label" style="font-weight: 500; font-size: 0.9rem;">
-                            <input type="checkbox" id="terminos" required style="width: 20px; height: 20px;"> Declaro que los datos suministrados son verídicos.
+                            <input type="checkbox" id="terminos" required style="width: 20px; height: 20px;"> Declaro que los datos suministrados son verídicos y autorizo a la academia.
                         </label>
                     </div>
 
@@ -304,30 +304,33 @@
             </div>
         </div>
 
-        <!-- SECCIÓN RESERVAS ORIGINAL -->
+        <!-- SECCIÓN RESERVAS ORIGINAL COMPLETA -->
         <div id="reservas" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-calendar-check"></i> Reservar Sesión de Entrenamiento</h2>
                 <div style="background: #1a1600; border: 1px solid var(--accent); padding: 1.2rem; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.85rem; color: var(--accent);">
-                    <i class="fa-solid fa-triangle-exclamation"></i> <b>Normativa KSA:</b> Las reservas deben realizarse con al menos 24 horas de anticipación. Las clases perdidas se recuperan en la misma semana.
+                    <i class="fa-solid fa-triangle-exclamation"></i> <b>Normativa KSA de Reservas y Clases:</b><br>
+                    • Anticipación: Las reservas deben realizarse con al menos <b>24 horas de anticipación</b>.<br>
+                    • Regla de Recuperación: Las clases perdidas deben recuperarse dentro de la <b>misma semana en curso</b>.
                 </div>
                 <div id="alertaReserva" class="alert alert-success"></div>
                 <form id="formReserva" onsubmit="enviarReserva(event)">
                     <div class="form-grid">
                         <div class="form-group"><label>Nombre del Atleta *</label><input type="text" id="resAtleta" required placeholder="Mateo Pérez"></div>
-                        <div class="form-group"><label>Tipo de Reserva *</label>
-                            <select id="resTipoAtleta" required><option value="Recuperacion">Recuperación (Misma semana)</option><option value="SesionExtraActiva">Sesión Extra ($7,5)</option><option value="Eventual">Atleta Eventual ($15.00)</option></select>
+                        <div class="form-group"><label>Tipo de Reserva / Atleta *</label>
+                            <select id="resTipoAtleta" required><option value="">Seleccione...</option><option value="Recuperacion">Atleta Activo (Recuperación - Misma semana)</option><option value="SesionExtraActiva">Atleta Regular - Sesión Extra ($7,5)</option><option value="Eventual">Atleta Eventual ($15.00)</option></select>
                         </div>
                         <div class="form-group"><label>Fecha de la Sesión *</label><input type="date" id="resFecha" required></div>
-                        <div class="form-group"><label>Sede / Turno *</label><select id="resTurno" required><option value="Vereda del Lago - 5:40 PM">Vereda del Lago - 5:40 PM</option></select></div>
+                        <div class="form-group"><label>Sede / Turno *</label><select id="resTurno" required><option value="Vereda del Lago - 5:40 PM">Vereda del Lago - 5:40 PM</option><option value="Vereda del Lago - 6:40 PM">Vereda del Lago - 6:40 PM</option></select></div>
                     </div>
                     <div class="form-group"><label>Motivo de la Reserva *</label><textarea id="resMotivo" rows="3" required placeholder="Detalle..."></textarea></div>
+                    <div class="form-group"><label>Número de Referencia (Si aplica pago)</label><input type="text" id="resRefPago" placeholder="Nro de Referencia"></div>
                     <button type="submit" class="btn btn-accent" id="btnReserva">Confirmar Reserva de Entrenamiento</button>
                 </form>
             </div>
         </div>
 
-        <!-- SECCIÓN KITS ORIGINAL -->
+        <!-- SECCIÓN KITS ORIGINAL COMPLETA -->
         <div id="kits" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-shirt"></i> Reserva de Kit de Entrenamiento Oficial</h2>
@@ -336,34 +339,36 @@
                 <form id="formKit" onsubmit="enviarReservaKit(event)">
                     <div class="form-grid">
                         <div class="form-group"><label>Nombre del Atleta *</label><input type="text" id="kitAtleta" required placeholder="Mateo Pérez"></div>
-                        <div class="form-group"><label>Talla de Uniforme *</label><select id="kitTalla" required><option value="Talla 10">Talla 10</option><option value="M">Talla M</option><option value="L">Talla L</option></select></div>
-                        <div class="form-group"><label>Modalidad de Pago *</label><select id="kitModalidad" required><option value="Completo">Pago Completo ($35)</option><option value="Abono 50%">Abono 50% ($17.50)</option></select></div>
-                        <div class="form-group"><label>Número de Referencia *</label><input type="text" id="kitReferencia" required placeholder="Ej. 987654"></div>
+                        <div class="form-group"><label>Cédula del Representante *</label><input type="text" id="kitCedula" required placeholder="V-12345678"></div>
+                        <div class="form-group"><label>Talla de Uniforme *</label><select id="kitTalla" required><option value="">Seleccione...</option><option value="Talla 10">Talla 10</option><option value="M">Talla M</option><option value="L">Talla L</option></select></div>
+                        <div class="form-group"><label>Modalidad de Pago *</label><select id="kitModalidad" required><option value="Completo">Pago Completo ($35.00)</option><option value="Abono 50%">Abono del 50% ($17.50)</option></select></div>
                     </div>
+                    <div class="form-group"><label>Número de Referencia del Pago *</label><input type="text" id="kitReferencia" required placeholder="Ej. 987654"></div>
                     <button type="submit" class="btn btn-accent" id="btnKit">Confirmar Reserva de Kit</button>
                 </form>
             </div>
         </div>
 
-        <!-- SECCIÓN FANS STORE ORIGINAL -->
+        <!-- SECCIÓN FANS STORE ORIGINAL COMPLETA -->
         <div id="fansstore" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-bag-shopping"></i> Fans Store KSA - Playeras Oficiales</h2>
-                <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.5rem;">Costo fijo: <b>$20.00 USD</b>.</p>
+                <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.5rem;">Costo fijo por playera: <b>$20.00 USD</b>.</p>
                 <div id="alertaStore" class="alert alert-success"></div>
                 <form id="formStore" onsubmit="enviarPedidoStore(event)">
                     <div class="form-grid">
                         <div class="form-group"><label>Nombre y Apellido *</label><input type="text" id="storeComprador" required placeholder="Ana Martínez"></div>
-                        <div class="form-group"><label>Teléfono *</label><input type="tel" id="storeTelefono" required placeholder="04140000000"></div>
-                        <div class="form-group"><label>Talla *</label><input type="text" id="storeTalla" required placeholder="M"></div>
-                        <div class="form-group"><label>Referencia de Pago *</label><input type="text" id="storeReferencia" required placeholder="Ej. 554433"></div>
+                        <div class="form-group"><label>Teléfono / WhatsApp *</label><input type="tel" id="storeTelefono" required placeholder="04140000000"></div>
+                        <div class="form-group"><label>Talla *</label><select id="storeTalla" required><option value="">Seleccione...</option><option value="M">Talla M</option><option value="L">Talla L</option></select></div>
+                        <div class="form-group"><label>Cantidad *</label><input type="number" id="storeCantidad" min="1" value="1" required></div>
                     </div>
+                    <div class="form-group"><label>Número de Referencia *</label><input type="text" id="storeReferencia" required placeholder="Ej. 554433"></div>
                     <button type="submit" class="btn btn-accent">Solicitar Playera Oficial</button>
                 </form>
             </div>
         </div>
 
-        <!-- SECCIÓN PAGOS CON CONSULTA DE DEUDA POR CÓDIGO (EJ. K-099) -->
+        <!-- SECCIÓN PAGOS ORIGINAL CON LA NUEVA CONSULTA DE SALDO POR CÓDIGO -->
         <div id="pagos" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-file-invoice-dollar"></i> Pasarela de Pagos y Consulta de Saldo</h2>
@@ -380,16 +385,20 @@
                 <div id="alertaPago" class="alert alert-success"></div>
                 <form id="formPago" onsubmit="enviarPago(event)">
                     <div class="form-grid">
-                        <div class="form-group"><label>Código de Atleta / C.I *</label><input type="text" id="pagoAtleta" required placeholder="K-099 o V-34567890"></div>
-                        <div class="form-group"><label>Concepto / Plan *</label><input type="text" id="pagoConcepto" required placeholder="Plan Base ($60)"></div>
+                        <div class="form-group"><label>Código de Atleta / Nombre *</label><input type="text" id="pagoAtleta" required placeholder="K-099 o Mateo Pérez"></div>
+                        <div class="form-group"><label>Concepto / Plan *</label>
+                            <select id="pagoConcepto" required><option value="Inscripción General">Inscripción General - $20</option><option value="Plan Base (8 sesiones)">Plan Base (8 sesiones) - $60</option><option value="Plan Pro (12 sesiones)">Plan Pro (12 sesiones) - $90</option><option value="Plan Élite GK (16 sesiones)">Plan Élite GK (16 sesiones) - $120</option></select>
+                        </div>
                         <div class="form-group"><label>Monto USD ($) *</label><input type="number" step="0.01" id="pagoMontoUSD" required placeholder="60.00"></div>
-                        <div class="form-group"><label>Número de Referencia *</label><input type="text" id="pagoReferencia" required placeholder="Ej. 123456"></div>
+                        <div class="form-group"><label>Método de Pago *</label><select id="pagoMetodo" required><option value="Pago Móvil">Pago Móvil (BDV)</option><option value="Transferencia">Transferencia (BNC)</option></select></div>
                     </div>
+                    <div class="form-group"><label>Número de Referencia *</label><input type="text" id="pagoReferencia" required placeholder="Ej. 123456"></div>
                     <button type="submit" class="btn btn-accent">Reportar Pago Oficial</button>
                 </form>
             </div>
         </div>
 
+        <!-- SECCIÓN ATLETAS KSA ORIGINAL -->
         <div id="infografia" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-id-card"></i> Infografía y Fichas de Atletas KSA</h2>
@@ -409,6 +418,7 @@
             </div>
         </div>
 
+        <!-- SECCIÓN HORARIOS Y SEDES ORIGINAL -->
         <div id="horarios" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-calendar-days"></i> Horarios y Sedes de Entrenamiento</h2>
@@ -423,6 +433,7 @@
             </div>
         </div>
 
+        <!-- SECCIÓN ASISTENCIA ORIGINAL -->
         <div id="asistencia" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-clipboard-user"></i> Control de Asistencia y Sesiones</h2>
@@ -435,6 +446,7 @@
             </div>
         </div>
 
+        <!-- SECCIÓN CUMPLEAÑOS ORIGINAL -->
         <div id="cumpleanos" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-cake-candles"></i> Cumpleaños y Fechas Especiales</h2>
@@ -457,6 +469,7 @@
             </div>
         </div>
 
+        <!-- SECCIÓN REDES ORIGINAL -->
         <div id="redes" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-share-nodes"></i> Redes Sociales Oficiales</h2>
