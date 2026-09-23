@@ -79,7 +79,8 @@
         .btn-accent { background: var(--accent); color: var(--primary); }
         .btn-accent:hover { background: #eab308; }
 
-        .payment-box { background: #1f1b0c; border: 2px dashed var(--accent); padding: 1.5rem; border-radius: 12px; margin-top: 1.5rem; }
+        /* Estructura original de pagos y bancos */
+        .payment-box { background: #1f1b0c; border: 2px dashed var(--accent); padding: 1.5rem; border-radius: 12px; margin-top: 1.5rem; margin-bottom: 1.5rem; }
         .bank-info { display: flex; flex-direction: column; background: #111; padding: 12px 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #333; font-size: 0.9rem; color: var(--light); gap: 10px; }
         .bank-info-content { width: 100%; line-height: 1.5; }
         .tasa-externa-separada { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--accent); color: var(--accent); font-weight: 700; font-size: 0.95rem; width: 100%; display: flex; align-items: center; gap: 6px; }
@@ -118,8 +119,11 @@
         .atleta-info { text-align: left; font-size: 0.85rem; color: #94a3b8; margin-top: 1rem; line-height: 1.6; background: #181818; padding: 12px; border-radius: 6px; }
         .atleta-info b { color: var(--light); }
 
-        .social-card { background: #111; border: 1px solid #333; padding: 1.5rem; border-radius: 12px; text-align: center; }
-        .social-card i { font-size: 2.5rem; color: var(--accent); margin-bottom: 10px; }
+        /* Estructura original redes */
+        .redes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+        .red-card { background: #111; border: 1px solid #333; border-radius: 12px; padding: 2rem; text-align: center; border-top: 4px solid var(--accent); }
+        .red-card i { font-size: 3rem; color: var(--accent); margin-bottom: 1rem; }
+
         .footer-ksa { text-align: center; padding: 1.5rem; color: #94a3b8; font-size: 0.85rem; border-top: 1px solid #333; margin-top: 3rem; }
     </style>
 </head>
@@ -215,7 +219,7 @@
             <div class="footer-ksa">Fundada el 16 de Enero de 2022 — Keepers Sport Academy GK. Todos los derechos reservados.</div>
         </div>
 
-        <!-- SECCIÓN INSCRIPCIÓN ORIGINAL COMPLETA CON CÓDIGO DE ATLETA -->
+        <!-- INSCRIPCIÓN CON ASIGNACIÓN AUTOMÁTICA DE CÓDIGO KSA -->
         <div id="inscripcion" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-futbol"></i> Ficha Técnica y Médica del Atleta</h2>
@@ -225,24 +229,23 @@
                 <form id="formInscripcion" onsubmit="enviarInscripcion(event)">
                     <div class="section-title">SECCIÓN 1: Identificación e Imagen del Atleta</div>
                     <div class="form-grid">
-                        <div class="form-group"><label>Código de Atleta KSA (Ej. K-099) *</label><input type="text" id="codigoAtleta" required placeholder="Ej. K-099"></div>
                         <div class="form-group"><label>Foto del Atleta (Subir Archivo) *</label><input type="file" id="fotoFile" accept="image/*" required style="padding: 0.5rem; background: #000;"></div>
                         <div class="form-group"><label>Partida de Nacimiento (Si no tiene Cédula)</label><input type="file" id="partidaFile" accept="image/*,.pdf" style="padding: 0.5rem; background: #000;"></div>
                         <div class="form-group"><label>Nombres y Apellidos del Atleta *</label><input type="text" id="nombreAtleta" required placeholder="Ej. Mateo Pérez"></div>
-                        <div class="form-group"><label>Cédula de Identidad / P.N. *</label><input type="text" id="cedulaAtleta" required placeholder="V-34567890 o Partida N°"></div>
+                        <div class="form-group"><label>Cédula de Identidad / P.N. *</label><input type="text" id="cedulaAtleta" required placeholder="V-34567890"></div>
                         <div class="form-group"><label>Fecha de Nacimiento *</label><input type="date" id="fechaNac" required onchange="calcularEdad()"></div>
                         <div class="form-group"><label>Edad</label><input type="number" id="edad" readonly placeholder="Automático"></div>
                         <div class="form-group"><label>Teléfono del Atleta</label><input type="tel" id="telAtleta" placeholder="0414-0000000"></div>
                     </div>
                     <div class="form-group"><label>Dirección de Residencia</label><textarea id="direccion" rows="2" placeholder="Sector, Calle, Casa"></textarea></div>
-                    <div class="form-group"><label>Redes Sociales (Instagram / TikTok / etc.)</label><input type="text" id="redesAtleta" placeholder="@usuario"></div>
+                    <div class="form-group"><label>Redes Sociales</label><input type="text" id="redesAtleta" placeholder="@usuario"></div>
 
                     <div class="section-title">SECCIÓN 2: Datos del Representante</div>
                     <div class="form-grid">
                         <div class="form-group"><label>Nombres y Apellidos del Representante *</label><input type="text" id="nombreRep" required placeholder="Ej. Carlos Pérez"></div>
                         <div class="form-group"><label>Cédula del Representante *</label><input type="text" id="cedulaRep" required placeholder="V-12345678"></div>
                         <div class="form-group"><label>Parentesco *</label>
-                            <select id="parentesco" required><option value="">Seleccione...</option><option value="Madre">Madre</option><option value="Padre">Padre</option><option value="Representante Legal">Representante Legal</option><option value="Otro">Otro</option></select>
+                            <select id="parentesco" required><option value="">Seleccione...</option><option value="Madre">Madre</option><option value="Padre">Padre</option><option value="Representante Legal">Representante Legal</option></select>
                         </div>
                         <div class="form-group"><label>Teléfono Principal / WhatsApp *</label><input type="tel" id="telRep" required placeholder="0412-0000000"></div>
                         <div class="form-group"><label>Correo Electrónico *</label><input type="email" id="correoRep" required placeholder="correo@ejemplo.com"></div>
@@ -257,8 +260,8 @@
                         </div>
                         <div class="form-group"><label>Estatura (cm)</label><input type="number" id="estatura" placeholder="Ej. 145"></div>
                         <div class="form-group"><label>Peso (kg)</label><input type="number" step="0.1" id="peso" placeholder="Ej. 38.5"></div>
-                        <div class="form-group"><label>Talla de Uniforme (T2 al 2XL) *</label>
-                            <select id="talla" required><option value="">Seleccione talla...</option><option value="Talla 2">Talla 2</option><option value="Talla 4">Talla 4</option><option value="Talla 6">Talla 6</option><option value="Talla 8">Talla 8</option><option value="Talla 10">Talla 10</option><option value="Talla 12">Talla 12</option><option value="Talla 14">Talla 14</option><option value="Talla 16">Talla 16</option><option value="S">Talla S</option><option value="M">Talla M</option><option value="L">Talla L</option><option value="XL">Talla XL</option><option value="2XL">Talla 2XL</option></select>
+                        <div class="form-group"><label>Talla de Uniforme *</label>
+                            <select id="talla" required><option value="">Seleccione talla...</option><option value="Talla 10">Talla 10</option><option value="M">Talla M</option><option value="L">Talla L</option></select>
                         </div>
                     </div>
 
@@ -283,7 +286,7 @@
                     <div class="section-title">SECCIÓN 5: Ficha Médica y Salud</div>
                     <div class="form-grid">
                         <div class="form-group"><label>Tipo de Sangre *</label>
-                            <select id="sangre" required><option value="">Seleccione...</option><option value="O+">O+</option><option value="O-">O-</option><option value="A+">A+</option><option value="A-">A-</option><option value="B+">B+</option><option value="B-">B-</option><option value="AB+">AB+</option><option value="AB-">AB-</option></select>
+                            <select id="sangre" required><option value="">Seleccione...</option><option value="O+">O+</option><option value="A+">A+</option><option value="B+">B+</option></select>
                         </div>
                     </div>
                     <div class="form-group"><label>¿Sufre de alguna enfermedad crónica?</label><textarea id="enfermedades" rows="2" placeholder="Ninguna"></textarea></div>
@@ -294,7 +297,7 @@
                     <div class="section-title">SECCIÓN 6: Declaración</div>
                     <div class="form-group" style="background: #111; padding: 1rem; border-radius: 8px; border: 1px solid #333;">
                         <label class="checkbox-label" style="font-weight: 500; font-size: 0.9rem;">
-                            <input type="checkbox" id="terminos" required style="width: 20px; height: 20px;"> Declaro que los datos suministrados son verídicos y autorizo a la academia.
+                            <input type="checkbox" id="terminos" required style="width: 20px; height: 20px;"> Declaro que los datos suministrados son verídicos.
                         </label>
                     </div>
 
@@ -304,33 +307,36 @@
             </div>
         </div>
 
-        <!-- SECCIÓN RESERVAS ORIGINAL COMPLETA -->
+        <!-- RESERVAS CON AMBOS HORARIOS (5:40 PM y 6:40 PM) -->
         <div id="reservas" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-calendar-check"></i> Reservar Sesión de Entrenamiento</h2>
                 <div style="background: #1a1600; border: 1px solid var(--accent); padding: 1.2rem; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.85rem; color: var(--accent);">
-                    <i class="fa-solid fa-triangle-exclamation"></i> <b>Normativa KSA de Reservas y Clases:</b><br>
-                    • Anticipación: Las reservas deben realizarse con al menos <b>24 horas de anticipación</b>.<br>
-                    • Regla de Recuperación: Las clases perdidas deben recuperarse dentro de la <b>misma semana en curso</b>.
+                    <i class="fa-solid fa-triangle-exclamation"></i> <b>Normativa KSA:</b> Las reservas deben realizarse con al menos 24 horas de anticipación. Las clases perdidas se recuperan en la misma semana.
                 </div>
                 <div id="alertaReserva" class="alert alert-success"></div>
                 <form id="formReserva" onsubmit="enviarReserva(event)">
                     <div class="form-grid">
                         <div class="form-group"><label>Nombre del Atleta *</label><input type="text" id="resAtleta" required placeholder="Mateo Pérez"></div>
-                        <div class="form-group"><label>Tipo de Reserva / Atleta *</label>
-                            <select id="resTipoAtleta" required><option value="">Seleccione...</option><option value="Recuperacion">Atleta Activo (Recuperación - Misma semana)</option><option value="SesionExtraActiva">Atleta Regular - Sesión Extra ($7,5)</option><option value="Eventual">Atleta Eventual ($15.00)</option></select>
+                        <div class="form-group"><label>Tipo de Reserva *</label>
+                            <select id="resTipoAtleta" required><option value="Recuperacion">Recuperación (Misma semana)</option><option value="SesionExtraActiva">Sesión Extra ($7,5)</option><option value="Eventual">Atleta Eventual ($15.00)</option></select>
                         </div>
                         <div class="form-group"><label>Fecha de la Sesión *</label><input type="date" id="resFecha" required></div>
-                        <div class="form-group"><label>Sede / Turno *</label><select id="resTurno" required><option value="Vereda del Lago - 5:40 PM">Vereda del Lago - 5:40 PM</option><option value="Vereda del Lago - 6:40 PM">Vereda del Lago - 6:40 PM</option></select></div>
+                        <div class="form-group"><label>Sede / Turno *</label>
+                            <select id="resTurno" required>
+                                <option value="">Seleccione turno...</option>
+                                <option value="Vereda del Lago - 5:40 PM (Atletas Avanzados)">1era Sesión: 5:40 PM (Atletas Avanzados)</option>
+                                <option value="Vereda del Lago - 6:40 PM (Atletas de Iniciación)">2da Sesión: 6:40 PM (Atletas de Iniciación)</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="form-group"><label>Motivo de la Reserva *</label><textarea id="resMotivo" rows="3" required placeholder="Detalle..."></textarea></div>
-                    <div class="form-group"><label>Número de Referencia (Si aplica pago)</label><input type="text" id="resRefPago" placeholder="Nro de Referencia"></div>
+                    <div class="form-group"><label>Número de Referencia (Si aplica)</label><input type="text" id="resRefPago" placeholder="Nro de Referencia"></div>
                     <button type="submit" class="btn btn-accent" id="btnReserva">Confirmar Reserva de Entrenamiento</button>
                 </form>
             </div>
         </div>
 
-        <!-- SECCIÓN KITS ORIGINAL COMPLETA -->
         <div id="kits" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-shirt"></i> Reserva de Kit de Entrenamiento Oficial</h2>
@@ -339,17 +345,15 @@
                 <form id="formKit" onsubmit="enviarReservaKit(event)">
                     <div class="form-grid">
                         <div class="form-group"><label>Nombre del Atleta *</label><input type="text" id="kitAtleta" required placeholder="Mateo Pérez"></div>
-                        <div class="form-group"><label>Cédula del Representante *</label><input type="text" id="kitCedula" required placeholder="V-12345678"></div>
-                        <div class="form-group"><label>Talla de Uniforme *</label><select id="kitTalla" required><option value="">Seleccione...</option><option value="Talla 10">Talla 10</option><option value="M">Talla M</option><option value="L">Talla L</option></select></div>
+                        <div class="form-group"><label>Talla de Uniforme *</label><select id="kitTalla" required><option value="Talla 10">Talla 10</option><option value="M">Talla M</option><option value="L">Talla L</option></select></div>
                         <div class="form-group"><label>Modalidad de Pago *</label><select id="kitModalidad" required><option value="Completo">Pago Completo ($35.00)</option><option value="Abono 50%">Abono del 50% ($17.50)</option></select></div>
+                        <div class="form-group"><label>Número de Referencia *</label><input type="text" id="kitReferencia" required placeholder="Ej. 987654"></div>
                     </div>
-                    <div class="form-group"><label>Número de Referencia del Pago *</label><input type="text" id="kitReferencia" required placeholder="Ej. 987654"></div>
                     <button type="submit" class="btn btn-accent" id="btnKit">Confirmar Reserva de Kit</button>
                 </form>
             </div>
         </div>
 
-        <!-- SECCIÓN FANS STORE ORIGINAL COMPLETA -->
         <div id="fansstore" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-bag-shopping"></i> Fans Store KSA - Playeras Oficiales</h2>
@@ -358,47 +362,76 @@
                 <form id="formStore" onsubmit="enviarPedidoStore(event)">
                     <div class="form-grid">
                         <div class="form-group"><label>Nombre y Apellido *</label><input type="text" id="storeComprador" required placeholder="Ana Martínez"></div>
-                        <div class="form-group"><label>Teléfono / WhatsApp *</label><input type="tel" id="storeTelefono" required placeholder="04140000000"></div>
-                        <div class="form-group"><label>Talla *</label><select id="storeTalla" required><option value="">Seleccione...</option><option value="M">Talla M</option><option value="L">Talla L</option></select></div>
-                        <div class="form-group"><label>Cantidad *</label><input type="number" id="storeCantidad" min="1" value="1" required></div>
+                        <div class="form-group"><label>Teléfono *</label><input type="tel" id="storeTelefono" required placeholder="04140000000"></div>
+                        <div class="form-group"><label>Talla *</label><select id="storeTalla" required><option value="M">Talla M</option><option value="L">Talla L</option></select></div>
+                        <div class="form-group"><label>Referencia *</label><input type="text" id="storeReferencia" required placeholder="Ej. 554433"></div>
                     </div>
-                    <div class="form-group"><label>Número de Referencia *</label><input type="text" id="storeReferencia" required placeholder="Ej. 554433"></div>
                     <button type="submit" class="btn btn-accent">Solicitar Playera Oficial</button>
                 </form>
             </div>
         </div>
 
-        <!-- SECCIÓN PAGOS ORIGINAL CON LA NUEVA CONSULTA DE SALDO POR CÓDIGO -->
+        <!-- PAGOS Y ABONOS: ESTRUCTURA ORIGINAL + DATOS BANCARIOS + CONSULTA DE SALDO POR CÓDIGO -->
         <div id="pagos" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-file-invoice-dollar"></i> Pasarela de Pagos y Consulta de Saldo</h2>
                 
                 <div style="background: #111; border: 1px solid var(--accent); padding: 1.2rem; border-radius: 8px; margin-bottom: 1.5rem;">
-                    <h4 style="color: var(--accent); margin-bottom: 8px;"><i class="fa-solid fa-magnifying-glass"></i> Consultar Estado de Cuenta por Código de Atleta (Ej. K-099)</h4>
+                    <h4 style="color: var(--accent); margin-bottom: 8px;"><i class="fa-solid fa-magnifying-glass"></i> Consultar Estado de Cuenta por Código de Atleta (Ej. K-054)</h4>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <input type="text" id="inputConsultaCodigo" placeholder="Ingrese su código (Ej. K-099)" style="flex: 1; padding: 0.7rem; border-radius: 6px; border: 1px solid #444; background: #000; color: #fff;">
+                        <input type="text" id="inputConsultaCodigo" placeholder="Ingrese su código (Ej. K-054)" style="flex: 1; padding: 0.7rem; border-radius: 6px; border: 1px solid #444; background: #000; color: #fff;">
                         <button type="button" class="btn btn-accent" style="width: auto; padding: 0.7rem 1.5rem;" onclick="consultarDeudaCodigo()">Consultar Saldo</button>
                     </div>
                     <div id="resultadoConsultaSaldo" style="margin-top: 12px; font-weight: 600; font-size: 0.95rem;"></div>
                 </div>
 
+                <div class="payment-box">
+                    <h3 style="color: var(--accent); margin-bottom: 1rem;"><i class="fa-solid fa-building-columns"></i> Datos Bancarios Oficiales KSA</h3>
+                    
+                    <div class="bank-info">
+                        <div class="bank-info-content">
+                            <b>Banco de Venezuela (BDV) — Pago Móvil</b><br>
+                            Rif: J-50284930-1 | Telf: 0424-6891083<br>
+                            <span id="txtMontoBDV" class="tasa-externa-separada"><i class="fa-solid fa-calculator"></i> Calculando monto en Bs...</span>
+                        </div>
+                        <button class="copy-btn" onclick="copiarDatosBanco('BDV')">Copiar Datos BDV</button>
+                    </div>
+
+                    <div class="bank-info">
+                        <div class="bank-info-content">
+                            <b>Banco Nacional de Crédito (BNC) — Transferencia</b><br>
+                            Nro Cuenta: 0191-0000-000000000000<br>
+                            Rif: J-50284930-1
+                        </div>
+                        <button class="copy-btn" onclick="copiarDatosBanco('BNC')">Copiar Cuenta BNC</button>
+                    </div>
+                </div>
+
                 <div id="alertaPago" class="alert alert-success"></div>
                 <form id="formPago" onsubmit="enviarPago(event)">
                     <div class="form-grid">
-                        <div class="form-group"><label>Código de Atleta / Nombre *</label><input type="text" id="pagoAtleta" required placeholder="K-099 o Mateo Pérez"></div>
-                        <div class="form-group"><label>Concepto / Plan *</label>
-                            <select id="pagoConcepto" required><option value="Inscripción General">Inscripción General - $20</option><option value="Plan Base (8 sesiones)">Plan Base (8 sesiones) - $60</option><option value="Plan Pro (12 sesiones)">Plan Pro (12 sesiones) - $90</option><option value="Plan Élite GK (16 sesiones)">Plan Élite GK (16 sesiones) - $120</option></select>
+                        <div class="form-group"><label>Código de Atleta / Nombre *</label><input type="text" id="pagoAtleta" required placeholder="K-054 o Mateo Pérez"></div>
+                        <div class="form-group"><label>Concepto / Opciones de Pago *</label>
+                            <select id="pagoConcepto" required>
+                                <option value="">Seleccione concepto...</option>
+                                <option value="Inscripción General ($20)">Inscripción General ($20)</option>
+                                <option value="Plan Base ($60)">Plan Base - 8 sesiones ($60)</option>
+                                <option value="Plan Pro ($90)">Plan Pro - 12 sesiones ($90)</option>
+                                <option value="Plan Élite GK ($120)">Plan Élite GK - 16 sesiones ($120)</option>
+                                <option value="Kit de Uniforme ($35)">Kit de Uniforme ($35 o Abono $17.50)</option>
+                                <option value="Playera Fans Store ($20)">Playera Fans Store ($20)</option>
+                            </select>
                         </div>
-                        <div class="form-group"><label>Monto USD ($) *</label><input type="number" step="0.01" id="pagoMontoUSD" required placeholder="60.00"></div>
-                        <div class="form-group"><label>Método de Pago *</label><select id="pagoMetodo" required><option value="Pago Móvil">Pago Móvil (BDV)</option><option value="Transferencia">Transferencia (BNC)</option></select></div>
+                        <div class="form-group"><label>Monto USD ($) *</label><input type="number" step="0.01" id="pagoMontoUSD" required placeholder="60.00" oninput="calcularMontoBsEnVivo()"></div>
+                        <div class="form-group"><label>Método de Pago *</label><select id="pagoMetodo" required><option value="Pago Móvil">Pago Móvil (BDV)</option><option value="Transferencia BNC">Transferencia (BNC)</option></select></div>
                     </div>
-                    <div class="form-group"><label>Número de Referencia *</label><input type="text" id="pagoReferencia" required placeholder="Ej. 123456"></div>
-                    <button type="submit" class="btn btn-accent">Reportar Pago Oficial</button>
+                    <div class="form-group"><label>Número de Referencia (Últimos 4 dígitos o ref completa) *</label><input type="text" id="pagoReferencia" required placeholder="Ej. 123456"></div>
+                    <button type="submit" class="btn btn-accent">Reportar Pago Oficial KSA</button>
                 </form>
             </div>
         </div>
 
-        <!-- SECCIÓN ATLETAS KSA ORIGINAL -->
+        <!-- ATLETAS KSA: ESTRUCTURA ORIGINAL -->
         <div id="infografia" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-id-card"></i> Infografía y Fichas de Atletas KSA</h2>
@@ -406,7 +439,7 @@
                     <div class="atleta-card">
                         <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" class="atleta-avatar">
                         <h3 style="color: var(--light);">Mateo Pérez</h3>
-                        <p style="font-size: 0.8rem; color: var(--accent);">Código: <b>K-099</b> | Atleta Oficial KSA</p>
+                        <p style="font-size: 0.8rem; color: var(--accent);">Código: <b>K-054</b> | Atleta Oficial KSA</p>
                         <div class="atleta-info">
                             Cédula: <b>V-34567890</b><br>
                             Perfil: <b>Derecho</b><br>
@@ -418,7 +451,6 @@
             </div>
         </div>
 
-        <!-- SECCIÓN HORARIOS Y SEDES ORIGINAL -->
         <div id="horarios" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-calendar-days"></i> Horarios y Sedes de Entrenamiento</h2>
@@ -426,27 +458,25 @@
                     <h3 style="color: var(--accent);">🏖️ Sede Oficial: Vereda del Lago</h3>
                     <p style="font-size: 0.9rem; color: #94a3b8; margin-top: 5px;">Cancha de arena de playa (Entrenamiento especializado en potencia y agilidad).</p>
                     <ul style="margin-top: 12px; margin-left: 20px; font-size: 0.9rem; line-height: 1.8; color: var(--light);">
-                        <li><b>Lunes y Miércoles:</b> 5:40 PM</li>
-                        <li><b>Martes y Jueves:</b> 5:40 PM y 6:40 PM</li>
+                        <li><b>1era Sesión (Atletas Avanzados):</b> 5:40 PM</li>
+                        <li><b>2da Sesión (Atletas de Iniciación):</b> 6:40 PM</li>
                     </ul>
                 </div>
             </div>
         </div>
 
-        <!-- SECCIÓN ASISTENCIA ORIGINAL -->
         <div id="asistencia" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-clipboard-user"></i> Control de Asistencia y Sesiones</h2>
                 <div class="table-container">
                     <table>
                         <thead><tr><th>Código</th><th>Atleta</th><th>Plan Mensual</th><th>Sesiones Asistidas</th></tr></thead>
-                        <tbody><tr><td>K-099</td><td>Mateo Pérez</td><td>Plan Base</td><td><span style="color: #34d399; font-weight: bold;">8 / 8</span></td></tr></tbody>
+                        <tbody><tr><td>K-054</td><td>Mateo Pérez</td><td>Plan Base</td><td><span style="color: #34d399; font-weight: bold;">8 / 8</span></td></tr></tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-        <!-- SECCIÓN CUMPLEAÑOS ORIGINAL -->
         <div id="cumpleanos" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-cake-candles"></i> Cumpleaños y Fechas Especiales</h2>
@@ -469,24 +499,33 @@
             </div>
         </div>
 
-        <!-- SECCIÓN REDES ORIGINAL -->
+        <!-- REDES: ESTRUCTURA ORIGINAL -->
         <div id="redes" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-share-nodes"></i> Redes Sociales Oficiales</h2>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
-                    <div class="social-card"><i class="fa-brands fa-whatsapp" style="color: #25D366;"></i><h3>WhatsApp</h3><p>0424-6891083</p></div>
-                    <div class="social-card"><i class="fa-brands fa-instagram"></i><h3>Instagram</h3><p>@keeperssportacademy</p></div>
+                <div class="redes-grid">
+                    <div class="red-card">
+                        <i class="fa-brands fa-whatsapp" style="color: #25D366;"></i>
+                        <h3>WhatsApp Oficial</h3>
+                        <p style="color: #94a3b8; margin: 10px 0;">0424-6891083</p>
+                        <a href="https://wa.me/584246891083" target="_blank" class="btn btn-accent" style="display: inline-block; text-decoration: none; padding: 0.6rem 1rem;">Escribir al WhatsApp</a>
+                    </div>
+                    <div class="red-card">
+                        <i class="fa-brands fa-instagram" style="color: #E1306C;"></i>
+                        <h3>Instagram</h3>
+                        <p style="color: #94a3b8; margin: 10px 0;">@keeperssportacademy</p>
+                        <a href="https://instagram.com/keeperssportacademy" target="_blank" class="btn" style="display: inline-block; text-decoration: none; padding: 0.6rem 1rem;">Visitar Instagram</a>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- PANEL ADMINISTRATIVO UNIVERSAL (VER, EDITAR, AÑADIR, BORRAR) -->
+        <!-- PANEL ADMINISTRATIVO UNIVERSAL -->
         <div id="admin" class="section-container">
             <div class="card" style="border-top-color: var(--accent);">
                 <h2><i class="fa-solid fa-lock"></i> Panel Administrativo y Base de Datos General</h2>
                 <p style="color: #94a3b8; margin-bottom: 1.5rem;">Control exclusivo del Head Coach Eduardo Martínez.</p>
                 
-                <!-- 1. GALERÍA -->
                 <div class="section-title">1. Gestión de Feed Social (Añadir / Borrar)</div>
                 <div class="form-grid">
                     <div class="form-group"><label>Título del Post</label><input type="text" id="adminMediaTitulo" placeholder="Entrenamiento..."></div>
@@ -500,7 +539,6 @@
                     </table>
                 </div>
 
-                <!-- 2. INSCRIPCIONES -->
                 <div class="section-title" style="margin-top: 2rem;">2. Base de Datos: Inscripciones y Códigos de Atletas</div>
                 <div class="table-container">
                     <table>
@@ -509,16 +547,14 @@
                     </table>
                 </div>
 
-                <!-- 3. RESERVAS -->
                 <div class="section-title" style="margin-top: 2rem;">3. Base de Datos: Reservas</div>
                 <div class="table-container">
                     <table>
-                        <thead><tr><th>Atleta</th><th>Fecha</th><th>Motivo</th><th>Acciones</th></tr></thead>
+                        <thead><tr><th>Atleta</th><th>Fecha</th><th>Turno / Motivo</th><th>Acciones</th></tr></thead>
                         <tbody id="tablaAdminReservas"></tbody>
                     </table>
                 </div>
 
-                <!-- 4. KITS -->
                 <div class="section-title" style="margin-top: 2rem;">4. Base de Datos: Kits</div>
                 <div class="table-container">
                     <table>
@@ -527,7 +563,6 @@
                     </table>
                 </div>
 
-                <!-- 5. STORE -->
                 <div class="section-title" style="margin-top: 2rem;">5. Base de Datos: Fans Store</div>
                 <div class="table-container">
                     <table>
@@ -536,7 +571,6 @@
                     </table>
                 </div>
 
-                <!-- 6. PAGOS -->
                 <div class="section-title" style="margin-top: 2rem;">6. Base de Datos: Pagos Reportados</div>
                 <div class="table-container">
                     <table>
@@ -553,7 +587,7 @@
         let modoAccesoActual = 'login';
 
         let dbInscripciones = JSON.parse(localStorage.getItem('ksa_db_inscripciones')) || [
-            { id: 1, codigo: "K-099", nombre: "Mateo Pérez", cedula: "V-34567890", plan: "Plan Base ($60)", saldoPendiente: 0 }
+            { id: 1, codigo: "K-054", nombre: "Mateo Pérez", cedula: "V-34567890", plan: "Plan Base ($60)", saldoPendiente: 0 }
         ];
         let dbReservas = JSON.parse(localStorage.getItem('ksa_db_reservas')) || [];
         let dbKits = JSON.parse(localStorage.getItem('ksa_db_kits')) || [];
@@ -571,7 +605,25 @@
         }
 
         function actualizarBarraTasaGlobal() {
-            document.getElementById('lblTasaGlobalHeader').innerText = obtenerTasaDelDia().toFixed(2);
+            const tasa = obtenerTasaDelDia();
+            document.getElementById('lblTasaGlobalHeader').innerText = tasa.toFixed(2);
+            calcularMontoBsEnVivo();
+        }
+
+        function calcularMontoBsEnVivo() {
+            const usd = parseFloat(document.getElementById('pagoMontoUSD').value) || 0;
+            const tasa = obtenerTasaDelDia();
+            const totalBs = usd * tasa;
+            const lbl = document.getElementById('txtMontoBDV');
+            if(lbl) {
+                lbl.innerHTML = `<i class="fa-solid faéquals"></i> Equivalente a <b>${totalBs.toFixed(2)} Bs</b> (Calculado a tasa de ${tasa.toFixed(2)} Bs/USD)`;
+            }
+        }
+
+        function copiarDatosBanco(banco) {
+            let texto = banco === 'BDV' ? "Banco de Venezuela | Telf: 04246891083 | Rif: J-50284930-1" : "Banco Nacional de Crédito (BNC) | Cuenta: 01910000000000000000 | Rif: J-50284930-1";
+            navigator.clipboard.writeText(texto);
+            alert("¡Datos bancarios copiados al portapapeles!");
         }
 
         function cambiarModo(modo) {
@@ -674,7 +726,12 @@
             document.getElementById('edad').value = edad >= 0 ? edad : 0;
         }
 
-        // Consulta de deuda por código de atleta (Ej. K-099)
+        // Generación automática de código KSA (Ej. K-054)
+        function generarCodigoAtletaKSA() {
+            const randomNum = Math.floor(10 + Math.random() * 900);
+            return `K-${randomNum}`;
+        }
+
         function consultarDeudaCodigo() {
             const codigo = document.getElementById('inputConsultaCodigo').value.trim().toUpperCase();
             const resultado = document.getElementById('resultadoConsultaSaldo');
@@ -694,24 +751,27 @@
 
         async function enviarInscripcion(e) {
             e.preventDefault();
+            const nuevoCodigo = generarCodigoAtletaKSA();
             dbInscripciones.push({
                 id: Date.now(),
-                codigo: document.getElementById('codigoAtleta').value.trim().toUpperCase(),
+                codigo: nuevoCodigo,
                 nombre: document.getElementById('nombreAtleta').value,
                 cedula: document.getElementById('cedulaAtleta').value,
                 plan: document.getElementById('plan').value,
                 saldoPendiente: 0
             });
             localStorage.setItem('ksa_db_inscripciones', JSON.stringify(dbInscripciones));
-            document.getElementById('alertaInscripcion').innerText = "¡Inscripción registrada con éxito!";
-            document.getElementById('alertaInscripcion').style.display = 'block';
+            
+            let alerta = document.getElementById('alertaInscripcion');
+            alerta.innerText = `¡Inscripción registrada con éxito! Código asignado: ${nuevoCodigo}`;
+            alerta.style.display = 'block';
             document.getElementById('formInscripcion').reset();
-            setTimeout(() => { document.getElementById('alertaInscripcion').style.display = 'none'; }, 4000);
+            setTimeout(() => { alerta.style.display = 'none'; }, 6000);
         }
 
         async function enviarReserva(e) {
             e.preventDefault();
-            dbReservas.push({ id: Date.now(), atleta: document.getElementById('resAtleta').value, fecha: document.getElementById('resFecha').value, motivo: document.getElementById('resMotivo').value });
+            dbReservas.push({ id: Date.now(), atleta: document.getElementById('resAtleta').value, fecha: document.getElementById('resFecha').value, motivo: document.getElementById('resTurno').value + ' - ' + document.getElementById('resMotivo').value });
             localStorage.setItem('ksa_db_reservas', JSON.stringify(dbReservas));
             document.getElementById('alertaReserva').innerText = "¡Reserva registrada!"; document.getElementById('alertaReserva').style.display = 'block';
             document.getElementById('formReserva').reset();
@@ -740,7 +800,7 @@
             e.preventDefault();
             dbPagos.push({ id: Date.now(), atleta: document.getElementById('pagoAtleta').value, concepto: document.getElementById('pagoConcepto').value, monto: document.getElementById('pagoMontoUSD').value, referencia: document.getElementById('pagoReferencia').value });
             localStorage.setItem('ksa_db_pagos', JSON.stringify(dbPagos));
-            document.getElementById('alertaPago').innerText = "¡Pago reportado!"; document.getElementById('alertaPago').style.display = 'block';
+            document.getElementById('alertaPago').innerText = "¡Pago reportado con éxito!"; document.getElementById('alertaPago').style.display = 'block';
             document.getElementById('formPago').reset();
             setTimeout(() => { document.getElementById('alertaPago').style.display = 'none'; }, 4000);
         }
