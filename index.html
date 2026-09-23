@@ -30,7 +30,13 @@
         .login-input { width: 100%; padding: 0.8rem 2.5rem 0.8rem 1rem; border: 2px solid #333; border-radius: 8px; background: #000; color: var(--light); font-size: 0.95rem; }
         .login-input:focus { border-color: var(--accent); outline: none; }
         .toggle-password { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; cursor: pointer; }
-        .captcha-box { background: #111; border: 1px solid #333; padding: 12px; border-radius: 8px; margin-bottom: 1.2rem; text-align: left; font-size: 0.85rem; }
+        
+        .captcha-box-secure { background: #111; border: 2px solid #333; padding: 12px; border-radius: 8px; margin-bottom: 1.2rem; text-align: left; }
+        .captcha-options { display: flex; gap: 10px; justify-content: center; margin-top: 8px; }
+        .captcha-btn-item { background: #222; border: 2px solid #444; border-radius: 8px; padding: 10px 15px; cursor: pointer; color: var(--light); font-size: 1.2rem; transition: 0.2s; }
+        .captcha-btn-item:hover { border-color: var(--accent); background: #333; }
+        .captcha-btn-item.selected { border-color: var(--accent); background: #3a3200; color: var(--accent); }
+
         .login-btn { background: var(--accent); color: var(--primary); font-weight: 700; padding: 0.9rem; border: none; border-radius: 8px; width: 100%; font-size: 1rem; cursor: pointer; text-transform: uppercase; transition: 0.3s; margin-bottom: 1rem; }
         .login-btn:hover { background: var(--light); }
         .auth-links { font-size: 0.85rem; color: var(--accent); cursor: pointer; margin-top: 5px; display: block; font-weight: 600; }
@@ -103,7 +109,8 @@
         .atleta-info b { color: var(--light); }
 
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
-        .gallery-media { width: 100%; height: 200px; object-fit: cover; background: #000; }
+        .gallery-card { background: #111; border: 1px solid #333; border-radius: 12px; overflow: hidden; }
+        .gallery-media { width: 100%; height: 200px; object-fit: cover; background: #000; display: block; }
         .gallery-body { padding: 1.2rem; }
 
         .social-card { background: #111; border: 1px solid #333; padding: 1.5rem; border-radius: 12px; text-align: center; }
@@ -150,13 +157,15 @@
                     <i class="fa-solid fa-eye toggle-password" onclick="alternarVerPass('loginPass', this)"></i>
                 </div>
 
-                <div class="captcha-box">
-                    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 6px;">
-                        <span style="font-size: 0.75rem; color: var(--accent); font-weight: 700;">Verificación Antispam KSA</span>
+                <div class="captcha-box-secure">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                        <span style="font-size: 0.75rem; color: var(--accent); font-weight: 700;">Seguridad KSA: Validación de Objeto</span>
                         <i class="fa-solid fa-shield-cat" style="color: var(--accent);"></i>
                     </div>
-                    <label id="lblPreguntaCaptcha" style="display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 6px;"></label>
-                    <input type="number" id="inputCaptchaRespuesta" placeholder="Respuesta numérica" class="login-input" required style="padding: 0.5rem;">
+                    <p style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 8px;" id="lblInstruccionObjeto">Seleccione el objeto: <b>Balón de Fútbol</b></p>
+                    <div class="captcha-options" id="contenedorOpcionesCaptcha">
+                        <!-- Generado dinámicamente -->
+                    </div>
                 </div>
 
                 <button type="submit" class="login-btn" id="btnLoginAccion">Ingresar</button>
@@ -834,7 +843,7 @@
                             
                             <div class="form-group"><label>Plan de Entrenamiento Mensual</label><select id="admRegPlanSelect"><option value="Plan Base">Plan Base (8 sesiones) - $60</option><option value="Plan Pro">Plan Pro (12 sesiones) - $90</option><option value="Plan Élite GK">Plan Élite GK (16 sesiones) - $120</option></select></div>
                             <div class="form-group"><label>Horario Preferido</label><select id="admRegHorario"><option value="Lunes y Miércoles - 5:40 PM">Lunes y Miércoles - 5:40 PM</option><option value="Martes y Jueves - 5:40 PM y 6:40 PM">Martes y Jueves - 5:40 PM y 6:40 PM</option></select></div>
-                            <div class="form-group"><label>Tipo de Sangre</label><select id="admRegSangre"><option value="O+">O+</option><option value="O-">O-</option><option>A+</option><option value="A-">A-</option><option value="B+">B+</option><option value="B-">B-</option><option value="AB+">AB+</option><option value="AB-">AB-</option></select></div>
+                            <div class="form-group"><label>Tipo de Sangre</label><select id="admRegSangre"><option value="O+">O+</option><option value="O-">O-</option><option value="A+">A+</option><option value="A-">A-</option><option value="B+">B+</option><option value="B-">B-</option><option value="AB+">AB+</option><option value="AB-">AB-</option></select></div>
                             <div class="form-group"><label>Enfermedades / Alergias / Lesiones</label><input type="text" id="admRegSalud" placeholder="Ninguna / No"></div>
                             <div class="form-group"><label>Contacto de Emergencia</label><input type="text" id="admRegEmergencia" placeholder="Nombre y Teléfono"></div>
                         </div>
@@ -881,24 +890,46 @@
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw98yxN91d8r8WmA-lu05yu85GSJ6HLVpvitkgs4sHGzArOrzpw8OmSlOkK4PqRlK-U/exec";
 
         let modoAccesoActual = 'login';
-        let captchaNum1 = 0;
-        let captchaNum2 = 0;
+        let captchaObjetoCorrecto = 'balon';
+        let captchaSeleccionado = '';
 
         let baseDatosAtletasKSA = [
             { nombre: "Mateo Pérez", nac: "2014-05-12", equipo: "Academia F.C.", perfil: "Derecho", cedula: "V-34567890", representante: "Carlos Pérez", telRep: "0412-0000000", plan: "Plan Base", sesionesRestantes: 2, estatus: "Activo" }
         ];
 
         let galeriaKSA = [
-            { id: 1, titulo: "Entrenamiento de Potencia en Arena", tipo: "imagen", url: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80", descripcion: "Sede Vereda del Lago - Alto Rendimiento GK." }
+            { id: 1, titulo: "Entrenamiento de Potencia en Arena", tipo: "imagen", url: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80", descripcion: "Sede Vereda del Lago - Alto Rendimiento GK." },
+            { id: 2, titulo: "Trabajo de Reacción y Caídas", tipo: "imagen", url: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=600&q=80", descripcion: "Exigencia técnica KSA." }
         ];
 
         let sedesAlternativasKSA = [];
 
-        function generarCaptchaDinamico() {
-            captchaNum1 = Math.floor(Math.random() * 10) + 1;
-            captchaNum2 = Math.floor(Math.random() * 10) + 1;
-            document.getElementById('lblPreguntaCaptcha').innerText = `Resuelva la operación matemática: ¿Cuánto es ${captchaNum1} + ${captchaNum2}?`;
-            document.getElementById('inputCaptchaRespuesta').value = '';
+        function generarCaptchaObjeto() {
+            const objetos = [
+                { id: 'balon', icono: 'fa-futbol', nombre: 'Balón de Fútbol' },
+                { id: 'guantes', icono: 'fa-mitten', nombre: 'Guantes de Arquero' },
+                { id: 'silbato', icono: 'fa-whistle', nombre: 'Silbato' },
+                { id: 'trofeo', icono: 'fa-trophy', nombre: 'Trofeo' }
+            ];
+            
+            // Elegir uno aleatorio como correcto
+            const correctoIndex = Math.floor(Math.random() * objetos.length);
+            captchaObjetoCorrecto = objetos[correctoIndex].id;
+            document.getElementById('lblInstruccionObjeto').innerHTML = `Seleccione el objeto correcto: <b>${objetos[correctoIndex].nombre}</b>`;
+
+            // Mezclar y mostrar 3 opciones
+            let html = '';
+            objetos.forEach(obj => {
+                html += `<div class="captcha-btn-item" id="cap_${obj.id}" onclick="seleccionarCaptchaObjeto('${obj.id}')"><i class="fa-solid ${obj.icono}"></i></div>`;
+            });
+            document.getElementById('contenedorOpcionesCaptcha').innerHTML = html;
+            captchaSeleccionado = '';
+        }
+
+        function seleccionarCaptchaObjeto(id) {
+            document.querySelectorAll('.captcha-btn-item').forEach(el => el.classList.remove('selected'));
+            document.getElementById('cap_' + id).classList.add('selected');
+            captchaSeleccionado = id;
         }
 
         function obtenerTasaDelDia() {
@@ -1001,7 +1032,7 @@
                 btnAccion.innerText = "Ingresar";
                 linkReg.style.display = 'block'; linkRec.style.display = 'block'; linkVol.style.display = 'none';
             }
-            generarCaptchaDinamico();
+            generarCaptchaObjeto();
         }
 
         function alternarVerPass(idInput, icono) {
@@ -1019,11 +1050,10 @@
             e.preventDefault();
             const correo = document.getElementById('loginCorreo').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
-            const respuestaUsuario = parseInt(document.getElementById('inputCaptchaRespuesta').value, 10);
 
-            if(respuestaUsuario !== (captchaNum1 + captchaNum2)) {
-                alert("⚠️ Error en la verificación de seguridad antispam. Por favor resuelva correctamente la operación matemática.");
-                generarCaptchaDinamico();
+            if(captchaSeleccionado !== captchaObjetoCorrecto) {
+                alert("⚠️ Validación de seguridad incorrecta. Por favor seleccione el objeto correcto indicado.");
+                generarCaptchaObjeto();
                 return;
             }
 
@@ -1064,7 +1094,7 @@
             document.getElementById('pantallaLogin').style.display = 'flex';
             document.getElementById('loginCorreo').value = '';
             document.getElementById('loginPass').value = '';
-            generarCaptchaDinamico();
+            generarCaptchaObjeto();
             cambiarModo('login');
         }
 
@@ -1081,7 +1111,7 @@
             actualizarBarraTasaGlobal();
             actualizarBancoStore();
             renderizarSedesPublicas();
-            generarCaptchaDinamico();
+            generarCaptchaObjeto();
         };
 
         function switchTab(tabId, element) {
