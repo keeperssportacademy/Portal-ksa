@@ -6,8 +6,6 @@
     <title>Keepers Sport Academy GK | Portal Oficial</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Script oficial de Google reCAPTCHA -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <style>
         :root {
             --primary: #000000;
@@ -33,7 +31,11 @@
         .login-input:focus { border-color: var(--accent); outline: none; }
         .toggle-password { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; cursor: pointer; }
         
-        .captcha-container-google { margin: 1.2rem 0; display: flex; justify-content: center; }
+        .captcha-box-secure { background: #111; border: 2px solid #333; padding: 12px; border-radius: 8px; margin-bottom: 1.2rem; text-align: left; }
+        .captcha-options { display: flex; gap: 10px; justify-content: center; margin-top: 8px; }
+        .captcha-btn-item { background: #222; border: 2px solid #444; border-radius: 8px; padding: 10px 15px; cursor: pointer; color: var(--light); font-size: 1.2rem; transition: 0.2s; }
+        .captcha-btn-item:hover { border-color: var(--accent); background: #333; }
+        .captcha-btn-item.selected { border-color: var(--accent); background: #3a3200; color: var(--accent); }
 
         .login-btn { background: var(--accent); color: var(--primary); font-weight: 700; padding: 0.9rem; border: none; border-radius: 8px; width: 100%; font-size: 1rem; cursor: pointer; text-transform: uppercase; transition: 0.3s; margin-bottom: 1rem; }
         .login-btn:hover { background: var(--light); }
@@ -155,9 +157,15 @@
                     <i class="fa-solid fa-eye toggle-password" onclick="alternarVerPass('loginPass', this)"></i>
                 </div>
 
-                <!-- Google reCAPTCHA Oficial Widget -->
-                <div class="captcha-container-google">
-                    <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" data-theme="dark"></div>
+                <div class="captcha-box-secure">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                        <span style="font-size: 0.75rem; color: var(--accent); font-weight: 700;">Seguridad KSA: Validación de Objeto</span>
+                        <i class="fa-solid fa-shield-cat" style="color: var(--accent);"></i>
+                    </div>
+                    <p style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 8px;" id="lblInstruccionObjeto">Seleccione el objeto: <b>Balón de Fútbol</b></p>
+                    <div class="captcha-options" id="contenedorOpcionesCaptcha">
+                        <!-- Generado dinámicamente -->
+                    </div>
                 </div>
 
                 <button type="submit" class="login-btn" id="btnLoginAccion">Ingresar</button>
@@ -801,11 +809,9 @@
                     <div class="section-title">3. Gestión de Galería (Subir y Eliminar)</div>
                     <div class="form-grid">
                         <div class="form-group"><label>Título Multimedia</label><input type="text" id="adminMediaTitulo" placeholder="Ej. Bloqueo Raso"></div>
-                        <div class="form-group"><label>Archivo Foto/Video</label><input type="file" id="adminMediaFile" accept="image/*,video/*" style="padding: 0.5rem; background: #000;"></div>
+                        <div class="form-group"><label>Archivo Foto/Video</label><input type="file" id="adminMediaFile" accept="image/*,video/*"></div>
                     </div>
                     <div class="form-group"><label>Descripción</label><textarea id="adminMediaDesc" rows="2" placeholder="Detalles..."></textarea></div>
-                    <button type="button" class="btn btn-accent" onclick="subirFotoGaleriaAdmin()">Subir Elemento a Galería</button>
-                    
                     <div id="panelGestionGaleria" style="margin-top: 1rem; background: #111; padding: 1rem; border-radius: 8px; border: 1px solid #333;">
                         <h4 style="color: var(--accent); margin-bottom: 8px; font-size: 0.9rem;">Elementos Actuales en Galería:</h4>
                         <div id="listaAdminGaleria">Cargando elementos...</div>
@@ -884,6 +890,9 @@
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw98yxN91d8r8WmA-lu05yu85GSJ6HLVpvitkgs4sHGzArOrzpw8OmSlOkK4PqRlK-U/exec";
 
         let modoAccesoActual = 'login';
+        let captchaObjetoCorrecto = 'balon';
+        let captchaSeleccionado = '';
+
         let baseDatosAtletasKSA = [
             { nombre: "Mateo Pérez", nac: "2014-05-12", equipo: "Academia F.C.", perfil: "Derecho", cedula: "V-34567890", representante: "Carlos Pérez", telRep: "0412-0000000", plan: "Plan Base", sesionesRestantes: 2, estatus: "Activo" }
         ];
@@ -894,6 +903,34 @@
         ];
 
         let sedesAlternativasKSA = [];
+
+        function generarCaptchaObjeto() {
+            const objetos = [
+                { id: 'balon', icono: 'fa-futbol', nombre: 'Balón de Fútbol' },
+                { id: 'guantes', icono: 'fa-mitten', nombre: 'Guantes de Arquero' },
+                { id: 'silbato', icono: 'fa-whistle', nombre: 'Silbato' },
+                { id: 'trofeo', icono: 'fa-trophy', nombre: 'Trofeo' }
+            ];
+            
+            // Elegir uno aleatorio como correcto
+            const correctoIndex = Math.floor(Math.random() * objetos.length);
+            captchaObjetoCorrecto = objetos[correctoIndex].id;
+            document.getElementById('lblInstruccionObjeto').innerHTML = `Seleccione el objeto correcto: <b>${objetos[correctoIndex].nombre}</b>`;
+
+            // Mezclar y mostrar 3 opciones
+            let html = '';
+            objetos.forEach(obj => {
+                html += `<div class="captcha-btn-item" id="cap_${obj.id}" onclick="seleccionarCaptchaObjeto('${obj.id}')"><i class="fa-solid ${obj.icono}"></i></div>`;
+            });
+            document.getElementById('contenedorOpcionesCaptcha').innerHTML = html;
+            captchaSeleccionado = '';
+        }
+
+        function seleccionarCaptchaObjeto(id) {
+            document.querySelectorAll('.captcha-btn-item').forEach(el => el.classList.remove('selected'));
+            document.getElementById('cap_' + id).classList.add('selected');
+            captchaSeleccionado = id;
+        }
 
         function obtenerTasaDelDia() {
             let base = parseFloat(localStorage.getItem('ksa_tasa_base')) || 1000.00;
@@ -995,6 +1032,7 @@
                 btnAccion.innerText = "Ingresar";
                 linkReg.style.display = 'block'; linkRec.style.display = 'block'; linkVol.style.display = 'none';
             }
+            generarCaptchaObjeto();
         }
 
         function alternarVerPass(idInput, icono) {
@@ -1012,24 +1050,21 @@
             e.preventDefault();
             const correo = document.getElementById('loginCorreo').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
-            
-            // Validar reCAPTCHA de Google
-            const recaptchaResponse = grecaptcha.getResponse();
-            if(recaptchaResponse.length === 0) {
-                alert("⚠️ Por favor complete la verificación de reCAPTCHA de Google.");
+
+            if(captchaSeleccionado !== captchaObjetoCorrecto) {
+                alert("⚠️ Validación de seguridad incorrecta. Por favor seleccione el objeto correcto indicado.");
+                generarCaptchaObjeto();
                 return;
             }
 
             if(modoAccesoActual === 'registro') {
                 alert("¡Registro de usuario exitoso en Google Sheets! Ya puede iniciar sesión.");
-                grecaptcha.reset();
                 cambiarModo('login');
                 return;
             }
 
             if(modoAccesoActual === 'recuperar') {
                 alert("Se han enviado las instrucciones de recuperación a: " + correo);
-                grecaptcha.reset();
                 cambiarModo('login');
                 return;
             }
@@ -1051,7 +1086,6 @@
                 document.getElementById('lblUltimoAcceso').innerText = ahoraStr;
             } else {
                 alert("Por favor ingrese correo y contraseña válidos.");
-                grecaptcha.reset();
             }
         }
 
@@ -1060,7 +1094,7 @@
             document.getElementById('pantallaLogin').style.display = 'flex';
             document.getElementById('loginCorreo').value = '';
             document.getElementById('loginPass').value = '';
-            if(typeof grecaptcha !== 'undefined') { grecaptcha.reset(); }
+            generarCaptchaObjeto();
             cambiarModo('login');
         }
 
@@ -1077,6 +1111,7 @@
             actualizarBarraTasaGlobal();
             actualizarBancoStore();
             renderizarSedesPublicas();
+            generarCaptchaObjeto();
         };
 
         function switchTab(tabId, element) {
@@ -1488,36 +1523,6 @@
 
             alert(`¡Atleta ${nombre} inscrito exitosamente en Google Sheets!`);
             cargarPanelAdministrativo();
-        }
-
-        async function subirFotoGaleriaAdmin() {
-            const titulo = document.getElementById('adminMediaTitulo').value.trim();
-            const desc = document.getElementById('adminMediaDesc').value.trim();
-            const fileInput = document.getElementById('adminMediaFile');
-
-            if(!titulo || !fileInput.files[0]) {
-                alert("Por favor ingrese al menos el título y seleccione un archivo de imagen o video.");
-                return;
-            }
-
-            const file = fileInput.files[0];
-            const base64Url = await convertirFileABase64(file);
-
-            galeriaKSA.push({
-                id: Date.now(),
-                titulo: titulo,
-                tipo: file.type.includes('video') ? 'video' : 'imagen',
-                url: base64Url,
-                descripcion: desc || 'Sede oficial KSA'
-            });
-
-            document.getElementById('adminMediaTitulo').value = '';
-            document.getElementById('adminMediaDesc').value = '';
-            fileInput.value = '';
-
-            cargarPanelAdministrativo();
-            cargarGaleria();
-            alert("¡Elemento subido con éxito a la galería KSA!");
         }
 
         function generarMensajesCumpleanosLimpios() {
