@@ -79,7 +79,6 @@
         .btn-accent { background: var(--accent); color: var(--primary); }
         .btn-accent:hover { background: #eab308; }
 
-        /* Estructura original de pagos y bancos */
         .payment-box { background: #1f1b0c; border: 2px dashed var(--accent); padding: 1.5rem; border-radius: 12px; margin-top: 1.5rem; margin-bottom: 1.5rem; }
         .bank-info { display: flex; flex-direction: column; background: #111; padding: 12px 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #333; font-size: 0.9rem; color: var(--light); gap: 10px; }
         .bank-info-content { width: 100%; line-height: 1.5; }
@@ -113,13 +112,14 @@
         .social-action-btn { background: none; border: none; color: inherit; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.9rem; font-weight: 600; }
         .social-action-btn:hover, .social-action-btn.liked { color: var(--danger); }
 
+        /* ESTILO ORIGINAL ATLETAS KSA */
         .infografia-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
         .atleta-card { background: #111; border: 2px solid #333; border-radius: 12px; padding: 1.5rem; text-align: center; border-top: 4px solid var(--accent); position: relative; }
         .atleta-avatar { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent); margin: 0 auto 1rem; background: #000; }
         .atleta-info { text-align: left; font-size: 0.85rem; color: #94a3b8; margin-top: 1rem; line-height: 1.6; background: #181818; padding: 12px; border-radius: 6px; }
         .atleta-info b { color: var(--light); }
 
-        /* Estructura original redes */
+        /* ESTILO ORIGINAL REDES SOCIALES */
         .redes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
         .red-card { background: #111; border: 1px solid #333; border-radius: 12px; padding: 2rem; text-align: center; border-top: 4px solid var(--accent); }
         .red-card i { font-size: 3rem; color: var(--accent); margin-bottom: 1rem; }
@@ -219,7 +219,7 @@
             <div class="footer-ksa">Fundada el 16 de Enero de 2022 — Keepers Sport Academy GK. Todos los derechos reservados.</div>
         </div>
 
-        <!-- INSCRIPCIÓN CON ASIGNACIÓN AUTOMÁTICA DE CÓDIGO KSA -->
+        <!-- SECCIÓN INSCRIPCIÓN ORIGINAL CON ASIGNACIÓN AUTOMÁTICA DE CÓDIGO KSA -->
         <div id="inscripcion" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-futbol"></i> Ficha Técnica y Médica del Atleta</h2>
@@ -261,7 +261,7 @@
                         <div class="form-group"><label>Estatura (cm)</label><input type="number" id="estatura" placeholder="Ej. 145"></div>
                         <div class="form-group"><label>Peso (kg)</label><input type="number" step="0.1" id="peso" placeholder="Ej. 38.5"></div>
                         <div class="form-group"><label>Talla de Uniforme *</label>
-                            <select id="talla" required><option value="">Seleccione talla...</option><option value="Talla 10">Talla 10</option><option value="M">Talla M</option><option value="L">Talla L</option></select>
+                            <select id="talla" required><option value="">Seleccione talla...</option><option value="Talla 2">Talla 2</option><option value="Talla 4">Talla 4</option><option value="Talla 6">Talla 6</option><option value="Talla 8">Talla 8</option><option value="Talla 10">Talla 10</option><option value="Talla 12">Talla 12</option><option value="Talla 14">Talla 14</option><option value="Talla 16">Talla 16</option><option value="S">Talla S</option><option value="M">Talla M</option><option value="L">Talla L</option><option value="XL">Talla XL</option><option value="2XL">Talla 2XL</option></select>
                         </div>
                     </div>
 
@@ -286,7 +286,7 @@
                     <div class="section-title">SECCIÓN 5: Ficha Médica y Salud</div>
                     <div class="form-grid">
                         <div class="form-group"><label>Tipo de Sangre *</label>
-                            <select id="sangre" required><option value="">Seleccione...</option><option value="O+">O+</option><option value="A+">A+</option><option value="B+">B+</option></select>
+                            <select id="sangre" required><option value="">Seleccione...</option><option value="O+">O+</option><option value="O-">O-</option><option value="A+">A+</option><option value="A-">A-</option><option value="B+">B+</option><option value="B-">B-</option><option value="AB+">AB+</option><option value="AB-">AB-</option></select>
                         </div>
                     </div>
                     <div class="form-group"><label>¿Sufre de alguna enfermedad crónica?</label><textarea id="enfermedades" rows="2" placeholder="Ninguna"></textarea></div>
@@ -307,7 +307,7 @@
             </div>
         </div>
 
-        <!-- RESERVAS CON AMBOS HORARIOS (5:40 PM y 6:40 PM) -->
+        <!-- RESERVAS: ESTRUCTURA ORIGINAL + AMBOS HORARIOS + DATOS BANCARIOS QUE APARECEN AL SELECCIONAR TIPO -->
         <div id="reservas" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-calendar-check"></i> Reservar Sesión de Entrenamiento</h2>
@@ -318,8 +318,13 @@
                 <form id="formReserva" onsubmit="enviarReserva(event)">
                     <div class="form-grid">
                         <div class="form-group"><label>Nombre del Atleta *</label><input type="text" id="resAtleta" required placeholder="Mateo Pérez"></div>
-                        <div class="form-group"><label>Tipo de Reserva *</label>
-                            <select id="resTipoAtleta" required><option value="Recuperacion">Recuperación (Misma semana)</option><option value="SesionExtraActiva">Sesión Extra ($7,5)</option><option value="Eventual">Atleta Eventual ($15.00)</option></select>
+                        <div class="form-group"><label>Tipo de Reserva / Atleta *</label>
+                            <select id="resTipoAtleta" required onchange="mostrarDatosBancosReserva()">
+                                <option value="">Seleccione...</option>
+                                <option value="Recuperacion">Recuperación (Misma semana) - Gratis</option>
+                                <option value="SesionExtraActiva">Atleta Regular - Sesión Extra ($7.50)</option>
+                                <option value="Eventual">Atleta Eventual ($15.00)</option>
+                            </select>
                         </div>
                         <div class="form-group"><label>Fecha de la Sesión *</label><input type="date" id="resFecha" required></div>
                         <div class="form-group"><label>Sede / Turno *</label>
@@ -331,12 +336,28 @@
                         </div>
                     </div>
                     <div class="form-group"><label>Motivo de la Reserva *</label><textarea id="resMotivo" rows="3" required placeholder="Detalle..."></textarea></div>
-                    <div class="form-group"><label>Número de Referencia (Si aplica)</label><input type="text" id="resRefPago" placeholder="Nro de Referencia"></div>
+                    
+                    <!-- DATOS BANCARIOS QUE APARECEN AUTOMÁTICAMENTE AL ELEGIR SESIÓN PAGADA -->
+                    <div id="contenedorBancoReserva" style="display: none;" class="payment-box">
+                        <h3 style="color: var(--accent); margin-bottom: 1rem;"><i class="fa-solid fa-building-columns"></i> Datos Bancarios para Pago de Sesión</h3>
+                        <p id="txtMontoReservaCalculado" style="color: var(--light); font-weight: bold; margin-bottom: 10px;"></p>
+                        <div class="bank-info">
+                            <div class="bank-info-content">
+                                <b>Banco de Venezuela (BDV) — Pago Móvil</b><br>
+                                Rif: J-50284930-1 | Telf: 0424-6891083<br>
+                                <span id="txtBsReserva" class="tasa-externa-separada">Calculando...</span>
+                            </div>
+                            <button type="button" class="copy-btn" onclick="copiarDatosBanco('BDV')">Copiar Datos BDV</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group"><label>Número de Referencia (Si aplica pago)</label><input type="text" id="resRefPago" placeholder="Nro de Referencia"></div>
                     <button type="submit" class="btn btn-accent" id="btnReserva">Confirmar Reserva de Entrenamiento</button>
                 </form>
             </div>
         </div>
 
+        <!-- KITS: ESTRUCTURA ORIGINAL CON TODAS LAS TALLAS Y DATOS BANCARIOS -->
         <div id="kits" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-shirt"></i> Reserva de Kit de Entrenamiento Oficial</h2>
@@ -345,15 +366,34 @@
                 <form id="formKit" onsubmit="enviarReservaKit(event)">
                     <div class="form-grid">
                         <div class="form-group"><label>Nombre del Atleta *</label><input type="text" id="kitAtleta" required placeholder="Mateo Pérez"></div>
-                        <div class="form-group"><label>Talla de Uniforme *</label><select id="kitTalla" required><option value="Talla 10">Talla 10</option><option value="M">Talla M</option><option value="L">Talla L</option></select></div>
+                        <div class="form-group"><label>Cédula del Representante *</label><input type="text" id="kitCedula" required placeholder="V-12345678"></div>
+                        <div class="form-group"><label>Talla de Uniforme *</label>
+                            <select id="kitTalla" required>
+                                <option value="">Seleccione...</option>
+                                <option value="Talla 2">Talla 2</option><option value="Talla 4">Talla 4</option><option value="Talla 6">Talla 6</option><option value="Talla 8">Talla 8</option><option value="Talla 10">Talla 10</option><option value="Talla 12">Talla 12</option><option value="Talla 14">Talla 14</option><option value="Talla 16">Talla 16</option><option value="S">Talla S</option><option value="M">Talla M</option><option value="L">Talla L</option><option value="XL">Talla XL</option><option value="2XL">Talla 2XL</option>
+                            </select>
+                        </div>
                         <div class="form-group"><label>Modalidad de Pago *</label><select id="kitModalidad" required><option value="Completo">Pago Completo ($35.00)</option><option value="Abono 50%">Abono del 50% ($17.50)</option></select></div>
-                        <div class="form-group"><label>Número de Referencia *</label><input type="text" id="kitReferencia" required placeholder="Ej. 987654"></div>
                     </div>
+                    
+                    <div class="payment-box">
+                        <h3 style="color: var(--accent); margin-bottom: 1rem;"><i class="fa-solid fa-building-columns"></i> Datos Bancarios Oficiales KSA</h3>
+                        <div class="bank-info">
+                            <div class="bank-info-content">
+                                <b>Banco de Venezuela (BDV) — Pago Móvil</b><br>
+                                Rif: J-50284930-1 | Telf: 0424-6891083
+                            </div>
+                            <button type="button" class="copy-btn" onclick="copiarDatosBanco('BDV')">Copiar Datos BDV</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group"><label>Número de Referencia del Pago *</label><input type="text" id="kitReferencia" required placeholder="Ej. 987654"></div>
                     <button type="submit" class="btn btn-accent" id="btnKit">Confirmar Reserva de Kit</button>
                 </form>
             </div>
         </div>
 
+        <!-- FANS STORE: ESTRUCTURA ORIGINAL CON TODAS LAS TALLAS Y DATOS BANCARIOS -->
         <div id="fansstore" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-bag-shopping"></i> Fans Store KSA - Playeras Oficiales</h2>
@@ -362,16 +402,34 @@
                 <form id="formStore" onsubmit="enviarPedidoStore(event)">
                     <div class="form-grid">
                         <div class="form-group"><label>Nombre y Apellido *</label><input type="text" id="storeComprador" required placeholder="Ana Martínez"></div>
-                        <div class="form-group"><label>Teléfono *</label><input type="tel" id="storeTelefono" required placeholder="04140000000"></div>
-                        <div class="form-group"><label>Talla *</label><select id="storeTalla" required><option value="M">Talla M</option><option value="L">Talla L</option></select></div>
-                        <div class="form-group"><label>Referencia *</label><input type="text" id="storeReferencia" required placeholder="Ej. 554433"></div>
+                        <div class="form-group"><label>Teléfono / WhatsApp *</label><input type="tel" id="storeTelefono" required placeholder="04140000000"></div>
+                        <div class="form-group"><label>Talla *</label>
+                            <select id="storeTalla" required>
+                                <option value="">Seleccione...</option>
+                                <option value="Talla 2">Talla 2</option><option value="Talla 4">Talla 4</option><option value="Talla 6">Talla 6</option><option value="Talla 8">Talla 8</option><option value="Talla 10">Talla 10</option><option value="Talla 12">Talla 12</option><option value="Talla 14">Talla 14</option><option value="Talla 16">Talla 16</option><option value="S">Talla S</option><option value="M">Talla M</option><option value="L">Talla L</option><option value="XL">Talla XL</option><option value="2XL">Talla 2XL</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label>Cantidad *</label><input type="number" id="storeCantidad" min="1" value="1" required></div>
                     </div>
+
+                    <div class="payment-box">
+                        <h3 style="color: var(--accent); margin-bottom: 1rem;"><i class="fa-solid fa-building-columns"></i> Datos Bancarios Oficiales KSA</h3>
+                        <div class="bank-info">
+                            <div class="bank-info-content">
+                                <b>Banco de Venezuela (BDV) — Pago Móvil</b><br>
+                                Rif: J-50284930-1 | Telf: 0424-6891083
+                            </div>
+                            <button type="button" class="copy-btn" onclick="copiarDatosBanco('BDV')">Copiar Datos BDV</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group"><label>Número de Referencia *</label><input type="text" id="storeReferencia" required placeholder="Ej. 554433"></div>
                     <button type="submit" class="btn btn-accent">Solicitar Playera Oficial</button>
                 </form>
             </div>
         </div>
 
-        <!-- PAGOS Y ABONOS: ESTRUCTURA ORIGINAL + DATOS BANCARIOS + CONSULTA DE SALDO POR CÓDIGO -->
+        <!-- PAGOS Y ABONOS ORIGINAL CON DESPLEGABLES, DATOS BANCARIOS Y CONSULTA DE SALDO POR CÓDIGO -->
         <div id="pagos" class="section-container">
             <div class="card">
                 <h2><i class="fa-solid fa-file-invoice-dollar"></i> Pasarela de Pagos y Consulta de Saldo</h2>
@@ -394,7 +452,7 @@
                             Rif: J-50284930-1 | Telf: 0424-6891083<br>
                             <span id="txtMontoBDV" class="tasa-externa-separada"><i class="fa-solid fa-calculator"></i> Calculando monto en Bs...</span>
                         </div>
-                        <button class="copy-btn" onclick="copiarDatosBanco('BDV')">Copiar Datos BDV</button>
+                        <button type="button" class="copy-btn" onclick="copiarDatosBanco('BDV')">Copiar Datos BDV</button>
                     </div>
 
                     <div class="bank-info">
@@ -403,7 +461,7 @@
                             Nro Cuenta: 0191-0000-000000000000<br>
                             Rif: J-50284930-1
                         </div>
-                        <button class="copy-btn" onclick="copiarDatosBanco('BNC')">Copiar Cuenta BNC</button>
+                        <button type="button" class="copy-btn" onclick="copiarDatosBanco('BNC')">Copiar Cuenta BNC</button>
                     </div>
                 </div>
 
@@ -414,18 +472,19 @@
                         <div class="form-group"><label>Concepto / Opciones de Pago *</label>
                             <select id="pagoConcepto" required>
                                 <option value="">Seleccione concepto...</option>
-                                <option value="Inscripción General ($20)">Inscripción General ($20)</option>
-                                <option value="Plan Base ($60)">Plan Base - 8 sesiones ($60)</option>
-                                <option value="Plan Pro ($90)">Plan Pro - 12 sesiones ($90)</option>
-                                <option value="Plan Élite GK ($120)">Plan Élite GK - 16 sesiones ($120)</option>
-                                <option value="Kit de Uniforme ($35)">Kit de Uniforme ($35 o Abono $17.50)</option>
-                                <option value="Playera Fans Store ($20)">Playera Fans Store ($20)</option>
+                                <option value="Inscripción General">Inscripción General - $20</option>
+                                <option value="Plan Base">Plan Base (8 sesiones) - $60</option>
+                                <option value="Plan Pro">Plan Pro (12 sesiones) - $90</option>
+                                <option value="Plan Élite GK">Plan Élite GK (16 sesiones) - $120</option>
+                                <option value="Kit de Uniforme">Kit de Uniforme - $35</option>
+                                <option value="Abono Kit 50%">Abono Kit 50% - $17.50</option>
+                                <option value="Fans Store Playera">Playera Fans Store - $20</option>
                             </select>
                         </div>
                         <div class="form-group"><label>Monto USD ($) *</label><input type="number" step="0.01" id="pagoMontoUSD" required placeholder="60.00" oninput="calcularMontoBsEnVivo()"></div>
                         <div class="form-group"><label>Método de Pago *</label><select id="pagoMetodo" required><option value="Pago Móvil">Pago Móvil (BDV)</option><option value="Transferencia BNC">Transferencia (BNC)</option></select></div>
                     </div>
-                    <div class="form-group"><label>Número de Referencia (Últimos 4 dígitos o ref completa) *</label><input type="text" id="pagoReferencia" required placeholder="Ej. 123456"></div>
+                    <div class="form-group"><label>Número de Referencia *</label><input type="text" id="pagoReferencia" required placeholder="Ej. 123456"></div>
                     <button type="submit" class="btn btn-accent">Reportar Pago Oficial KSA</button>
                 </form>
             </div>
@@ -616,7 +675,27 @@
             const totalBs = usd * tasa;
             const lbl = document.getElementById('txtMontoBDV');
             if(lbl) {
-                lbl.innerHTML = `<i class="fa-solid faéquals"></i> Equivalente a <b>${totalBs.toFixed(2)} Bs</b> (Calculado a tasa de ${tasa.toFixed(2)} Bs/USD)`;
+                lbl.innerHTML = `<i class="fa-solid fa-calculator"></i> Equivalente a <b>${totalBs.toFixed(2)} Bs</b> (Tasa: ${tasa.toFixed(2)} Bs/USD)`;
+            }
+        }
+
+        function mostrarDatosBancosReserva() {
+            const tipo = document.getElementById('resTipoAtleta').value;
+            const contenedor = document.getElementById('contenedorBancoReserva');
+            const txtMonto = document.getElementById('txtMontoReservaCalculado');
+            const txtBs = document.getElementById('txtBsReserva');
+            const tasa = obtenerTasaDelDia();
+
+            if(tipo === 'SesionExtraActiva') {
+                contenedor.style.display = 'block';
+                txtMonto.innerText = "Monto a cancelar: $7.50 USD";
+                txtBs.innerHTML = `Equivalente a <b>${(7.50 * tasa).toFixed(2)} Bs</b>`;
+            } else if(tipo === 'Eventual') {
+                contenedor.style.display = 'block';
+                txtMonto.innerText = "Monto a cancelar: $15.00 USD";
+                txtBs.innerHTML = `Equivalente a <b>${(15.00 * tasa).toFixed(2)} Bs</b>`;
+            } else {
+                contenedor.style.display = 'none';
             }
         }
 
@@ -726,7 +805,6 @@
             document.getElementById('edad').value = edad >= 0 ? edad : 0;
         }
 
-        // Generación automática de código KSA (Ej. K-054)
         function generarCodigoAtletaKSA() {
             const randomNum = Math.floor(10 + Math.random() * 900);
             return `K-${randomNum}`;
