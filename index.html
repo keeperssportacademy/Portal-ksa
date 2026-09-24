@@ -163,9 +163,7 @@
                         <i class="fa-solid fa-shield-cat" style="color: var(--accent);"></i>
                     </div>
                     <p style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 8px;" id="lblInstruccionObjeto">Seleccione el objeto: <b>Balón de Fútbol</b></p>
-                    <div class="captcha-options" id="contenedorOpcionesCaptcha">
-                        <!-- Generado dinámicamente -->
-                    </div>
+                    <div class="captcha-options" id="contenedorOpcionesCaptcha"></div>
                 </div>
 
                 <button type="submit" class="login-btn" id="btnLoginAccion">Ingresar</button>
@@ -228,7 +226,6 @@
                     <button class="btn btn-accent" style="width: auto; background: var(--light); color: var(--primary);" onclick="switchTab('fansstore', document.querySelectorAll('.nav-tab')[4])"><i class="fa-solid fa-bag-shopping"></i> Visitar Fans Store</button>
                 </div>
             </div>
-            
             <div class="footer-ksa">
                 Fundada el 16 de Enero de 2022 — Keepers Sport Academy GK. Todos los derechos reservados.
             </div>
@@ -675,9 +672,7 @@
 
                 <div id="contenedorSedesAlternativas" style="background: #111; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--accent); border: 1px solid #333;">
                     <h3 style="color: var(--accent);"><i class="fa-solid fa-map-location-dot"></i> Sedes Alternativas y Clínicas Especiales</h3>
-                    <div id="listaSedesExtra" style="margin-top: 10px; font-size: 0.9rem; color: var(--light);">
-                        <!-- SE DINÁMICO DESDE GOOGLE SHEETS -->
-                    </div>
+                    <div id="listaSedesExtra" style="margin-top: 10px; font-size: 0.9rem; color: var(--light);"></div>
                 </div>
             </div>
         </div>
@@ -912,12 +907,10 @@
                 { id: 'trofeo', icono: 'fa-trophy', nombre: 'Trofeo' }
             ];
             
-            // Elegir uno aleatorio como correcto
             const correctoIndex = Math.floor(Math.random() * objetos.length);
             captchaObjetoCorrecto = objetos[correctoIndex].id;
             document.getElementById('lblInstruccionObjeto').innerHTML = `Seleccione el objeto correcto: <b>${objetos[correctoIndex].nombre}</b>`;
 
-            // Mezclar y mostrar 3 opciones
             let html = '';
             objetos.forEach(obj => {
                 html += `<div class="captcha-btn-item" id="cap_${obj.id}" onclick="seleccionarCaptchaObjeto('${obj.id}')"><i class="fa-solid ${obj.icono}"></i></div>`;
@@ -1637,7 +1630,7 @@
             contenedor.innerHTML = html;
         }
 
-        function guardarContenidoAdmin(e) {
+        async function guardarContenidoAdmin(e) {
             e.preventDefault();
             document.getElementById('loadingAdmin').style.display = 'block';
 
@@ -1659,6 +1652,18 @@
                 sedesAlternativasKSA.push(nuevaSede);
                 document.getElementById('admNuevaSede').value = '';
                 renderizarSedesPublicas();
+            }
+
+            // Sincronizar configuración con Google Sheets
+            try {
+                await enviarDatosSheets('guardarConfiguracion', {
+                    tasaBase: baseVal,
+                    puntosExtra: puntosVal,
+                    costoReg: costoRegVal,
+                    costoEventual: costoEventualVal
+                });
+            } catch(err) {
+                console.log("Aviso de sincronización de config:", err);
             }
 
             setTimeout(() => {
